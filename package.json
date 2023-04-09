@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
+    "pretty": "prettier --write \"{,!(node_modules|dist|coverage)/**/}*.{js,jsx,ts,tsx,json}\"",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -18,5 +20,15 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "prettier": "^2.8.7"
+  },
+  "lint-staged": {
+    "{,app}/**/*.{js,ts,tsx}": [
+      "npm run pretty"
+    ]
   }
 }

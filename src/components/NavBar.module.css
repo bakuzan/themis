@@ -1,0 +1,11 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  height: var(--navbar-height);
+  background-color: var(--primary-background);
+}
+
+.navbar__link {
+  color: var(--primary-constrast-colour);
+}

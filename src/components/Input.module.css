@@ -1,0 +1,24 @@
+.control {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.input {
+  border: none;
+  border-bottom: 1px solid var(--primary-background);
+}
+
+.checkbox {
+  flex-direction: row-reverse;
+}
+
+.checkbox label {
+  margin-left: 5px;
+}
+.checkbox label,
+.checkbox input {
+  cursor: pointer;
+}
