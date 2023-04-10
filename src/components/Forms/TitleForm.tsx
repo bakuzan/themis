@@ -10,9 +10,9 @@ import Button from '@/components/Button';
 import ButtonGroup from '@/components/ButtonGroup';
 
 interface TitleFromProps {
-  method?: string;
-  action?: string;
-  data: TitleViewModel;
+  method: string;
+  action: string;
+  data: Partial<TitleViewModel>;
 }
 
 export const OLDEST_START_YEAR = 1930;
@@ -27,7 +27,9 @@ export default function TitleForm(props: TitleFromProps) {
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const response = await callApi<TitleResponse>('/api/titles/new', {
+
+    const response = await callApi<TitleResponse>(props.action, {
+      method: props.method,
       body: JSON.stringify({ id: data.id, name, startYear, isOneShot })
     });
     if (response.success) {
@@ -54,7 +56,6 @@ export default function TitleForm(props: TitleFromProps) {
           name="name"
           label="Name"
           required
-          defaultValue={data.name}
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
         />
@@ -66,7 +67,6 @@ export default function TitleForm(props: TitleFromProps) {
           required
           min={OLDEST_START_YEAR}
           max={2100}
-          defaultValue={data.startYear}
           value={startYear}
           onChange={(e) => setStartYear(Number(e.currentTarget.value))}
         />
@@ -75,7 +75,6 @@ export default function TitleForm(props: TitleFromProps) {
           id="isOneShot"
           name="isOneShot"
           label="Is One Shot"
-          defaultChecked={data.isOneShot}
           checked={isOneShot}
           onChange={(e) => setIsOneShot(e.currentTarget.checked)}
         />

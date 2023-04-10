@@ -1,2 +1,12 @@
 .button {
+  background-color: var(--primary-background);
+  color: var(--primary-constrast-colour);
+  border-color: var(--primary-background);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.button:focus,
+.button:hover {
+  box-shadow: 0px 0px 5px 0px var(--accent-background);
 }

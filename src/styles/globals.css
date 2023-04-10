@@ -1,11 +1,15 @@
 @import './minireset.css';
+@import './generic.css';
 
 :root {
   --font-size: 16px;
   --font-family: 'Lucida Console', Consolas, monospace;
 
-  --primary-background: #00f;
+  --primary-background: #4169e1; /* ROYAL BLUE */
   --primary-constrast-colour: #fff;
+  --accent-background: #4682b4; /* STEEL BLUE */ /* #008080; /* TEAL */
+
+  --muted-colour: #757575;
 
   --navbar-height: 50px;
 
@@ -32,4 +36,15 @@ main {
 
 h1 {
   font-size: 2rem;
+}
+
+a {
+  color: var(--accent-background);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  border-bottom: 1px dashed;
 }

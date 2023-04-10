@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: var(--muted-colour);
+}
