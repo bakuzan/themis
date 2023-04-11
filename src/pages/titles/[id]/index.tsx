@@ -6,7 +6,8 @@ import { TitleViewModel } from '@/types/Title';
 
 import IssueForm from '@/components/Forms/IssueForm';
 
-import styles from './[id].module.css';
+import styles from './index.module.css';
+import PageHead from '@/components/PageHead';
 
 interface TitleViewProps {
   item: TitleViewModel;
@@ -15,15 +16,16 @@ interface TitleViewProps {
 export default function TitleView(props: TitleViewProps) {
   const data = props.item;
   const issues = [];
+
+  const pageTitle = `${data.name} (${data.startYear})`;
   console.log('<TitleView>', props);
 
   return (
     <section>
+      <PageHead title={pageTitle} />
       <header className="header">
         <div>
-          <h1>
-            {data.name} ({data.startYear})
-          </h1>
+          <h1>{pageTitle}</h1>
           <p className="subtitle">
             {data.isOneShot ? `(One Shot)` : `${issues.length} Issues`}
           </p>
@@ -34,7 +36,7 @@ export default function TitleView(props: TitleViewProps) {
       </header>
       <div>
         <section className={styles.issue_form}>
-          <IssueForm method="POST" action="/issue/new" />
+          <IssueForm method="POST" action="/api/issue/new" />
         </section>
         {/* TODO Add a filter */}
         {/* TODO Render list of issues */}

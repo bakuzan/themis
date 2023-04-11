@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import TitleForm from '@/components/Forms/TitleForm';
 
-import styles from './titles.module.css';
+import PageHead from '@/components/PageHead';
 
 export const metadata = {
   title: 'Create Title'
@@ -11,15 +11,16 @@ export const metadata = {
 export default function TitlesNew() {
   return (
     <section>
+      <PageHead title={metadata.title} />
       <header className="header">
-        <h1>Create Title</h1>
+        <h1>{metadata.title}</h1>
         <div>
           <Link href="/titles">Back</Link>
         </div>
       </header>
       <TitleForm
         method="POST"
-        action="titles/new"
+        action="/api/titles/new"
         data={{ name: '', startYear: 1977, isOneShot: false }}
       />
     </section>

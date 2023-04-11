@@ -5,6 +5,7 @@
   margin-bottom: 20px;
 }
 
+.muted,
 .subtitle {
   font-size: 0.8rem;
   color: var(--muted-colour);

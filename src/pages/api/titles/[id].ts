@@ -7,7 +7,7 @@ export default async function handler(
   const headersList = request.headers;
   const referer = headersList['referer'];
 
-  console.log('POST', referer, request.body);
+  console.log('PUT', referer, request, request.body);
 
   return response.json({ success: true, referer });
 }

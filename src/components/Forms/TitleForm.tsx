@@ -8,14 +8,14 @@ import callApi from '@/utils/callApi';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import ButtonGroup from '@/components/ButtonGroup';
+import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
+import { OLDEST_START_YEAR } from '@/constants';
 
 interface TitleFromProps {
   method: string;
   action: string;
   data: Partial<TitleViewModel>;
 }
-
-export const OLDEST_START_YEAR = 1930;
 
 export default function TitleForm(props: TitleFromProps) {
   const router = useRouter();
@@ -42,14 +42,14 @@ export default function TitleForm(props: TitleFromProps) {
   return (
     <div>
       <form
-        method={props.method}
+        method={convertMethodToFormValidMethod(props.method)}
         action={props.action}
         id="titleForm"
         name="titleForm"
         style={{ maxWidth: 300 }}
         onSubmit={handleSubmit}
       >
-        <Input type="hidden" id="id" value={data.id} />
+        <Input type="hidden" id="id" name="id" value={data.id} />
         <Input
           type="text"
           id="name"

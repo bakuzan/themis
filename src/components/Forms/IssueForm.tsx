@@ -5,6 +5,7 @@ import { FormEvent } from 'react';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import ButtonGroup from '@/components/ButtonGroup';
+import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
 
 interface IssueFromProps {
   method: string;
@@ -21,13 +22,13 @@ export default function IssueForm(props: IssueFromProps) {
   return (
     <div>
       <form
-        method={props.method}
+        method={convertMethodToFormValidMethod(props.method)}
         action={props.action}
         id="issueForm"
         name="issueForm"
         onSubmit={handleSubmit}
       >
-        <Input type="hidden" id="id" value={data.id} />
+        <Input type="hidden" id="id" name="id" value={data.id} />
 
         <ButtonGroup>
           <Button type="submit">Save</Button>
