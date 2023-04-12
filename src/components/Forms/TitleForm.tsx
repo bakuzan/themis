@@ -79,7 +79,7 @@ export default function TitleForm(props: TitleFromProps) {
           onChange={(e) => setIsOneShot(e.currentTarget.checked)}
         />
         <ButtonGroup>
-          <Button type="submit">Save</Button>
+          <Button type="submit">{data.id ? 'Save' : 'Create'}</Button>
         </ButtonGroup>
       </form>
     </div>

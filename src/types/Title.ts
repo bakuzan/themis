@@ -1,7 +1,7 @@
 export interface Title {
   Id: number;
   Name: string;
-  StartYear: number;
+  StartYear: string; // YYYY
   IsOneShot: number; // boolean 0 or 1
 }
 

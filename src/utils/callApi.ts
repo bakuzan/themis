@@ -4,7 +4,11 @@ export default async function callApi<T = any>(
 ): Promise<T> {
   console.log('callApi Request : ', url, opts);
 
-  const response = await fetch(url, opts);
+  const response = await fetch(url, {
+    headers: { accept: 'application/json' },
+    ...opts
+  });
+
   const data = await response.json();
 
   console.log('callApi Response : ', data);

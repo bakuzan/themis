@@ -31,7 +31,7 @@ export default function IssueForm(props: IssueFromProps) {
         <Input type="hidden" id="id" name="id" value={data.id} />
 
         <ButtonGroup>
-          <Button type="submit">Save</Button>
+          <Button type="submit">{data.id ? 'Save' : 'Create'}</Button>
         </ButtonGroup>
       </form>
     </div>
