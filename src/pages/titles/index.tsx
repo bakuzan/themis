@@ -5,6 +5,8 @@ import { TitleViewModel } from '@/types/Title';
 
 import styles from './index.module.css';
 import PageHead from '@/components/PageHead';
+import { useState } from 'react';
+import SearchBox from '@/components/SearchBox';
 
 interface TitlesProps {
   items: TitleViewModel[];
@@ -15,6 +17,11 @@ const metadata = {
 };
 
 export default function Titles(props: TitlesProps) {
+  const [searchString, setSearchString] = useState('');
+  const searchStringLower = searchString.toLowerCase();
+  const titles = props.items.filter((x) =>
+    x.name.toLowerCase().includes(searchStringLower)
+  );
   console.log('<Titles>', props);
 
   return (
@@ -27,14 +34,20 @@ export default function Titles(props: TitlesProps) {
         </div>
       </header>
       <div>
-        {/* TODO Add a filter */}
+        <SearchBox
+          value={searchString}
+          onChange={(text) => setSearchString(text)}
+        />
         <ul className={styles.list}>
-          {props.items.map((x) => (
+          {titles.map((x) => (
             <li key={x.id} className={styles.list__item}>
-              <div>
+              <div className={styles.nameWrapper}>
                 <Link href={`/titles/${x.id}`}>{x.name}</Link>
+                {x.isOneShot && <span className="muted">&nbsp;(One Shot)</span>}
               </div>
-              {x.isOneShot && <span className="muted">&nbsp;(One Shot)</span>}
+              <div className="muted">
+                {x.issueCount} {x.issueCount === 1 ? 'issue' : 'issues'}
+              </div>
             </li>
           ))}
         </ul>

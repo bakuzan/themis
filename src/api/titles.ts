@@ -1,30 +1,38 @@
 import db from './database';
 
-import { Title, TitleViewModel } from '@/types/Title';
+import { Title, TitleWithIssueCount } from '@/types/Title';
+import { Issue } from '@/types/Issue';
 
-function toViewModel(title: Title): TitleViewModel {
-  return {
-    id: title.Id,
-    name: title.Name,
-    startYear: Number(title.StartYear),
-    isOneShot: title.IsOneShot === 1
-  };
-}
+import getStoredProceedure from '@/api/database/storedProceedures';
+import {
+  toTitleViewModel,
+  toTitleWithIssuesViewModel
+} from '@/api/mappers/title';
 
+/* DATEBASE READS */
 export function getTitles() {
-  // TODO Return an issue count
-  const titles = db.prepare(`SELECT * FROM Title`).all() as Title[];
+  const query = getStoredProceedure('GetTitlesWithIssueCount');
+  const titles = db.prepare(query).all() as TitleWithIssueCount[];
 
-  return titles.map(toViewModel);
+  return titles.map(toTitleViewModel);
 }
 
 export function getTitleById(id: number) {
-  // TODO return issues list
   const title = db.prepare(`SELECT * FROM Title WHERE Id = ?`).get(id) as Title;
 
-  return toViewModel(title);
+  return toTitleViewModel(title);
 }
 
+export function getTitleWithIssues(id: number) {
+  const title = db.prepare(`SELECT * FROM Title WHERE Id = ?`).get(id) as Title;
+
+  const query = getStoredProceedure('GetIssuesListForTitle');
+  const issues = db.prepare(query).all(id) as Issue[];
+
+  return toTitleWithIssuesViewModel(title, issues);
+}
+
+/* DATABASE WRITES */
 export function insertTitle(data: Partial<Title>) {
   const result = db
     .prepare(

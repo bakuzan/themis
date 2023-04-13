@@ -4,7 +4,11 @@
 
 .list__item {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
   margin-bottom: 10px;
+}
+
+.nameWrapper {
+  display: flex;
+  align-items: center;
 }

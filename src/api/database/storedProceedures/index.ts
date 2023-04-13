@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 
-type StoredProceedures = '';
+type StoredProceedures = 'GetTitlesWithIssueCount' | 'GetIssuesListForTitle';
 
 const proceedures = {} as Record<StoredProceedures, string>;
 const targetFolder = path.join(

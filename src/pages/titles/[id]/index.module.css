@@ -1,4 +1,24 @@
 .issue_form {
   padding: 10px 5px;
+  margin-bottom: 25px;
   box-shadow: 1px 1px 5px 1px var(--primary-background);
+}
+
+.list {
+  margin: 20px 0 25px 0;
+}
+
+.list__item {
+  display: flex;
+  flex-direction: column;
+
+  padding: 5px;
+  border: 1px dashed var(--primary-background);
+  margin-bottom: 10px;
+}
+
+.coverInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
