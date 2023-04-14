@@ -6,3 +6,7 @@ interface BaseResponse {
 export interface TitleResponse extends BaseResponse {
   id?: number;
 }
+
+export interface IssueResponse extends BaseResponse {
+  id?: number;
+}
