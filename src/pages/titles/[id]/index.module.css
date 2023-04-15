@@ -7,18 +7,3 @@
 .list {
   margin: 20px 0 25px 0;
 }
-
-.list__item {
-  display: flex;
-  flex-direction: column;
-
-  padding: 5px;
-  border: 1px dashed var(--primary-background);
-  margin-bottom: 10px;
-}
-
-.coverInfo {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}

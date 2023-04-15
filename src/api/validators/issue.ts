@@ -21,7 +21,7 @@ export function validateRequest(request: NextApiRequest) {
     errorMessages.push('Issue Title is required');
   }
 
-  if (isNullOrEmpty(data.number)) {
+  if (!data.number) {
     errorMessages.push('Issue Number is required');
   } else {
     const issueNumber = Number(data.number);
@@ -42,7 +42,7 @@ export function validateRequest(request: NextApiRequest) {
   if (isNullOrEmpty(data.coverDate)) {
     errorMessages.push('Issue Cover Date is required');
   } else {
-    const regex = new RegExp(/^\d{4}\-(0?[1-9]|1[012])\$/);
+    const regex = new RegExp(/^\d{4}-(0?[1-9]|1[012])$/);
     if (regex.test(data.coverDate)) {
       processedData.CoverDate = data.coverDate;
     } else {

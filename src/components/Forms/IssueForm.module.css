@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.wrapper > div {
+  margin: 0;
+}
+
+.actions.actions {
+  margin: 0 20px;
+}

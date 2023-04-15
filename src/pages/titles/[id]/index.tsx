@@ -1,19 +1,17 @@
+import { useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 
 import { getTitleWithIssues } from '@/api/titles';
 import { TitleWithIssuesViewModel } from '@/types/Title';
-
-import IssueForm from '@/components/Forms/IssueForm';
-import PageHead from '@/components/PageHead';
-
-import styles from './index.module.css';
-import { useState } from 'react';
-import SearchBox from '@/components/SearchBox';
 import { IssueViewModel } from '@/types/Issue';
 
-const getFormattedIssueNumber = (issue: IssueViewModel) =>
-  '#' + `${issue.number}`.padStart(issue.isAnnual ? 2 : 4, '0');
+import SearchBox from '@/components/SearchBox';
+import IssueForm from '@/components/Forms/IssueForm';
+import PageHead from '@/components/PageHead';
+import IssueItem, { getFormattedIssueNumber } from '@/components/IssueItem';
+
+import styles from './index.module.css';
 
 interface TitleViewProps {
   item: TitleWithIssuesViewModel;
@@ -55,10 +53,13 @@ export default function TitleView(props: TitleViewProps) {
       </header>
       <div>
         <section className={styles.issue_form}>
+          <header className="header">
+            <h2>Add a new issue to {pageTitle}</h2>
+          </header>
           <IssueForm
             key={issueFormKey}
             method="POST"
-            action="/api/issue/new"
+            action="/api/issues/new"
             onSuccess={(newIssue) => {
               setNewIssues((p) => [newIssue, ...p]);
               setIssueFormKey((p) => p + 1);
@@ -77,22 +78,9 @@ export default function TitleView(props: TitleViewProps) {
           onChange={(text) => setSearchString(text)}
         />
         <ul className={styles.list}>
-          {issues.map((x) => {
-            const issueNumber = getFormattedIssueNumber(x);
-
-            return (
-              <li key={x.id} className={styles.list__item}>
-                <div className={styles.coverInfo}>
-                  <div>
-                    {issueNumber} {x.isAnnual && 'Annual'}
-                  </div>
-                  &nbsp;
-                  <div>{x.coverDate}</div>
-                </div>
-                <div>{x.name}</div>
-              </li>
-            );
-          })}
+          {issues.map((x) => (
+            <IssueItem key={x.id} data={x} />
+          ))}
         </ul>
       </div>
       <footer>{/* TODO Add a delete button */}</footer>

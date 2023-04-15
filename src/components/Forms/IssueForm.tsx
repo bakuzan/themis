@@ -2,12 +2,14 @@ import { FormEvent, useState } from 'react';
 
 import callApi from '@/utils/callApi';
 import { IssueViewModel } from '@/types/Issue';
+import { IssueResponse } from '@/types/Response';
 
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import ButtonGroup from '@/components/ButtonGroup';
 import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
-import { IssueResponse } from '@/types/Response';
+
+import styles from './IssueForm.module.css';
 
 interface IssueFromProps {
   method: string;
@@ -58,49 +60,58 @@ export default function IssueForm(props: IssueFromProps) {
         name="issueForm"
         onSubmit={handleSubmit}
       >
-        <Input type="hidden" id="id" name="id" value={data.id} />
-        <Input type="hidden" id="titleId" name="titleId" value={data.titleId} />
+        <div className={styles.wrapper}>
+          <Input type="hidden" id="id" name="id" value={data.id} />
+          <Input
+            type="hidden"
+            id="titleId"
+            name="titleId"
+            value={data.titleId}
+          />
 
-        <Input
-          type="number"
-          id="number"
-          name="number"
-          label="Number"
-          required
-          value={issueNumber}
-          onChange={(e) => setIssueNumber(Number(e.currentTarget.value))}
-        />
-        <Input
-          type="text"
-          id="name"
-          name="name"
-          label="Name"
-          required
-          value={name}
-          onChange={(e) => setName(e.currentTarget.value)}
-        />
-        <Input
-          type="text"
-          id="coverDate"
-          name="coverDate"
-          label="Cover Date"
-          required
-          pattern="^\d{4}\-(0?[1-9]|1[012])\$"
-          value={coverDate}
-          onChange={(e) => setCoverDate(e.currentTarget.value)}
-        />
-        <Input
-          type="checkbox"
-          id="isAnnual"
-          name="isAnnual"
-          label="Is Annual"
-          checked={isAnnual}
-          onChange={(e) => setIsAnnual(e.currentTarget.checked)}
-        />
+          <Input
+            type="number"
+            id="number"
+            name="number"
+            label="Number"
+            required
+            value={issueNumber}
+            onChange={(e) => setIssueNumber(Number(e.currentTarget.value))}
+          />
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            label="Name"
+            required
+            value={name}
+            onChange={(e) => setName(e.currentTarget.value)}
+          />
+          <Input
+            type="text"
+            id="coverDate"
+            name="coverDate"
+            label="Cover Date"
+            placeholder="YYYY-MM"
+            title="Cover Date (YYYY-MM)"
+            required
+            pattern="^\d{4}-(0?[1-9]|1[012])$"
+            value={coverDate}
+            onChange={(e) => setCoverDate(e.currentTarget.value)}
+          />
+          <Input
+            type="checkbox"
+            id="isAnnual"
+            name="isAnnual"
+            label="Is Annual"
+            checked={isAnnual}
+            onChange={(e) => setIsAnnual(e.currentTarget.checked)}
+          />
 
-        <ButtonGroup>
-          <Button type="submit">{data.id ? 'Save' : 'Create'}</Button>
-        </ButtonGroup>
+          <ButtonGroup className={styles.actions}>
+            <Button type="submit">{data.id ? 'Save' : 'Create'}</Button>
+          </ButtonGroup>
+        </div>
       </form>
     </div>
   );

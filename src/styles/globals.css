@@ -9,6 +9,7 @@
   --primary-constrast-colour: #fff;
   --accent-background: #4682b4; /* STEEL BLUE */ /* #008080; /* TEAL */
 
+  --danger-colour: #b22222;
   --muted-colour: #757575;
 
   --navbar-height: 50px;
@@ -36,6 +37,10 @@ main {
 
 h1 {
   font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
 }
 
 a {
