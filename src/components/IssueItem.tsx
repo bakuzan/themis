@@ -5,11 +5,9 @@ import Link from 'next/link';
 import { IssueViewModel } from '@/types/Issue';
 
 import IssueForm from './Forms/IssueForm';
+import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 
 import styles from './IssueItem.module.css';
-
-export const getFormattedIssueNumber = (issue: IssueViewModel) =>
-  '#' + `${issue.number}`.padStart(issue.isAnnual ? 2 : 4, '0');
 
 interface IssueItemProps {
   data: IssueViewModel;

@@ -1,6 +1,18 @@
 import db from './database';
 
-import { Issue } from '@/types/Issue';
+import { Issue, IssueWithTitleInfo } from '@/types/Issue';
+
+import getStoredProceedure from './database/storedProceedures';
+import { toIssueWithTitleInfoViewModel } from './mappers/issue';
+
+/* DATABASE READS */
+export function getIssuesWithTitleInfo() {
+  const issues = db
+    .prepare(getStoredProceedure('GetIssuesListWithTitleInfo'))
+    .all() as IssueWithTitleInfo[];
+
+  return issues.map(toIssueWithTitleInfoViewModel);
+}
 
 /* DATABASE WRITES */
 export function insertIssue(data: Partial<Issue>) {

@@ -9,7 +9,8 @@ import { IssueViewModel } from '@/types/Issue';
 import SearchBox from '@/components/SearchBox';
 import IssueForm from '@/components/Forms/IssueForm';
 import PageHead from '@/components/PageHead';
-import IssueItem, { getFormattedIssueNumber } from '@/components/IssueItem';
+import IssueItem from '@/components/IssueItem';
+import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 
 import styles from './index.module.css';
 
