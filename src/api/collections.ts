@@ -2,6 +2,7 @@ import db from './database';
 
 import { IssueWithTitleInfo } from '@/types/Issue';
 import { Collection, CollectionWithIssueCount } from '@/types/Collection';
+import { CollectionIssue } from '@/types/CollectionIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
 
@@ -58,5 +59,20 @@ export function updateCollection(data: Partial<Collection>) {
          , Number = @Number
      WHERE Id = @Id
     `
+  ).run(data);
+}
+
+export function insertCollectionIssue(data: Partial<CollectionIssue>) {
+  db.prepare(
+    `INSERT INTO CollectionIssue (CollectionId, IssueId)
+     VALUES (@CollectionId, @IssueId)`
+  ).run(data);
+}
+
+export function removeCollectionIssue(data: Partial<CollectionIssue>) {
+  db.prepare(
+    `DELETE FROM CollectionIssue
+     WHERE CollectionId = @CollectionId
+       AND IssueId = @IssueId`
   ).run(data);
 }
