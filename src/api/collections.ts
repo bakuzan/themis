@@ -62,14 +62,28 @@ export function updateCollection(data: Partial<Collection>) {
   ).run(data);
 }
 
-export function insertCollectionIssue(data: Partial<CollectionIssue>) {
+export function checkCollectionIssueDoesNotExist(data: CollectionIssue) {
+  const existingCollectionIssue = db
+    .prepare(
+      `
+    SELECT * 
+      FROM CollectionIssue
+     WHERE CollectionId = @CollectionId
+       AND IssueId = @IssueId`
+    )
+    .get(data);
+
+  return !existingCollectionIssue;
+}
+
+export function insertCollectionIssue(data: CollectionIssue) {
   db.prepare(
     `INSERT INTO CollectionIssue (CollectionId, IssueId)
      VALUES (@CollectionId, @IssueId)`
   ).run(data);
 }
 
-export function removeCollectionIssue(data: Partial<CollectionIssue>) {
+export function removeCollectionIssue(data: CollectionIssue) {
   db.prepare(
     `DELETE FROM CollectionIssue
      WHERE CollectionId = @CollectionId

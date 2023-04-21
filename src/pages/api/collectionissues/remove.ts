@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { CollectionIssue } from '@/types/CollectionIssue';
+
 import { isFormData } from '@/api/helpers/common';
 import { removeCollectionIssue } from '@/api/collections';
 import { validateCollectionIssueRequest } from '@/api/validators/collection';
@@ -22,7 +24,8 @@ export default async function handler(
     }
   }
 
-  removeCollectionIssue(data.processedData);
+  const collectionIssueForRemoval = data.processedData as CollectionIssue;
+  removeCollectionIssue(collectionIssueForRemoval);
 
   if (isFormPost) {
     response.redirect(`/collections/${collectionId}`);

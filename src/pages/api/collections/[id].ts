@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { isFormData } from '@/api/helpers/common';
 import { updateCollection } from '@/api/collections';
-import { validateRequest } from '@/api/validators/title';
+import { validateRequest } from '@/api/validators/collection';
 
 export default async function handler(
   request: NextApiRequest,

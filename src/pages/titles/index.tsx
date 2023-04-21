@@ -19,8 +19,10 @@ const metadata = {
 export default function Titles(props: TitlesProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
-  const titles = props.items.filter((x) =>
-    x.name.toLowerCase().includes(searchStringLower)
+  const titles = props.items.filter(
+    (x) =>
+      x.name.toLowerCase().includes(searchStringLower) ||
+      `${x.startYear}`.includes(searchStringLower)
   );
   console.log('<Titles>', props);
 

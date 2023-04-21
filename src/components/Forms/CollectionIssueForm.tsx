@@ -78,7 +78,8 @@ export default function CollectionIssueForm(props: CollectionIssueFromProps) {
           <option value="">Select an Issue</option>
           {props.issues.map((x) => (
             <option key={x.id} value={x.id}>
-              {x.titleName} {x.startYear} {getFormattedIssueNumber(x)}
+              {x.titleName} ({x.startYear}) {getFormattedIssueNumber(x)}{' '}
+              {x.isAnnual && '(Annual)'} {x.isOneShot && '(One Shot)'}
             </option>
           ))}
         </InputSelect>

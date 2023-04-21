@@ -1,16 +1,16 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 
 import { getTitleWithIssues } from '@/api/titles';
 import { TitleWithIssuesViewModel } from '@/types/Title';
-import { IssueViewModel } from '@/types/Issue';
 
 import SearchBox from '@/components/SearchBox';
 import IssueForm from '@/components/Forms/IssueForm';
 import PageHead from '@/components/PageHead';
 import IssueItem from '@/components/IssueItem';
-import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
+import { filterTitleIssues } from '@/utils/filters/issues';
 
 import styles from './index.module.css';
 
@@ -19,20 +19,16 @@ interface TitleViewProps {
 }
 
 export default function TitleView(props: TitleViewProps) {
+  const router = useRouter();
+  const refreshData = () => router.replace(router.asPath);
   const data = props.item;
 
   const [issueFormKey, setIssueFormKey] = useState(1);
-  const [newIssues, setNewIssues] = useState([] as IssueViewModel[]);
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
 
-  const allIssues = [...newIssues, ...data.issues];
-  const issues = allIssues.filter(
-    (x) =>
-      x.name.toLowerCase().includes(searchStringLower) ||
-      x.coverDate.includes(searchStringLower) ||
-      getFormattedIssueNumber(x).includes(searchStringLower)
-  );
+  const allIssues = [...data.issues];
+  const issues = allIssues.filter(filterTitleIssues(searchStringLower));
 
   const pageTitle = `${data.name} (${data.startYear})`;
   const latestIssue = issues[0] ?? { number: 0, coverDate: '' };
@@ -61,8 +57,8 @@ export default function TitleView(props: TitleViewProps) {
             key={issueFormKey}
             method="POST"
             action="/api/issues/new"
-            onSuccess={(newIssue) => {
-              setNewIssues((p) => [newIssue, ...p]);
+            onSuccess={() => {
+              refreshData();
               setIssueFormKey((p) => p + 1);
             }}
             data={{

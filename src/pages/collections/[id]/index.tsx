@@ -14,7 +14,7 @@ import CollectionIssueItem from '@/components/CollectionIssueItem';
 import CollectionIssueForm from '@/components/Forms/CollectionIssueForm';
 
 import getCollectionFullName from '@/utils/getCollectionFullName';
-import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
+import { filterCollectionIssues } from '@/utils/filters/issues';
 
 import styles from './index.module.css';
 
@@ -29,23 +29,17 @@ export default function CollectionView(props: CollectionViewProps) {
   const data = props.item;
 
   const [issueFormKey, setIssueFormKey] = useState(1);
-  const [newIssues, setNewIssues] = useState(
-    [] as IssueWithTitleInfoViewModel[]
-  );
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
 
-  const allIssues = [...data.issues, ...newIssues];
-  const issues = allIssues.filter(
-    (x) =>
-      x.titleName.toLowerCase().includes(searchStringLower) ||
-      `${x.startYear}`.includes(searchStringLower) ||
-      x.name.toLowerCase().includes(searchStringLower) ||
-      x.coverDate.includes(searchStringLower) ||
-      getFormattedIssueNumber(x).includes(searchStringLower)
-  );
+  const allIssues = [...data.issues];
+  const issues = allIssues.filter(filterCollectionIssues(searchStringLower));
 
   const pageTitle = getCollectionFullName(data);
+  const issueIds = allIssues.map((x) => x.id);
+  const dropdownIssues = props.issues.filter(
+    (x) => !issueIds.some((y) => y === x.id)
+  );
 
   console.log('<CollectionView>', props);
 
@@ -70,9 +64,9 @@ export default function CollectionView(props: CollectionViewProps) {
             key={issueFormKey}
             method="POST"
             action={`/api/collectionissues/new`}
-            issues={props.issues}
-            onSuccess={(newIssue) => {
-              setNewIssues((p) => [...p, newIssue]);
+            issues={dropdownIssues}
+            onSuccess={() => {
+              refreshData();
               setIssueFormKey((p) => p + 1);
             }}
             data={{

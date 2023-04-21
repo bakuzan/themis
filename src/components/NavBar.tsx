@@ -7,6 +7,9 @@ export default function NavBar() {
       <Link className={styles.navbar__link} href={'/titles'}>
         Titles
       </Link>
+      <Link className={styles.navbar__link} href={'/collections'}>
+        Collections
+      </Link>
     </nav>
   );
 }

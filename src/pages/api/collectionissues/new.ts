@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { CollectionIssue } from '@/types/CollectionIssue';
+
 import { isFormData } from '@/api/helpers/common';
-import { insertCollectionIssue } from '@/api/collections';
+import {
+  checkCollectionIssueDoesNotExist,
+  insertCollectionIssue
+} from '@/api/collections';
 import { validateCollectionIssueRequest } from '@/api/validators/collection';
 
 export default async function handler(
@@ -9,7 +14,7 @@ export default async function handler(
   response: NextApiResponse
 ) {
   const isFormPost = isFormData(request);
-  const data = validateCollectionIssueRequest(request);
+  let data = validateCollectionIssueRequest(request);
   const collectionId = data.processedData.CollectionId;
   console.log('POST', request.body);
 
@@ -22,7 +27,12 @@ export default async function handler(
     }
   }
 
-  insertCollectionIssue(data.processedData);
+  const newCollectionIssue = data.processedData as CollectionIssue;
+
+  // This should only insert request if it doesn't already exist.
+  if (checkCollectionIssueDoesNotExist(newCollectionIssue)) {
+    insertCollectionIssue(newCollectionIssue);
+  }
 
   if (isFormPost) {
     response.redirect(`/collections/${collectionId}`);

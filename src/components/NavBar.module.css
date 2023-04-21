@@ -8,4 +8,5 @@
 
 .navbar__link {
   color: var(--primary-constrast-colour);
+  margin-right: 10px;
 }

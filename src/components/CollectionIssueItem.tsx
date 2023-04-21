@@ -24,7 +24,7 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
     event.preventDefault();
 
     const response = await callApi<DeleteResponse>(deleteActionUrl, {
-      method: 'DELETE',
+      method: 'POST',
       body: JSON.stringify({ collectionId, issueId: item.id })
     });
 
@@ -39,7 +39,7 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
     <li className={styles.item}>
       <div className={styles.coverInfo}>
         <div>
-          {issueNumber} {item.isAnnual && 'Annual'}
+          {item.titleName} {issueNumber} {item.isAnnual && 'Annual'}
         </div>
         &nbsp;
         <div>{item.coverDate}</div>
