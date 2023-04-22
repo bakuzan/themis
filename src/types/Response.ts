@@ -18,3 +18,9 @@ export interface CollectionResponse extends BaseResponse {
 }
 
 export interface CollectionIssueResponse extends BaseResponse {}
+
+export interface ReadOrderResponse extends BaseResponse {
+  id?: number;
+}
+
+export interface ReadOrderIssueResponse extends BaseResponse {}

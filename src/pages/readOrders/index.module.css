@@ -1,0 +1,14 @@
+.list {
+  margin: 10px 0 25px 0;
+}
+
+.list__item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.nameWrapper {
+  display: flex;
+  align-items: center;
+}

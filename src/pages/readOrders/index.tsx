@@ -1,28 +1,29 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-import { getTitles } from '@/api/titles';
-import { TitleViewModel } from '@/types/Title';
+import { getReadOrders } from '@/api/readOrders';
+import { ReadOrderViewModel } from '@/types/ReadOrder';
 
 import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
-import { filterTitles } from '@/utils/filters/titles';
 
 import styles from './index.module.css';
 
-interface TitlesProps {
-  items: TitleViewModel[];
+interface ReadOrdersProps {
+  items: ReadOrderViewModel[];
 }
 
 const metadata = {
-  title: 'Titles'
+  title: 'Read Orders'
 };
 
-export default function Titles(props: TitlesProps) {
+export default function ReadOrders(props: ReadOrdersProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
-  const titles = props.items.filter(filterTitles(searchStringLower));
-  console.log('<Titles>', props);
+  const readOrders = props.items.filter((x) =>
+    x.name.toLowerCase().includes(searchStringLower)
+  );
+  console.log('<ReadOrders>', props);
 
   return (
     <section>
@@ -30,7 +31,7 @@ export default function Titles(props: TitlesProps) {
       <header className="header">
         <h1>{metadata.title}</h1>
         <div>
-          <Link href="/titles/new">Create New Title</Link>
+          <Link href="/readOrders/new">Create New Read Order</Link>
         </div>
       </header>
       <div>
@@ -39,11 +40,10 @@ export default function Titles(props: TitlesProps) {
           onChange={(text) => setSearchString(text)}
         />
         <ul className={styles.list}>
-          {titles.map((x) => (
+          {readOrders.map((x) => (
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
-                <Link href={`/titles/${x.id}`}>{x.name}</Link>
-                {x.isOneShot && <span className="muted">&nbsp;(One Shot)</span>}
+                <Link href={`/readOrders/${x.id}`}>{x.name}</Link>
               </div>
               <div className="muted">
                 {x.issueCount} {x.issueCount === 1 ? 'issue' : 'issues'}
@@ -57,7 +57,7 @@ export default function Titles(props: TitlesProps) {
 }
 
 export async function getServerSideProps() {
-  const items = getTitles();
+  const items = getReadOrders();
 
   return {
     props: { items }

@@ -13,15 +13,15 @@ import ButtonGroup from '@/components/ButtonGroup';
 import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 
-interface CollectionIssueFormProps {
+interface ReadOrderIssueFormProps {
   method: string;
   action: string;
-  data: Partial<CollectionIssueViewModel>;
+  data: Partial<ReadOrderIssueViewModel>;
   issues: IssueWithTitleInfoViewModel[];
   onSuccess: (issue: IssueWithTitleInfoViewModel) => void;
 }
 
-export default function CollectionIssueForm(props: CollectionIssueFormProps) {
+export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
   const { data } = props;
   const [issueId, setIssueId] = useState(data.issueId);
 
@@ -32,7 +32,7 @@ export default function CollectionIssueForm(props: CollectionIssueFormProps) {
       issueId
     };
 
-    const response = await callApi<CollectionIssueResponse>(props.action, {
+    const response = await callApi<ReadOrderIssueResponse>(props.action, {
       method: props.method,
       body: JSON.stringify(payload)
     });
@@ -54,15 +54,15 @@ export default function CollectionIssueForm(props: CollectionIssueFormProps) {
       <form
         method={convertMethodToFormValidMethod(props.method)}
         action={props.action}
-        id="collectionIssueForm"
-        name="collectionIssueForm"
+        id="readOrderIssueForm"
+        name="readOrderIssueForm"
         onSubmit={handleSubmit}
       >
         <Input
           type="hidden"
-          id="collectionId"
-          name="collectionId"
-          value={data.collectionId}
+          id="readOrderId"
+          name="readOrderId"
+          value={data.readOrderId}
         />
         <InputSelect
           id="issueId"
