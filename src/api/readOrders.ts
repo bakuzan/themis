@@ -1,7 +1,7 @@
 import db from './database';
 
 import { ReadOrder, ReadOrderWithIssueCount } from '@/types/ReadOrder';
-import { Issue } from '@/types/Issue';
+import { Issue, IssueWithReadOrderInfo } from '@/types/Issue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
 
@@ -13,9 +13,9 @@ import {
 /* DATEBASE READS */
 export function getReadOrders() {
   const query = getStoredProceedure('GetReadOrdersWithIssueCount');
-  const titles = db.prepare(query).all() as ReadOrderWithIssueCount[];
+  const readOrders = db.prepare(query).all() as ReadOrderWithIssueCount[];
 
-  return titles.map(toReadOrderViewModel);
+  return readOrders.map(toReadOrderViewModel);
 }
 
 export function getReadOrderById(id: number) {
@@ -32,7 +32,7 @@ export function getReadOrderWithIssues(id: number) {
     .get(id) as ReadOrder;
 
   const query = getStoredProceedure('GetIssuesListForReadOrder');
-  const issues = db.prepare(query).all(id) as any[]; // TODO nned the special interfces
+  const issues = db.prepare(query).all(id) as IssueWithReadOrderInfo[];
 
   return toReadOrderWithIssuesViewModel(readOrder, issues);
 }

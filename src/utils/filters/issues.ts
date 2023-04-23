@@ -1,11 +1,18 @@
-import { IssueViewModel, IssueWithTitleInfoViewModel } from '@/types/Issue';
+import {
+  IssueViewModel,
+  IssueWithReadOrderInfoViewModel,
+  IssueWithTitleInfoViewModel
+} from '@/types/Issue';
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
+import getCollectionFullName from '@/utils/getCollectionFullName';
+
+// TODO consider splitting search term on spaces...
 
 export function filterReadOrderIssues(searchStringLower: string) {
-  // TODO set the correct thing here...
-  return (x: IssueWithTitleInfoViewModel) =>
+  return (x: IssueWithReadOrderInfoViewModel) =>
     x.titleName.toLowerCase().includes(searchStringLower) ||
     `${x.startYear}`.includes(searchStringLower) ||
+    getCollectionFullName(x)?.toLowerCase().includes(searchStringLower) ||
     x.name.toLowerCase().includes(searchStringLower) ||
     x.coverDate.includes(searchStringLower) ||
     getFormattedIssueNumber(x).includes(searchStringLower);

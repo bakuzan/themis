@@ -1,9 +1,11 @@
+import { IssueWithReadOrderInfo } from '@/types/Issue';
 import {
   ReadOrder,
   ReadOrderViewModel,
   ReadOrderWithIssueCount,
   ReadOrderWithIssuesViewModel
 } from '@/types/ReadOrder';
+import { toIssueWithReadOrderInfoViewModel } from './issue';
 
 export function toReadOrderViewModel(
   readOrder: ReadOrder | ReadOrderWithIssueCount
@@ -17,12 +19,12 @@ export function toReadOrderViewModel(
 
 export function toReadOrderWithIssuesViewModel(
   readOrder: ReadOrder,
-  issues: any[] // TODO interfaces or something...
+  issues: IssueWithReadOrderInfo[]
 ): ReadOrderWithIssuesViewModel {
   return {
     id: readOrder.Id,
     name: readOrder.Name,
     issueCount: issues.length,
-    issues: [] //issues.map(toIssueViewModel)
+    issues: issues.map(toIssueWithReadOrderInfoViewModel)
   };
 }

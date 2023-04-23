@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
@@ -38,10 +38,8 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
   const issues = allIssues.filter(filterReadOrderIssues(searchStringLower));
 
   const pageTitle = data.name;
-  const issueIds = allIssues.map((x) => x.id);
-  const dropdownIssues = props.issues.filter(
-    (x) => !issueIds.some((y) => y === x.id)
-  );
+  const dropdownCollections = props.collections;
+  const dropdownIssues = props.issues;
 
   console.log('<ReadOrderView>', props);
 
@@ -66,6 +64,7 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
             key={formKey}
             method="POST"
             action={`/api/readOrderIssues/new`}
+            collections={dropdownCollections}
             issues={dropdownIssues}
             onSuccess={() => {
               refreshData();
@@ -82,16 +81,22 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
           value={searchString}
           onChange={(text) => setSearchString(text)}
         />
-        {/* <ul className={styles.list}>
-          {issues.map((x) => (
-            <CollectionIssueItem
-              key={x.id}
-              data={x}
-              collectionId={data.id}
-              onRemove={refreshData}
-            />
-          ))}
-        </ul> */}
+        <ul className={styles.list}>
+          {issues.map((item, index, arr) => {
+            const prevItem = arr[index - 1];
+            const collectionStarting =
+              !prevItem || prevItem.collectionId !== item.collectionId;
+
+            return (
+              <ReadOrderIssueItem
+                key={`${item.collectionId}_${item.issueId}`}
+                includeHeader={collectionStarting}
+                data={item}
+                onRemove={refreshData}
+              />
+            );
+          })}
+        </ul>
       </div>
       <footer>{/* TODO Add a delete button */}</footer>
     </section>
@@ -108,7 +113,7 @@ export async function getServerSideProps(
 
   const item = getReadOrderWithIssues(Number(id));
   const collections = getCollections();
-  const issues = getIssuesWithTitleInfo();
+  const issues = getIssuesWithTitleInfo(); // TODO get issues without a collection only...
 
   return {
     props: { item, collections, issues }

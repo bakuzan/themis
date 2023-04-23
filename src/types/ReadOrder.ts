@@ -1,3 +1,5 @@
+import { IssueWithReadOrderInfoViewModel } from './Issue';
+
 export interface ReadOrder {
   Id: number;
   Name: string;
@@ -14,5 +16,5 @@ export interface ReadOrderViewModel {
 }
 
 export interface ReadOrderWithIssuesViewModel extends ReadOrderViewModel {
-  issues: any[]; // TODO will need custom interface for this.
+  issues: IssueWithReadOrderInfoViewModel[];
 }

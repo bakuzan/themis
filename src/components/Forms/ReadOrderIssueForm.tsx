@@ -1,7 +1,8 @@
 import { FormEvent, useState } from 'react';
 
-import { CollectionIssueViewModel } from '@/types/CollectionIssue';
-import { CollectionIssueResponse } from '@/types/Response';
+import { CollectionViewModel } from '@/types/Collection';
+import { ReadOrderIssueViewModel } from '@/types/ReadOrderIssue';
+import { ReadOrderIssueResponse } from '@/types/Response';
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
 import callApi from '@/utils/callApi';
 
@@ -12,23 +13,27 @@ import ButtonGroup from '@/components/ButtonGroup';
 
 import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
+import getCollectionFullName from '@/utils/getCollectionFullName';
 
 interface ReadOrderIssueFormProps {
   method: string;
   action: string;
   data: Partial<ReadOrderIssueViewModel>;
+  collections: CollectionViewModel[];
   issues: IssueWithTitleInfoViewModel[];
-  onSuccess: (issue: IssueWithTitleInfoViewModel) => void;
+  onSuccess: () => void;
 }
 
 export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
   const { data } = props;
   const [issueId, setIssueId] = useState(data.issueId);
+  const [collectionId, setCollectionId] = useState(data.collectionId);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const payload = {
-      collectionId: data.collectionId,
+      readOrderId: data.readOrderId,
+      collectionId,
       issueId
     };
 
@@ -38,12 +43,7 @@ export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
     });
 
     if (response.success) {
-      const issue = props.issues.find((x) => x.id === issueId);
-      if (!issue) {
-        throw new Error('This should never happen!');
-      }
-
-      props.onSuccess(issue);
+      props.onSuccess();
     } else {
       // TODO handle errors...
     }
@@ -65,10 +65,26 @@ export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
           value={data.readOrderId}
         />
         <InputSelect
+          id="collectionId"
+          name="collectionId"
+          label="Collection"
+          value={collectionId}
+          onChange={(e) => {
+            const value = e.target.value;
+            setCollectionId(value ? Number(value) : undefined);
+          }}
+        >
+          <option value="">Select a Collection</option>
+          {props.collections.map((x) => (
+            <option key={x.id} value={x.id}>
+              {getCollectionFullName(x)}
+            </option>
+          ))}
+        </InputSelect>
+        <InputSelect
           id="issueId"
           name="issueId"
           label="Issue"
-          required
           value={issueId}
           onChange={(e) => {
             const value = e.target.value;

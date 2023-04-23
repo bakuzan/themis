@@ -1,6 +1,6 @@
 import filterFalsey from './filterFalsey';
 
-type ClassesTypes = string | boolean | null | undefined;
+type ClassesTypes = string | number | boolean | null | undefined;
 
 export default function classNames(...args: (ClassesTypes | ClassesTypes[])[]) {
   const options = args.reduce<ClassesTypes[]>(
