@@ -14,6 +14,14 @@ export function getIssuesWithTitleInfo() {
   return issues.map(toIssueWithTitleInfoViewModel);
 }
 
+export function getIssuesWithoutACollection() {
+  const issues = db
+    .prepare(getStoredProceedure('GetIssuesWithoutACollection'))
+    .all() as IssueWithTitleInfo[];
+
+  return issues.map(toIssueWithTitleInfoViewModel);
+}
+
 /* DATABASE WRITES */
 export function insertIssue(data: Partial<Issue>) {
   const result = db

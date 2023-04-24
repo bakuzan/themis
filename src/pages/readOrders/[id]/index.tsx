@@ -1,14 +1,15 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 
-import { getReadOrderWithIssues } from '@/api/readOrders';
-import { getCollections } from '@/api/collections';
-import { getIssuesWithTitleInfo } from '@/api/issues';
 import { ReadOrderWithIssuesViewModel } from '@/types/ReadOrder';
 import { CollectionViewModel } from '@/types/Collection';
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
+
+import { getReadOrderWithIssues } from '@/api/readOrders';
+import { getCollectionsForDropdown } from '@/api/collections';
+import { getIssuesWithoutACollection } from '@/api/issues';
 
 import SearchBox from '@/components/SearchBox';
 import PageHead from '@/components/PageHead';
@@ -18,6 +19,7 @@ import ReadOrderIssueForm from '@/components/Forms/ReadOrderIssueForm';
 import { filterReadOrderIssues } from '@/utils/filters/issues';
 
 import styles from './index.module.css';
+import { exclude } from '@/utils/filters/includeExclude';
 
 interface ReadOrderViewProps {
   item: ReadOrderWithIssuesViewModel;
@@ -38,8 +40,11 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
   const issues = allIssues.filter(filterReadOrderIssues(searchStringLower));
 
   const pageTitle = data.name;
-  const dropdownCollections = props.collections;
-  const dropdownIssues = props.issues;
+  const collectionIds = allIssues.map((x) => x.collectionId);
+  const issueIds = allIssues.map((x) => x.issueId);
+
+  const dropdownCollections = exclude(props.collections, collectionIds);
+  const dropdownIssues = exclude(props.issues, issueIds);
 
   console.log('<ReadOrderView>', props);
 
@@ -85,7 +90,9 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
           {issues.map((item, index, arr) => {
             const prevItem = arr[index - 1];
             const collectionStarting =
-              !prevItem || prevItem.collectionId !== item.collectionId;
+              !prevItem ||
+              (prevItem.collectionId !== item.collectionId &&
+                !!item.collectionId);
 
             return (
               <ReadOrderIssueItem
@@ -108,12 +115,12 @@ export async function getServerSideProps(
 ) {
   const { id } = context.params ?? {};
   if (!id) {
-    throw new Error(`readOrder/[id] was called without an id!`);
+    throw new Error(`readOrders/[id] was called without an id!`);
   }
 
   const item = getReadOrderWithIssues(Number(id));
-  const collections = getCollections();
-  const issues = getIssuesWithTitleInfo(); // TODO get issues without a collection only...
+  const collections = getCollectionsForDropdown();
+  const issues = getIssuesWithoutACollection();
 
   return {
     props: { item, collections, issues }

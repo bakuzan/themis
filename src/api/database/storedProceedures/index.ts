@@ -5,10 +5,12 @@ type StoredProceedures =
   | 'GetTitlesWithIssueCount'
   | 'GetIssuesListForTitle'
   | 'GetCollectionsWithIssueCount'
+  | 'GetCollectionsForDropdown'
   | 'GetIssuesListForCollection'
   | 'GetIssuesListWithTitleInfo'
   | 'GetReadOrdersWithIssueCount'
-  | 'GetIssuesListForReadOrder';
+  | 'GetIssuesListForReadOrder'
+  | 'GetIssuesWithoutACollection';
 
 const proceedures = {} as Record<StoredProceedures, string>;
 const targetFolder = path.join(

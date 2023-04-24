@@ -77,7 +77,7 @@ export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
           <option value="">Select a Collection</option>
           {props.collections.map((x) => (
             <option key={x.id} value={x.id}>
-              {getCollectionFullName(x)}
+              {getCollectionFullName(x, true)}
             </option>
           ))}
         </InputSelect>
@@ -95,7 +95,7 @@ export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
           {props.issues.map((x) => (
             <option key={x.id} value={x.id}>
               {x.titleName} ({x.startYear}) {getFormattedIssueNumber(x)}{' '}
-              {x.isAnnual && '(Annual)'} {x.isOneShot && '(One Shot)'}
+              {x.isOneShot && '(One Shot)'}
             </option>
           ))}
         </InputSelect>

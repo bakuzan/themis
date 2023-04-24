@@ -14,9 +14,9 @@ import {
 /* DATEBASE READS */
 export function getCollections() {
   const query = getStoredProceedure('GetCollectionsWithIssueCount');
-  const titles = db.prepare(query).all() as CollectionWithIssueCount[];
+  const collections = db.prepare(query).all() as CollectionWithIssueCount[];
 
-  return titles.map(toCollectionViewModel);
+  return collections.map(toCollectionViewModel);
 }
 
 export function getCollectionById(id: number) {
@@ -36,6 +36,13 @@ export function getCollectionWithIssues(id: number) {
   const issues = db.prepare(query).all(id) as IssueWithTitleInfo[];
 
   return toCollectionWithIssuesViewModel(collection, issues);
+}
+
+export function getCollectionsForDropdown() {
+  const query = getStoredProceedure('GetCollectionsForDropdown');
+  const collections = db.prepare(query).all() as CollectionWithIssueCount[];
+
+  return collections.map(toCollectionViewModel);
 }
 
 /* DATABASE WRITES */
