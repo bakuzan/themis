@@ -90,9 +90,8 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
           {issues.map((item, index, arr) => {
             const prevItem = arr[index - 1];
             const collectionStarting =
-              !prevItem ||
-              (prevItem.collectionId !== item.collectionId &&
-                !!item.collectionId);
+              !!item.collectionId &&
+              (!prevItem || prevItem.collectionId !== item.collectionId);
 
             return (
               <ReadOrderIssueItem

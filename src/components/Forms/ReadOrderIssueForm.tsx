@@ -68,7 +68,7 @@ export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
           id="collectionId"
           name="collectionId"
           label="Collection"
-          value={collectionId}
+          value={collectionId ?? undefined}
           onChange={(e) => {
             const value = e.target.value;
             setCollectionId(value ? Number(value) : undefined);
