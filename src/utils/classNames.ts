@@ -1,4 +1,4 @@
-import filterFalsey from './filterFalsey';
+import filterFalsey from './filters/falsey';
 
 type ClassesTypes = string | number | boolean | null | undefined;
 

@@ -18,6 +18,11 @@ export interface ReadOrderIssuesRequest {
   IssueId: number | null;
 }
 
-export interface AddReadOrderIssuesRequest extends ReadOrderIssuesRequest {}
+export interface AddReadOrderIssuesRequest extends ReadOrderIssuesRequest {
+  BeforeReadOrderIssue?: {
+    CollectionId: number | null;
+    IssueId: number;
+  };
+}
 
 export interface RemoveReadOrderIssuesRequest extends ReadOrderIssuesRequest {}

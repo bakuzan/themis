@@ -1,17 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { AddReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
-
 import { isFormData } from '@/api/helpers/common';
 import { insertReadOrderIssues } from '@/api/readOrders';
-import { validateReadOrderIssueRequest } from '@/api/validators/readOrder';
+import { validateAddReadOrderIssueRequest } from '@/api/validators/readOrder';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
   const isFormPost = isFormData(request);
-  const data = validateReadOrderIssueRequest(request);
+  const data = validateAddReadOrderIssueRequest(request);
   const readOrderId = data.processedData.ReadOrderId;
   console.log('POST', request.body);
 
@@ -24,8 +22,7 @@ export default async function handler(
     }
   }
 
-  const addRequest = data.processedData as AddReadOrderIssuesRequest;
-  insertReadOrderIssues(addRequest);
+  insertReadOrderIssues(data.processedData);
 
   if (isFormPost) {
     response.redirect(`/readOrders/${readOrderId}`);

@@ -8,6 +8,24 @@ import getCollectionFullName from '@/utils/getCollectionFullName';
 
 // TODO consider splitting search term on spaces...
 
+export function filterReadOrderIssueOnUniqueCollection(
+  issue: IssueWithReadOrderInfoViewModel,
+  index: number,
+  arr: IssueWithReadOrderInfoViewModel[]
+) {
+  // if there is no collection the loose issue needs to be included.
+  if (!issue.collectionId) {
+    return true;
+  }
+
+  // only keep the first issue of a collection as source of information
+  const collectionIndex = arr.findIndex(
+    (x) => x.collectionId === issue.collectionId
+  );
+
+  return collectionIndex === index;
+}
+
 export function filterReadOrderIssues(searchStringLower: string) {
   return (x: IssueWithReadOrderInfoViewModel) =>
     x.titleName.toLowerCase().includes(searchStringLower) ||

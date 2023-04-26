@@ -4,6 +4,8 @@ import { ReadOrder } from '@/types/ReadOrder';
 import { ReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
 
 import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
+import { AddReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
+import { RemoveReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
 
 export function validateRequest(request: NextApiRequest) {
   const data = isFormData(request) ? request.body : JSON.parse(request.body);
@@ -29,9 +31,10 @@ export function validateRequest(request: NextApiRequest) {
   };
 }
 
-export function validateReadOrderIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
-
+/* Read Order Issue Validators */
+function validateReadOrderIssueRequest<T extends ReadOrderIssuesRequest>(
+  data: any
+) {
   const errorMessages = [];
   const processedData: Partial<ReadOrderIssuesRequest> = {};
 
@@ -63,6 +66,40 @@ export function validateReadOrderIssueRequest(request: NextApiRequest) {
   return {
     success: errorMessages.length === 0,
     errorMessages,
-    processedData
+    processedData: processedData as T
   };
+}
+
+export function validateAddReadOrderIssueRequest(request: NextApiRequest) {
+  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+  const response =
+    validateReadOrderIssueRequest<AddReadOrderIssuesRequest>(data);
+
+  if (!response.success) {
+    return response;
+  }
+
+  if (!isNullOrEmpty(data.beforeReadOrderIssueKey)) {
+    const parts = data.beforeReadOrderIssueKey.split('_');
+
+    if (parts.length === 3) {
+      const [_, collectionIdStr, issueIdStr] = parts;
+      const CollectionId = parseInt(collectionIdStr);
+      const IssueId = parseInt(issueIdStr);
+
+      if (!isNaN(IssueId)) {
+        response.processedData.BeforeReadOrderIssue = {
+          CollectionId: isNaN(CollectionId) ? null : CollectionId,
+          IssueId
+        };
+      }
+    }
+  }
+
+  return response;
+}
+
+export function validateRemoveReadOrderIssueRequest(request: NextApiRequest) {
+  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+  return validateReadOrderIssueRequest<RemoveReadOrderIssuesRequest>(data);
 }

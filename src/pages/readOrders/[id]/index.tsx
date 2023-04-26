@@ -17,9 +17,10 @@ import ReadOrderIssueItem from '@/components/ReadOrderIssueItem';
 import ReadOrderIssueForm from '@/components/Forms/ReadOrderIssueForm';
 
 import { filterReadOrderIssues } from '@/utils/filters/issues';
+import { exclude } from '@/utils/filters/includeExclude';
+import getReadOrderIssueKey from '@/utils/getReadOrderIssueKey';
 
 import styles from './index.module.css';
-import { exclude } from '@/utils/filters/includeExclude';
 
 interface ReadOrderViewProps {
   item: ReadOrderWithIssuesViewModel;
@@ -69,6 +70,7 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
             key={formKey}
             method="POST"
             action={`/api/readOrderIssues/new`}
+            readOrderIssues={data.issues}
             collections={dropdownCollections}
             issues={dropdownIssues}
             onSuccess={() => {
@@ -95,7 +97,7 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
 
             return (
               <ReadOrderIssueItem
-                key={`${item.collectionId}_${item.issueId}`}
+                key={getReadOrderIssueKey(item)}
                 includeHeader={collectionStarting}
                 data={item}
                 onRemove={refreshData}

@@ -15,6 +15,7 @@ import {
   toReadOrderWithIssuesViewModel
 } from './mappers/readOrder';
 import { CollectionIssue } from '@/types/CollectionIssue';
+import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
 
 /* DATEBASE READS */
 export function getReadOrders() {
@@ -68,6 +69,7 @@ export function updateReadOrder(data: Partial<ReadOrder>) {
 export function insertReadOrderIssues(data: AddReadOrderIssuesRequest) {
   const items: ReadOrderIssue[] = [];
 
+  // process the request ids to create a list of new read order issues
   if (data.CollectionId) {
     const ci = db
       .prepare(`SELECT * FROM CollectionIssue WHERE CollectionId = ?`)
@@ -91,9 +93,11 @@ export function insertReadOrderIssues(data: AddReadOrderIssuesRequest) {
     throw new Error('This should never happen!');
   }
 
-  // TODO
-  // Calculate Sort Order from Issue(s) !! This is the question....
+  // update the sort order to what the real values
+  // should be based on request values
+  calculateNewReadOrderIssueSortOrder(data, items);
 
+  // prepare the insert and run in a transactions
   const insertROI = db.prepare<ReadOrderIssue>(
     `INSERT INTO ReadOrderIssue (ReadOrderId, CollectionId, IssueId, SortOrder)
      VALUES (@ReadOrderId, @CollectionId, @IssueId, @SortOrder)`
