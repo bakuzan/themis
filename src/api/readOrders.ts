@@ -2,6 +2,7 @@ import db from './database';
 
 import { ReadOrder, ReadOrderWithIssueCount } from '@/types/ReadOrder';
 import { IssueWithReadOrderInfo } from '@/types/Issue';
+import { CollectionIssue } from '@/types/CollectionIssue';
 import {
   AddReadOrderIssuesRequest,
   ReadOrderIssue,
@@ -14,8 +15,12 @@ import {
   toReadOrderViewModel,
   toReadOrderWithIssuesViewModel
 } from './mappers/readOrder';
-import { CollectionIssue } from '@/types/CollectionIssue';
 import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
+
+interface ReadOrderIssueChanges {
+  items: ReadOrderIssue[];
+  updateItems: ReadOrderIssue[];
+}
 
 /* DATEBASE READS */
 export function getReadOrders() {
@@ -95,7 +100,7 @@ export function insertReadOrderIssues(data: AddReadOrderIssuesRequest) {
 
   // update the sort order to what the real values
   // should be based on request values
-  calculateNewReadOrderIssueSortOrder(data, items);
+  const updateItems = calculateNewReadOrderIssueSortOrder(data, items);
 
   // prepare the insert and run in a transactions
   const insertROI = db.prepare<ReadOrderIssue>(
@@ -103,13 +108,30 @@ export function insertReadOrderIssues(data: AddReadOrderIssuesRequest) {
      VALUES (@ReadOrderId, @CollectionId, @IssueId, @SortOrder)`
   );
 
-  const insertROIs = db.transaction((rows: ReadOrderIssue[]) => {
-    for (let row of rows) {
-      insertROI.run(row);
-    }
-  });
+  const updateROI = db.prepare<ReadOrderIssue>(
+    `UPDATE ReadOrderIssue
+        SET SortOrder = @SortOrder
+      WHERE ReadOrderId = @ReadOrderId
+        AND (@CollectionId IS NULL OR CollectionId = @CollectionId)
+        AND IssueId = @IssueId`
+  );
 
-  insertROIs(items);
+  const insertAndUpdateROIs = db.transaction(
+    (changes: ReadOrderIssueChanges) => {
+      const rows = changes.items;
+      const updateRows = changes.updateItems;
+
+      for (let newRow of rows) {
+        insertROI.run(newRow);
+      }
+
+      for (let currentRow of updateRows) {
+        updateROI.run(currentRow);
+      }
+    }
+  );
+
+  insertAndUpdateROIs({ items, updateItems });
 }
 
 export function removeReadOrderIssues(data: RemoveReadOrderIssuesRequest) {
