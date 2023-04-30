@@ -1,11 +1,19 @@
 import { NextApiRequest } from 'next';
 
 import { ReadOrder } from '@/types/ReadOrder';
-import { ReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
-
-import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
+import {
+  ReOrderReadOrderIssuesRequest,
+  ReadOrderIssuesRequest
+} from '@/types/ReadOrderIssue';
 import { AddReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
 import { RemoveReadOrderIssuesRequest } from '@/types/ReadOrderIssue';
+
+import {
+  isFormData,
+  isNullOrEmpty,
+  returnNumberOrNull
+} from '@/api/helpers/common';
+import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
 export function validateRequest(request: NextApiRequest) {
   const data = isFormData(request) ? request.body : JSON.parse(request.body);
@@ -97,6 +105,39 @@ export function validateAddReadOrderIssueRequest(request: NextApiRequest) {
   }
 
   return response;
+}
+
+export function validateEditReadOrderIssueRequest(request: NextApiRequest) {
+  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+  const errorMessages = [];
+  const processedData: Partial<ReOrderReadOrderIssuesRequest> = {};
+
+  // Set the id if it exists (must be an update)
+  processedData.ReadOrderId = Number(data.readOrderId);
+
+  if (!data.collectionId && !data.issueId) {
+    errorMessages.push('Either Collection Id or Issue Id are required');
+  } else {
+    const collectionId = Number(data.collectionId);
+    const issueId = Number(data.issueId);
+    processedData.CollectionId = returnNumberOrNull(collectionId);
+    processedData.IssueId = returnNumberOrNull(issueId);
+  }
+
+  if (!data.direction) {
+    errorMessages.push(`Direction should be either 'UP' or 'DOWN'`);
+  } else {
+    processedData.Direction =
+      data.direction === ReOrderDirection.UP
+        ? ReOrderDirection.UP
+        : ReOrderDirection.DOWN;
+  }
+
+  return {
+    success: errorMessages.length === 0,
+    errorMessages,
+    processedData: processedData as ReOrderReadOrderIssuesRequest
+  };
 }
 
 export function validateRemoveReadOrderIssueRequest(request: NextApiRequest) {

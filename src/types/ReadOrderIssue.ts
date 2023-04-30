@@ -1,3 +1,5 @@
+import { ReOrderDirection } from '@/constants/ReOrderDirection';
+
 export interface ReadOrderIssue {
   ReadOrderId: number;
   CollectionId: number | null;
@@ -26,3 +28,10 @@ export interface AddReadOrderIssuesRequest extends ReadOrderIssuesRequest {
 }
 
 export interface RemoveReadOrderIssuesRequest extends ReadOrderIssuesRequest {}
+
+export interface ReOrderReadOrderIssuesRequest {
+  ReadOrderId: number;
+  CollectionId: number | null;
+  IssueId: number | null;
+  Direction: ReOrderDirection;
+}

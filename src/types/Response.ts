@@ -24,3 +24,5 @@ export interface ReadOrderResponse extends BaseResponse {
 }
 
 export interface ReadOrderIssueResponse extends BaseResponse {}
+
+export interface ReadOrderIssueReOrderResponse extends BaseResponse {}

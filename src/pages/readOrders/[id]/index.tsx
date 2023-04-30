@@ -100,6 +100,7 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
                 key={getReadOrderIssueKey(item)}
                 includeHeader={collectionStarting}
                 data={item}
+                onEdit={refreshData}
                 onRemove={refreshData}
               />
             );

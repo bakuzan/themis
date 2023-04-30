@@ -30,3 +30,17 @@
   justify-content: space-between;
   align-items: center;
 }
+
+/* Actions styling */
+.actions {
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.headerItem:hover .actions,
+.item:hover .actions {
+  pointer-events: unset;
+  visibility: visible;
+  opacity: 1;
+}

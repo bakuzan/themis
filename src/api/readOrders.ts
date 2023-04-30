@@ -5,17 +5,17 @@ import { IssueWithReadOrderInfo } from '@/types/Issue';
 import { CollectionIssue } from '@/types/CollectionIssue';
 import {
   AddReadOrderIssuesRequest,
+  ReOrderReadOrderIssuesRequest,
   ReadOrderIssue,
   RemoveReadOrderIssuesRequest
 } from '@/types/ReadOrderIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
-
+import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
 import {
   toReadOrderViewModel,
   toReadOrderWithIssuesViewModel
 } from './mappers/readOrder';
-import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
 
 interface ReadOrderIssueChanges {
   items: ReadOrderIssue[];
@@ -143,4 +143,19 @@ export function removeReadOrderIssues(data: RemoveReadOrderIssuesRequest) {
             OR (CollectionId IS NULL AND IssueId = @IssueId))
     `
   ).run(data);
+}
+
+export function reOrderReadOrderIssues(data: ReOrderReadOrderIssuesRequest) {
+  // TODO Re-order within a collection
+  // If CollectionId and IssueId
+  //  > Move Issue in direction requested (within the collection)
+  // You only need to get the issues for this collection!
+  // TODO Re-order within read order
+  // If CollectionId and Not IssueId
+  //  > Move Collection in direction request
+  // If Not CollectionId and IssueId
+  //  > Move Collection in direction request (same as Collection)
+  // You need to get all of the issues as follows:
+  //  If DOWN, get all from the requested item and below.
+  //  If UP, get all from the requested item -1 and below.
 }
