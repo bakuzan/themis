@@ -99,6 +99,8 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
             return (
               <ReadOrderIssueItem
                 key={getReadOrderIssueKey(item)}
+                isFirst={index === 0}
+                isLast={index === arr.length - 1} // TODO fix this for when collection is last...
                 includeHeader={collectionStarting}
                 data={item}
                 onEdit={refreshData}

@@ -9,6 +9,9 @@
   --primary-constrast-colour: #fff;
   --accent-background: #4682b4; /* STEEL BLUE */ /* #008080; /* TEAL */
 
+  --disabled-background: #757575;
+  --disabled-colour: #fff;
+
   --danger-colour: #b22222;
   --muted-colour: #757575;
 

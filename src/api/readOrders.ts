@@ -19,6 +19,7 @@ import {
 import { ReOrderDirection } from '@/constants/ReOrderDirection';
 import setIssueSortOrders from './helpers/setIssueSortOrders';
 import { moveToNewArrayPosition } from './helpers/common';
+import reOrderIssuesList from './helpers/reOrderIssueList';
 
 interface ReadOrderIssueChanges {
   items: ReadOrderIssue[];
@@ -149,6 +150,7 @@ export function removeReadOrderIssues(data: RemoveReadOrderIssuesRequest) {
 }
 
 export function reOrderReadOrderIssues(data: ReOrderReadOrderIssuesRequest) {
+  const isMovingUp = data.Direction === ReOrderDirection.UP;
   let changedIssues: ReadOrderIssue[] = [];
 
   // Re-order issues within a collection
@@ -157,7 +159,7 @@ export function reOrderReadOrderIssues(data: ReOrderReadOrderIssuesRequest) {
     const issues = db.prepare(query).all(data) as ReadOrderIssue[];
 
     const initialSortOrder = issues[0].SortOrder;
-    const diff = data.Direction === ReOrderDirection.UP ? -1 : 1;
+    const diff = isMovingUp ? -1 : 1;
     const targetIndex = issues.findIndex((x) => x.IssueId === data.IssueId);
     const toIndex = targetIndex + diff;
     const reOrderedIssues = moveToNewArrayPosition(
@@ -170,14 +172,19 @@ export function reOrderReadOrderIssues(data: ReOrderReadOrderIssuesRequest) {
     changedIssues = reOrderedIssues;
   } else {
     // Re-order within read order
-    // TODO
-    // If CollectionId and Not IssueId
-    //  > Move Collection in direction request
-    // If Not CollectionId and IssueId
-    //  > Move Collection in direction request (same as Collection)
-    // You need to get all of the issues as follows:
-    //  If DOWN, get all from the requested item and below.
-    //  If UP, get all from the requested item -1 and below.
+    const query = getStoredProceedure('GetIssuesUsingTargetInReadOrder');
+    const issues = db.prepare(query).all({
+      ReadOrderId: data.ReadOrderId,
+      CollectionId: data.CollectionId,
+      IssueId: data.IssueId,
+      IncludePriors: isMovingUp ? 1 : 0
+    }) as ReadOrderIssue[];
+
+    const initialSortOrder = issues[0].SortOrder;
+    const reOrderedIssues = reOrderIssuesList(data, issues);
+
+    setIssueSortOrders(reOrderedIssues, initialSortOrder);
+    changedIssues = reOrderedIssues;
   }
 
   // Perform updates on the issues that were re-ordered during processing

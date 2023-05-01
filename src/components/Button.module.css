@@ -10,3 +10,12 @@
 .button:hover {
   box-shadow: 0px 0px 5px 0px var(--accent-background);
 }
+
+.button:disabled,
+.button[disabled] {
+  box-shadow: unset;
+  border-color: transparent;
+  background-color: var(--disabled-background);
+  color: var(--disabled-colour);
+  cursor: default;
+}

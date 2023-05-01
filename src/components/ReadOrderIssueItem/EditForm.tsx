@@ -10,6 +10,8 @@ import Button from '@/components/Button';
 import styles from './EditForm.module.css';
 
 interface EditFormProps {
+  canUp: boolean;
+  canDown: boolean;
   readOrderId: number;
   collectionId?: number;
   issueId?: number;
@@ -60,6 +62,7 @@ export default function EditForm(props: EditFormProps) {
           title="Move earlier in the read order"
           type="submit"
           name={ReOrderDirection.UP}
+          disabled={!props.canUp}
         >
           <span aria-hidden={true}>&#x25b2;</span>
         </Button>
@@ -68,6 +71,7 @@ export default function EditForm(props: EditFormProps) {
           title="Move later in the read order"
           type="submit"
           name={ReOrderDirection.DOWN}
+          disabled={!props.canDown}
         >
           <span aria-hidden={true}>&#x25bc;</span>
         </Button>

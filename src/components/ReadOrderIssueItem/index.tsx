@@ -14,6 +14,8 @@ import styles from './ReadOrderIssueItem.module.css';
 interface ReadOrderIssueItemProps {
   includeHeader: boolean;
   data: IssueWithReadOrderInfoViewModel;
+  isFirst: boolean;
+  isLast: boolean;
   onEdit: () => void;
   onRemove: () => void;
 }
@@ -37,6 +39,8 @@ export default function ReadOrderIssueItem(props: ReadOrderIssueItemProps) {
 
           <div className={styles.actions}>
             <EditForm
+              canUp={!props.isFirst}
+              canDown={!props.isLast}
               readOrderId={props.data.readOrderId}
               collectionId={props.data.collectionId}
               onSubmitSuccess={props.onEdit}
@@ -67,6 +71,8 @@ export default function ReadOrderIssueItem(props: ReadOrderIssueItemProps) {
         </div>
         <div className={styles.actions}>
           <EditForm
+            canUp={!!props.data.collectionId || !props.isFirst}
+            canDown={!!props.data.collectionId || !props.isLast}
             readOrderId={props.data.readOrderId}
             collectionId={props.data.collectionId}
             issueId={props.data.issueId}

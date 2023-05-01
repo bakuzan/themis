@@ -1,4 +1,4 @@
-;WITH TargetedRow_CTE AS
+WITH TargetedRow_CTE AS
 (
    SELECT *
      FROM ReadOrderIssue
