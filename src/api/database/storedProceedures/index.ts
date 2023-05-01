@@ -13,7 +13,8 @@ type StoredProceedures =
   | 'GetIssuesWithoutACollection'
   // Helpers
   | 'GetLastIssueInReadOrder'
-  | 'GetIssuesAfterTargetInReadOrder';
+  | 'GetIssuesAfterTargetInReadOrder'
+  | 'GetCollectionIssuesWithinReadOrder';
 
 const proceedures = {} as Record<StoredProceedures, string>;
 const targetFolder = path.join(

@@ -7,25 +7,7 @@ import {
 } from '@/types/ReadOrderIssue';
 
 import { SORT_ORDER_INCREMENT } from '@/constants';
-
-/**
- * Will loop through the items giving them equally spaced sort order values.
- * The first item will be assigned the initialSortOrder value.
- * @param items
- * @param initialSortOrder
- * @returns nextSortOrder
- */
-function incrementItems(items: ReadOrderIssue[], initialSortOrder: number) {
-  let offset = 0;
-
-  for (const roi of items) {
-    roi.SortOrder = initialSortOrder + offset;
-    offset += SORT_ORDER_INCREMENT;
-  }
-
-  // Return next sort order...
-  return initialSortOrder + offset;
-}
+import setIssueSortOrders from './setIssueSortOrders';
 
 /**
  * Will set the required SortOrder values for the newItems.
@@ -54,10 +36,10 @@ export default function calculateNewReadOrderIssueSortOrder(
 
     // Set new items orders to replace the current ones.
     const firstSortOrder = readOrderIssues[0].SortOrder;
-    const nextSortOrder = incrementItems(newItems, firstSortOrder);
+    const nextSortOrder = setIssueSortOrders(newItems, firstSortOrder);
 
     // Update old item order to occur after new ones.
-    incrementItems(readOrderIssues, nextSortOrder);
+    setIssueSortOrders(readOrderIssues, nextSortOrder);
 
     return readOrderIssues;
   } else {
@@ -66,7 +48,7 @@ export default function calculateNewReadOrderIssueSortOrder(
       .prepare(lastIssueQuery)
       .get(data.ReadOrderId) as ReadOrderIssue;
 
-    incrementItems(
+    setIssueSortOrders(
       newItems,
       lastReadOrderIssue.SortOrder + SORT_ORDER_INCREMENT
     );

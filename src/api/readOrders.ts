@@ -16,6 +16,9 @@ import {
   toReadOrderViewModel,
   toReadOrderWithIssuesViewModel
 } from './mappers/readOrder';
+import { ReOrderDirection } from '@/constants/ReOrderDirection';
+import setIssueSortOrders from './helpers/setIssueSortOrders';
+import { moveToNewArrayPosition } from './helpers/common';
 
 interface ReadOrderIssueChanges {
   items: ReadOrderIssue[];
@@ -146,16 +149,51 @@ export function removeReadOrderIssues(data: RemoveReadOrderIssuesRequest) {
 }
 
 export function reOrderReadOrderIssues(data: ReOrderReadOrderIssuesRequest) {
-  // TODO Re-order within a collection
-  // If CollectionId and IssueId
-  //  > Move Issue in direction requested (within the collection)
-  // You only need to get the issues for this collection!
-  // TODO Re-order within read order
-  // If CollectionId and Not IssueId
-  //  > Move Collection in direction request
-  // If Not CollectionId and IssueId
-  //  > Move Collection in direction request (same as Collection)
-  // You need to get all of the issues as follows:
-  //  If DOWN, get all from the requested item and below.
-  //  If UP, get all from the requested item -1 and below.
+  let changedIssues: ReadOrderIssue[] = [];
+
+  // Re-order issues within a collection
+  if (data.CollectionId && data.IssueId) {
+    const query = getStoredProceedure('GetCollectionIssuesWithinReadOrder');
+    const issues = db.prepare(query).all(data) as ReadOrderIssue[];
+
+    const initialSortOrder = issues[0].SortOrder;
+    const diff = data.Direction === ReOrderDirection.UP ? -1 : 1;
+    const targetIndex = issues.findIndex((x) => x.IssueId === data.IssueId);
+    const toIndex = targetIndex + diff;
+    const reOrderedIssues = moveToNewArrayPosition(
+      issues,
+      targetIndex,
+      toIndex
+    );
+
+    setIssueSortOrders(reOrderedIssues, initialSortOrder);
+    changedIssues = reOrderedIssues;
+  } else {
+    // Re-order within read order
+    // TODO
+    // If CollectionId and Not IssueId
+    //  > Move Collection in direction request
+    // If Not CollectionId and IssueId
+    //  > Move Collection in direction request (same as Collection)
+    // You need to get all of the issues as follows:
+    //  If DOWN, get all from the requested item and below.
+    //  If UP, get all from the requested item -1 and below.
+  }
+
+  // Perform updates on the issues that were re-ordered during processing
+  const updateROI = db.prepare<ReadOrderIssue>(
+    `UPDATE ReadOrderIssue
+      SET SortOrder = @SortOrder
+    WHERE ReadOrderId = @ReadOrderId
+      AND (@CollectionId IS NULL OR CollectionId = @CollectionId)
+      AND IssueId = @IssueId`
+  );
+
+  const updateROIs = db.transaction((rows: ReadOrderIssue[]) => {
+    for (let row of rows) {
+      updateROI.run(row);
+    }
+  });
+
+  updateROIs(changedIssues);
 }

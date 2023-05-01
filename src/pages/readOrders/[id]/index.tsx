@@ -30,9 +30,10 @@ interface ReadOrderViewProps {
 
 export default function ReadOrderView(props: ReadOrderViewProps) {
   const router = useRouter();
-  const refreshData = () => router.replace(router.asPath);
-  const data = props.item;
+  const refreshData = () =>
+    router.replace(router.asPath, undefined, { scroll: false });
 
+  const data = props.item;
   const [formKey, setFormKey] = useState(1);
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
