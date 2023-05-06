@@ -1,19 +1,21 @@
 WITH TargetedRow_CTE AS
 (
    SELECT *
+   		, MAX(SortOrder) LastSortOrder
+		, MIN(SortOrder) FirstSortOrder
      FROM ReadOrderIssue
     WHERE ReadOrderId = @ReadOrderId
 	  AND (CollectionId = @CollectionId OR IssueId = @IssueId)
  ORDER BY SortOrder, IssueId
-	  LIMIT 1
+	LIMIT 1
 ),
 PriorRow_CTE AS
 (
    SELECT RI.*
      FROM ReadOrderIssue RI
-	   JOIN TargetedRow_CTE TR	ON RI.ReadOrderId = TR.ReadOrderId
+	 JOIN TargetedRow_CTE TR	ON RI.ReadOrderId = TR.ReadOrderId
     WHERE RI.ReadOrderId = @ReadOrderId
-	    AND RI.SortOrder < TR.SortOrder
+	  AND RI.SortOrder < TR.FirstSortOrder
  ORDER BY SortOrder DESC, IssueId DESC
     LIMIT 1
 ),
@@ -23,7 +25,7 @@ NextRow_CTE AS
      FROM ReadOrderIssue RI
 	 JOIN TargetedRow_CTE TR	ON RI.ReadOrderId = TR.ReadOrderId
     WHERE RI.ReadOrderId = @ReadOrderId
-	  AND RI.SortOrder > TR.SortOrder
+	  AND RI.SortOrder > TR.LastSortOrder
  ORDER BY SortOrder, IssueId
     LIMIT 1
 )

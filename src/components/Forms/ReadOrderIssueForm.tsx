@@ -19,7 +19,7 @@ import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMeth
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 import getCollectionFullName from '@/utils/getCollectionFullName';
 import getReadOrderDropdownDisplayText from '@/utils/getReadOrderDropdownDisplayText';
-import getReadOrderIssueKey from '@/utils/getReadOrderIssueKey';
+import { getReadOrderIssueKey } from '@/utils/getReadOrderIssueKey';
 
 import styles from './ReadOrderIssueForm.module.css';
 

@@ -18,7 +18,11 @@ import ReadOrderIssueForm from '@/components/Forms/ReadOrderIssueForm';
 
 import { filterReadOrderIssues } from '@/utils/filters/issues';
 import { exclude } from '@/utils/filters/includeExclude';
-import getReadOrderIssueKey from '@/utils/getReadOrderIssueKey';
+import {
+  getReadOrderIssueKey,
+  getFirstReadOrderIssueKey,
+  getLastReadOrderIssueKey
+} from '@/utils/getReadOrderIssueKey';
 
 import styles from './index.module.css';
 
@@ -26,6 +30,8 @@ interface ReadOrderViewProps {
   item: ReadOrderWithIssuesViewModel;
   collections: CollectionViewModel[];
   issues: IssueWithTitleInfoViewModel[];
+  firstROIKey: string;
+  lastROIKey: string;
 }
 
 export default function ReadOrderView(props: ReadOrderViewProps) {
@@ -91,6 +97,8 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
         />
         <ul className={styles.list}>
           {issues.map((item, index, arr) => {
+            const itemKey = getReadOrderIssueKey(item);
+
             const prevItem = arr[index - 1];
             const collectionStarting =
               !!item.collectionId &&
@@ -98,9 +106,9 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
 
             return (
               <ReadOrderIssueItem
-                key={getReadOrderIssueKey(item)}
-                isFirst={index === 0}
-                isLast={index === arr.length - 1} // TODO fix this for when collection is last...
+                key={itemKey}
+                isFirst={itemKey === props.firstROIKey}
+                isLast={itemKey === props.lastROIKey}
                 includeHeader={collectionStarting}
                 data={item}
                 onEdit={refreshData}
@@ -127,7 +135,11 @@ export async function getServerSideProps(
   const collections = getCollectionsForDropdown();
   const issues = getIssuesWithoutACollection();
 
+  const readOrderIssues = item.issues;
+  const firstROIKey = getFirstReadOrderIssueKey(readOrderIssues);
+  const lastROIKey = getLastReadOrderIssueKey(readOrderIssues);
+
   return {
-    props: { item, collections, issues }
+    props: { item, collections, issues, firstROIKey, lastROIKey }
   };
 }
