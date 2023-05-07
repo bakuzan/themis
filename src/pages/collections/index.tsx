@@ -23,7 +23,7 @@ export default function Collections(props: CollectionsProps) {
   const searchStringLower = searchString.toLowerCase();
   const collections = props.items.filter(
     (x) =>
-      getCollectionFullName(x).toLowerCase().includes(searchStringLower) ||
+      getCollectionFullName(x)?.toLowerCase().includes(searchStringLower) ||
       `${x.publicationDate}`.includes(searchStringLower)
   );
   console.log('<Collections>', props);

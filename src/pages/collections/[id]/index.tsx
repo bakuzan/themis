@@ -45,7 +45,7 @@ export default function CollectionView(props: CollectionViewProps) {
 
   return (
     <section>
-      <PageHead title={pageTitle} />
+      <PageHead title={pageTitle ?? undefined} />
       <header className="header">
         <div>
           <h1>{pageTitle}</h1>
