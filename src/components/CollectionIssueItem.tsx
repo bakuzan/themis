@@ -1,7 +1,8 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useContext } from 'react';
 
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
 import { DeleteResponse } from '@/types/Response';
+import { AppContext } from '@/context';
 import callApi from '@/utils/callApi';
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 
@@ -16,6 +17,7 @@ interface CollectionIssueItemProps {
 }
 
 export default function CollectionIssueItem(props: CollectionIssueItemProps) {
+  const appProps = useContext(AppContext);
   const { collectionId, data: item } = props;
   const issueNumber = getFormattedIssueNumber(item);
   const deleteActionUrl = `/api/collectionissues/remove`;
@@ -31,7 +33,7 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
     if (response.success) {
       props.onRemove();
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

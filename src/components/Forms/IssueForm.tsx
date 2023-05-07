@@ -1,13 +1,14 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 
-import callApi from '@/utils/callApi';
 import { IssueViewModel } from '@/types/Issue';
 import { IssueResponse } from '@/types/Response';
+import { AppContext } from '@/context';
+import callApi from '@/utils/callApi';
+import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
 
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import ButtonGroup from '@/components/ButtonGroup';
-import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
 
 import styles from './IssueForm.module.css';
 
@@ -19,6 +20,7 @@ interface IssueFromProps {
 }
 
 export default function IssueForm(props: IssueFromProps) {
+  const appProps = useContext(AppContext);
   const data = props.data;
   const [issueNumber, setIssueNumber] = useState(data.number);
   const [name, setName] = useState(data.name);
@@ -47,7 +49,7 @@ export default function IssueForm(props: IssueFromProps) {
         id: (data.id ?? response.id) as number
       } as IssueViewModel);
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

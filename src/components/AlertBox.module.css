@@ -1,0 +1,45 @@
+.alert {
+  position: absolute;
+  left: 25vw;
+  width: 50vw;
+  display: flex;
+  align-items: center;
+
+  z-index: 10000;
+  background-color: var(--base-background);
+  box-shadow: 0px 0px 5px 0px var(--primary-background);
+}
+
+.icon {
+  font-size: 1.75rem;
+  padding: 10px 5px;
+  color: var(--base-background);
+}
+
+.alert.error .icon {
+  background-color: var(--danger-colour);
+}
+.alert.info .icon {
+  background-color: var(--primary-background);
+}
+
+.message {
+  display: flex;
+  flex: 1;
+  padding: 10px;
+}
+
+.buttonBox {
+  padding: 5px;
+}
+
+.clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.clear:focus,
+.clear:hover {
+  box-shadow: 0px 0px 5px 0px var(--accent-background);
+}

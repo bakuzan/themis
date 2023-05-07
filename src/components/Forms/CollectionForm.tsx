@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 
 import { CollectionViewModel } from '@/types/Collection';
 import { CollectionResponse } from '@/types/Response';
+import { AppContext } from '@/context';
+import { LATEST_START_YEAR, OLDEST_START_YEAR } from '@/constants';
 import callApi from '@/utils/callApi';
 
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import ButtonGroup from '@/components/ButtonGroup';
+
 import convertMethodToFormValidMethod from '@/utils/convertMethodToFormValidMethod';
-import { LATEST_START_YEAR, OLDEST_START_YEAR } from '@/constants';
 
 interface CollectionFromProps {
   method: string;
@@ -18,6 +20,7 @@ interface CollectionFromProps {
 }
 
 export default function CollectionForm(props: CollectionFromProps) {
+  const appProps = useContext(AppContext);
   const router = useRouter();
 
   const data = props.data;
@@ -40,7 +43,7 @@ export default function CollectionForm(props: CollectionFromProps) {
     if (response.success) {
       router.push(`/collections/${response.id}`);
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

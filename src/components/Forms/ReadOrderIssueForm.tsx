@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 
 import { CollectionViewModel } from '@/types/Collection';
 import { ReadOrderIssueViewModel } from '@/types/ReadOrderIssue';
@@ -7,6 +7,7 @@ import {
   IssueWithTitleInfoViewModel,
   IssueWithReadOrderInfoViewModel
 } from '@/types/Issue';
+import { AppContext } from '@/context';
 import callApi from '@/utils/callApi';
 
 import Input from '@/components/Input';
@@ -34,6 +35,7 @@ interface ReadOrderIssueFormProps {
 }
 
 export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
+  const appProps = useContext(AppContext);
   const { data } = props;
 
   const [issueId, setIssueId] = useState(data.issueId);
@@ -63,7 +65,7 @@ export default function ReadOrderIssueForm(props: ReadOrderIssueFormProps) {
     if (response.success) {
       props.onSuccess();
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

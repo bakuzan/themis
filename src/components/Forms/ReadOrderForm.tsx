@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 
 import { ReadOrderViewModel } from '@/types/ReadOrder';
 import { ReadOrderResponse } from '@/types/Response';
+import { AppContext } from '@/context';
 import callApi from '@/utils/callApi';
 
 import Input from '@/components/Input';
@@ -17,6 +18,7 @@ interface ReadOrderFromProps {
 }
 
 export default function TitleForm(props: ReadOrderFromProps) {
+  const appProps = useContext(AppContext);
   const router = useRouter();
 
   const data = props.data;
@@ -32,7 +34,7 @@ export default function TitleForm(props: ReadOrderFromProps) {
     if (response.success) {
       router.push(`/readOrders/${response.id}`);
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

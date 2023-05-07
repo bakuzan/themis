@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useContext } from 'react';
 
 import { ReadOrderIssueReOrderResponse } from '@/types/Response';
 
@@ -8,6 +8,7 @@ import { ReOrderDirection } from '@/constants/ReOrderDirection';
 import Button from '@/components/Button';
 
 import styles from './EditForm.module.css';
+import { AppContext } from '@/context';
 
 interface EditFormProps {
   canUp: boolean;
@@ -21,6 +22,7 @@ interface EditFormProps {
 const actionUrl = `/api/readOrderIssues/edit`;
 
 export default function EditForm(props: EditFormProps) {
+  const appProps = useContext(AppContext);
   const { readOrderId, collectionId, issueId } = props;
 
   async function onEdit(event: FormEvent<HTMLFormElement>) {
@@ -44,7 +46,7 @@ export default function EditForm(props: EditFormProps) {
     if (response.success) {
       props.onSubmitSuccess();
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

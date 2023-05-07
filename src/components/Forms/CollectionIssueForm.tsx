@@ -1,8 +1,9 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 
 import { CollectionIssueViewModel } from '@/types/CollectionIssue';
 import { CollectionIssueResponse } from '@/types/Response';
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
+import { AppContext } from '@/context';
 import callApi from '@/utils/callApi';
 
 import Input from '@/components/Input';
@@ -22,6 +23,7 @@ interface CollectionIssueFormProps {
 }
 
 export default function CollectionIssueForm(props: CollectionIssueFormProps) {
+  const appProps = useContext(AppContext);
   const { data } = props;
   const [issueId, setIssueId] = useState(data.issueId);
 
@@ -45,7 +47,7 @@ export default function CollectionIssueForm(props: CollectionIssueFormProps) {
 
       props.onSuccess(issue);
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

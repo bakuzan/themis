@@ -18,9 +18,9 @@ export default async function handler(
   if (!data.success) {
     // The redirect here isn't what I want...I want to return data during the redirect.
     if (isFormPost) {
-      response.redirect(`/collections/${collectionId}`);
+      return response.redirect(`/collections/${collectionId}`);
     } else {
-      response.json(data);
+      return response.json(data);
     }
   }
 
@@ -28,8 +28,8 @@ export default async function handler(
   removeCollectionIssue(collectionIssueForRemoval);
 
   if (isFormPost) {
-    response.redirect(`/collections/${collectionId}`);
+    return response.redirect(`/collections/${collectionId}`);
   } else {
-    response.json({ success: true, errorMessages: [] });
+    return response.json({ success: true, errorMessages: [] });
   }
 }

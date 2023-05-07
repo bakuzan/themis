@@ -1,7 +1,8 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useContext } from 'react';
 
 import { IssueWithReadOrderInfoViewModel } from '@/types/Issue';
 import { DeleteResponse } from '@/types/Response';
+import { AppContext } from '@/context';
 
 import callApi from '@/utils/callApi';
 
@@ -15,6 +16,7 @@ interface RemoveFormProps {
 const deleteActionUrl = `/api/readOrderIssues/remove`;
 
 export default function RemoveForm(props: RemoveFormProps) {
+  const appProps = useContext(AppContext);
   const { data: item } = props;
 
   async function onDelete(event: FormEvent) {
@@ -32,7 +34,7 @@ export default function RemoveForm(props: RemoveFormProps) {
     if (response.success) {
       props.onSubmitSuccess();
     } else {
-      // TODO handle errors...
+      appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
   }
 

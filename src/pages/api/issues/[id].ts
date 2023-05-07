@@ -16,17 +16,17 @@ export default async function handler(
   if (!data.success) {
     // The redirect here isn't what I want...I want to return data during the redirect.
     if (isFormPost) {
-      response.redirect(`/issues/${issueId}`);
+      return response.redirect(`/issues/${issueId}`);
     } else {
-      response.json(data);
+      return response.json(data);
     }
   }
 
   updateIssue(data.processedData);
 
   if (isFormPost) {
-    response.redirect(`/issues/${issueId}`);
+    return response.redirect(`/issues/${issueId}`);
   } else {
-    response.json({ success: true, errorMessages: [], id: issueId });
+    return response.json({ success: true, errorMessages: [], id: issueId });
   }
 }
