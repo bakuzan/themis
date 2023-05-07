@@ -12,13 +12,21 @@ export function getReadOrderIssueKey(readOrderIssue: ReadOrderIssueLike) {
 export function getFirstReadOrderIssueKey(
   readOrderIssues: ReadOrderIssueLike[]
 ) {
-  return getReadOrderIssueKey(readOrderIssues[0]);
+  const firstIssue = readOrderIssues[0];
+  if (!firstIssue) {
+    return null;
+  }
+
+  return getReadOrderIssueKey(firstIssue);
 }
 
 export function getLastReadOrderIssueKey(
   readOrderIssues: ReadOrderIssueLike[]
 ) {
   const lastIssue = readOrderIssues[readOrderIssues.length - 1];
+  if (!lastIssue) {
+    return null;
+  }
 
   if (!lastIssue.collectionId) {
     return getReadOrderIssueKey(lastIssue);

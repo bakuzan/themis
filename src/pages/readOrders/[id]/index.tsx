@@ -30,8 +30,8 @@ interface ReadOrderViewProps {
   item: ReadOrderWithIssuesViewModel;
   collections: CollectionViewModel[];
   issues: IssueWithTitleInfoViewModel[];
-  firstROIKey: string;
-  lastROIKey: string;
+  firstROIKey: string | null;
+  lastROIKey: string | null;
 }
 
 export default function ReadOrderView(props: ReadOrderViewProps) {
