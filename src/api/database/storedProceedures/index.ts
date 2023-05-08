@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 type StoredProceedures =
+  // Data queries
   | 'GetTitlesWithIssueCount'
   | 'GetIssuesListForTitle'
   | 'GetCollectionsWithIssueCount'
@@ -11,6 +12,9 @@ type StoredProceedures =
   | 'GetReadOrdersWithIssueCount'
   | 'GetIssuesListForReadOrder'
   | 'GetIssuesWithoutACollection'
+  // Read History queries
+  | 'GetReadHistoriesWithCounts'
+  | 'GetReadHistoryById'
   // Helpers
   | 'GetLastIssueInReadOrder'
   | 'GetIssuesAfterTargetInReadOrder'

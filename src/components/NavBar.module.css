@@ -10,3 +10,7 @@
   color: var(--primary-constrast-colour);
   margin-right: 10px;
 }
+
+.imageContainer {
+  padding: 0 5px;
+}

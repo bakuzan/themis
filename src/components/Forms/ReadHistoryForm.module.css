@@ -1,0 +1,7 @@
+.innerContainer {
+  display: flex;
+}
+
+.innerContainer > * {
+  margin-right: 10px;
+}
