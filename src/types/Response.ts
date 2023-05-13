@@ -30,3 +30,5 @@ export interface ReadOrderIssueReOrderResponse extends BaseResponse {}
 export interface ReadHistoryResponse extends BaseResponse {
   id?: number;
 }
+
+export interface ToggleReadHistoryIssueResponse extends BaseResponse {}

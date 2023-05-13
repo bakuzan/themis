@@ -1,6 +1,5 @@
 import React, { FormEvent, useContext } from 'react';
 
-import { IssueWithReadOrderInfoViewModel } from '@/types/Issue';
 import { DeleteResponse } from '@/types/Response';
 import { AppContext } from '@/context';
 
@@ -8,16 +7,18 @@ import callApi from '@/utils/callApi';
 
 import Button from '@/components/Button';
 
-interface RemoveFormProps {
-  data: IssueWithReadOrderInfoViewModel;
+interface RemoveReadHistoryFormProps {
+  readHistoryId: number;
   onSubmitSuccess: () => void;
 }
 
-const deleteActionUrl = `/api/readOrderIssues/remove`;
+const deleteActionUrl = `/api/readHistory/remove`;
 
-export default function RemoveForm(props: RemoveFormProps) {
+export default function RemoveReadHistoryForm(
+  props: RemoveReadHistoryFormProps
+) {
   const appProps = useContext(AppContext);
-  const { data: item } = props;
+  const readHistoryId = props.readHistoryId;
 
   async function onDelete(event: FormEvent) {
     event.preventDefault();
@@ -25,9 +26,7 @@ export default function RemoveForm(props: RemoveFormProps) {
     const response = await callApi<DeleteResponse>(deleteActionUrl, {
       method: 'POST',
       body: JSON.stringify({
-        readOrderId: item.readOrderId,
-        collectionId: item.collectionId,
-        issueId: item.issueId
+        readHistoryId
       })
     });
 
@@ -42,8 +41,8 @@ export default function RemoveForm(props: RemoveFormProps) {
     <form
       method="POST"
       action={deleteActionUrl}
-      id={`removeReadOrderIssue_${item.collectionId ?? 0}_${item.issueId}`}
-      name="removeReadOrderIssue"
+      id="removeReadHistory"
+      name="removeReadHistory"
       onSubmit={onDelete}
     >
       <Button type="submit" isDanger>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { ReadOrderViewModel } from '@/types/ReadOrder';
-import { ReadHistoryViewModel } from '@/types/ReadHistory';
+import { ReadHistoryWithCountsViewModel } from '@/types/ReadHistory';
 
 import { getReadHistories } from '@/api/readHistory';
 import { getReadOrders } from '@/api/readOrders';
@@ -15,7 +15,7 @@ import { filterReadHistory } from '@/utils/filters/readHistory';
 import styles from './index.module.css';
 
 interface HomePageProps {
-  readHistoryList: ReadHistoryViewModel[];
+  readHistoryList: ReadHistoryWithCountsViewModel[];
   readOrders: ReadOrderViewModel[];
 }
 
@@ -56,12 +56,14 @@ export default function Home(props: HomePageProps) {
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
                 <Link href={`/readHistory/${x.id}`}>{x.readOrderName}</Link>
-                <span className="muted">&nbsp;{x.startedOnDate}</span>
-                {x.completedOnDate && (
-                  <span className="muted"> to {x.completedOnDate}</span>
-                )}
+                <span className="muted">&nbsp;{x.readIssueCount}</span>/
+                <span className="muted">{x.totalIssueCount}</span>
               </div>
-              <div className="muted">// TODO counts</div>
+              <div className="muted">
+                <span>{x.startedOnDate}</span>
+                <span>&nbsp;to&nbsp;</span>
+                <span>{x.completedOnDate ? x.completedOnDate : 'present'}</span>
+              </div>
             </li>
           ))}
         </ul>

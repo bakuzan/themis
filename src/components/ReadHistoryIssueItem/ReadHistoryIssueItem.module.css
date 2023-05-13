@@ -1,0 +1,36 @@
+.headerItem,
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 5px;
+  border: 1px solid var(--primary-background);
+  margin-bottom: 5px;
+}
+
+.item {
+  border-style: dashed;
+  margin-bottom: 10px;
+}
+
+.itemIndented {
+  margin-left: 25px;
+  margin-bottom: 5px;
+}
+
+.coverInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Actions styling */
+.actions {
+}

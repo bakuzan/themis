@@ -1,17 +1,43 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 
-import { ReadHistoryViewModel } from '@/types/ReadHistory';
-import { getReadHistoryById } from '@/api/readHistory';
+import {
+  ReadHistoryIssueInfoViewModel,
+  ReadHistoryViewModel
+} from '@/types/ReadHistory';
+import { getReadHistoryById, getReadHistoryIssues } from '@/api/readHistory';
 
 import PageHead from '@/components/PageHead';
+import SearchBox from '@/components/SearchBox';
+import ReadHistoryIssueItem from '@/components/ReadHistoryIssueItem';
+
+import { filterReadHistoryIssues } from '@/utils/filters/issues';
+import { getReadOrderIssueKey } from '@/utils/getReadOrderIssueKey';
+
+import styles from './[id].module.css';
+import RemoveReadHistoryForm from '@/components/Forms/RemoveReadHistoryForm';
 
 interface ReadHistoryViewProps {
   item: ReadHistoryViewModel;
+  issues: ReadHistoryIssueInfoViewModel[];
 }
 
 export default function ReadHistoryView(props: ReadHistoryViewProps) {
+  const router = useRouter();
+  const refreshData = () =>
+    router.replace(router.asPath, undefined, { scroll: false });
+
   const data = props.item;
   const pageTitle = `Reading ${data.readOrderName}`;
+
+  const [searchString, setSearchString] = useState('');
+  const searchStringLower = searchString.toLowerCase();
+
+  const allIssues = [...props.issues];
+  const issues = allIssues.filter(filterReadHistoryIssues(searchStringLower));
+  const totalIssueCount = allIssues.length;
+  const completedCount = allIssues.filter((x) => !!x.readOnDate).length;
 
   console.log('<ReadHistoryView>', props);
 
@@ -21,32 +47,12 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
       <header className="header">
         <div>
           <h1>{pageTitle}</h1>
-          {/* <p className="subtitle">{data.issueCount} Issues</p> */}
+          <p className="subtitle">
+            {completedCount}/{totalIssueCount}
+          </p>
         </div>
       </header>
-      {/* <div>
-        <section className={styles.issue_form}>
-          <header className="header">
-            <h2>Add existing collection or issue to {pageTitle}</h2>
-          </header>
-          <ReadOrderIssueForm
-            key={formKey}
-            method="POST"
-            action={`/api/readOrderIssues/new`}
-            readOrderIssues={data.issues}
-            collections={dropdownCollections}
-            issues={dropdownIssues}
-            onSuccess={() => {
-              refreshData();
-              setFormKey((p) => p + 1);
-            }}
-            data={{
-              readOrderId: data.id,
-              collectionId: undefined,
-              issueId: undefined
-            }}
-          />
-        </section>
+      <div>
         <SearchBox
           value={searchString}
           onChange={(text) => setSearchString(text)}
@@ -61,20 +67,22 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
               (!prevItem || prevItem.collectionId !== item.collectionId);
 
             return (
-              <ReadOrderIssueItem
+              <ReadHistoryIssueItem
                 key={itemKey}
-                isFirst={itemKey === props.firstROIKey}
-                isLast={itemKey === props.lastROIKey}
                 includeHeader={collectionStarting}
                 data={item}
-                onEdit={refreshData}
-                onRemove={refreshData}
+                onUpdate={refreshData}
               />
             );
           })}
         </ul>
-      </div> */}
-      <footer>{/* TODO Add a delete button */}</footer>
+      </div>
+      <footer className={styles.footer}>
+        <RemoveReadHistoryForm
+          readHistoryId={data.id}
+          onSubmitSuccess={() => router.replace('/')}
+        />
+      </footer>
     </section>
   );
 }
@@ -87,9 +95,11 @@ export async function getServerSideProps(
     throw new Error(`readHistory/[id] was called without an id!`);
   }
 
-  const item = getReadHistoryById(Number(id));
+  const readHistoryId = Number(id);
+  const item = getReadHistoryById(readHistoryId);
+  const issues = getReadHistoryIssues(readHistoryId);
 
   return {
-    props: { item }
+    props: { item, issues }
   };
 }
