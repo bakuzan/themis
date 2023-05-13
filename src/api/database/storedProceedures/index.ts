@@ -15,6 +15,7 @@ type StoredProceedures =
   // Read History queries
   | 'GetReadHistoriesWithCounts'
   | 'GetReadHistoryById'
+  | 'GetIssuesListForReadHistory'
   // Helpers
   | 'GetLastIssueInReadOrder'
   | 'GetIssuesAfterTargetInReadOrder'

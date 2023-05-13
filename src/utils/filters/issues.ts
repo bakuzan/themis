@@ -3,10 +3,21 @@ import {
   IssueWithReadOrderInfoViewModel,
   IssueWithTitleInfoViewModel
 } from '@/types/Issue';
+import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistory';
+
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 import getCollectionFullName from '@/utils/getCollectionFullName';
 
 // TODO consider splitting search term on spaces...
+export function filterReadHistoryIssues(searchStringLower: string) {
+  return (x: ReadHistoryIssueInfoViewModel) =>
+    x.titleName.toLowerCase().includes(searchStringLower) ||
+    `${x.startYear}`.includes(searchStringLower) ||
+    getCollectionFullName(x)?.toLowerCase().includes(searchStringLower) ||
+    x.name.toLowerCase().includes(searchStringLower) ||
+    x.coverDate.includes(searchStringLower) ||
+    getFormattedIssueNumber(x).includes(searchStringLower);
+}
 
 export function filterReadOrderIssueOnUniqueCollection(
   issue: IssueWithReadOrderInfoViewModel,

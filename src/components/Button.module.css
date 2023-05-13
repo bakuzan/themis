@@ -11,6 +11,16 @@
   box-shadow: 0px 0px 5px 0px var(--accent-background);
 }
 
+.danger {
+  background-color: var(--danger-colour);
+  border-color: var(--danger-colour);
+}
+
+.danger:focus,
+.danger:hover {
+  box-shadow: 0px 0px 5px 0px var(--danger-constrast-colour);
+}
+
 .button:disabled,
 .button[disabled] {
   box-shadow: unset;

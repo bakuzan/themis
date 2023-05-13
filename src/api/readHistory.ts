@@ -1,14 +1,18 @@
 import db from './database';
 
 import {
-  ReadHistory,
-  ReadHistoryViewModel,
-  ReadHistoryWithReadOrder
+  ReadHistoryWithCounts,
+  ReadHistoryWithReadOrder,
+  ReadHistoryIssue
 } from '@/types/ReadHistory';
+import { ReadOrderIssue } from '@/types/ReadOrderIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
-import { toReadHistoryViewModel } from './mappers/readHistory';
-import { ReadOrderIssue } from '@/types/ReadOrderIssue';
+import {
+  toIssueWithReadHistoryInfoViewModel,
+  toReadHistoryViewModel,
+  toReadHistoryWithCountsViewModel
+} from './mappers/readHistory';
 
 interface ReadHistoryIssueInsertProps
   extends Omit<ReadOrderIssue, 'ReadOrderId'> {
@@ -18,9 +22,9 @@ interface ReadHistoryIssueInsertProps
 /* DATEBASE READS */
 export function getReadHistories() {
   const query = getStoredProceedure('GetReadHistoriesWithCounts');
-  const readOrders = db.prepare(query).all() as ReadHistoryWithReadOrder[];
+  const readOrders = db.prepare(query).all() as ReadHistoryWithCounts[];
 
-  return readOrders.map(toReadHistoryViewModel);
+  return readOrders.map(toReadHistoryWithCountsViewModel);
 }
 
 export function getReadHistoryById(id: number) {
@@ -28,6 +32,13 @@ export function getReadHistoryById(id: number) {
   const history = db.prepare(query).get(id) as ReadHistoryWithReadOrder;
 
   return toReadHistoryViewModel(history);
+}
+
+export function getReadHistoryIssues(readHistoryId: number) {
+  const query = getStoredProceedure('GetIssuesListForReadHistory');
+  const issues = db.prepare(query).all(readHistoryId) as ReadHistoryIssue[];
+
+  return issues.map(toIssueWithReadHistoryInfoViewModel);
 }
 
 /* DATABASE WRITES */

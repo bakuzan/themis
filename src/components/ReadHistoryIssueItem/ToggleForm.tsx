@@ -1,30 +1,31 @@
 import React, { FormEvent, useContext } from 'react';
 
-import { IssueWithReadOrderInfoViewModel } from '@/types/Issue';
-import { DeleteResponse } from '@/types/Response';
+import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistory';
+import { ToggleReadHistoryIssueResponse } from '@/types/Response';
 import { AppContext } from '@/context';
 
 import callApi from '@/utils/callApi';
 
 import Button from '@/components/Button';
 
-interface RemoveFormProps {
-  data: IssueWithReadOrderInfoViewModel;
+interface ToggleFormProps {
+  data: ReadHistoryIssueInfoViewModel;
   onSubmitSuccess: () => void;
 }
 
-const deleteActionUrl = `/api/readOrderIssues/remove`;
+const actionUrl = `/api/readHistoryIssues/toggle`;
 
-export default function RemoveForm(props: RemoveFormProps) {
+export default function ToggleForm(props: ToggleFormProps) {
   const appProps = useContext(AppContext);
   const { data: item } = props;
 
-  async function onDelete(event: FormEvent) {
+  async function onUpdate(event: FormEvent) {
     event.preventDefault();
 
-    const response = await callApi<DeleteResponse>(deleteActionUrl, {
+    const response = await callApi<ToggleReadHistoryIssueResponse>(actionUrl, {
       method: 'POST',
       body: JSON.stringify({
+        readHistoryId: item.readHistoryId,
         readOrderId: item.readOrderId,
         collectionId: item.collectionId,
         issueId: item.issueId
@@ -41,14 +42,12 @@ export default function RemoveForm(props: RemoveFormProps) {
   return (
     <form
       method="POST"
-      action={deleteActionUrl}
-      id={`removeReadOrderIssue_${item.collectionId ?? 0}_${item.issueId}`}
-      name="removeReadOrderIssue"
-      onSubmit={onDelete}
+      action={actionUrl}
+      id={`toggleReadHistoryIssue_${item.collectionId ?? 0}_${item.issueId}`}
+      name="toggleReadHistoryIssue"
+      onSubmit={onUpdate}
     >
-      <Button type="submit" isDanger>
-        Remove
-      </Button>
+      <Button type="submit">{item.readOnDate ? 'Unread' : 'Read'}</Button>
     </form>
   );
 }
