@@ -33,4 +33,9 @@
 
 /* Actions styling */
 .actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  height: 37px; /* Height of text + button */
 }

@@ -10,7 +10,7 @@ import Button from '@/components/Button';
 
 interface ToggleFormProps {
   data: ReadHistoryIssueInfoViewModel;
-  onSubmitSuccess: () => void;
+  onSubmitSuccess: (item: ReadHistoryIssueInfoViewModel) => void;
 }
 
 const actionUrl = `/api/readHistoryIssues/toggle`;
@@ -26,14 +26,20 @@ export default function ToggleForm(props: ToggleFormProps) {
       method: 'POST',
       body: JSON.stringify({
         readHistoryId: item.readHistoryId,
-        readOrderId: item.readOrderId,
         collectionId: item.collectionId,
         issueId: item.issueId
       })
     });
 
     if (response.success) {
-      props.onSubmitSuccess();
+      const readOnDate = !item.readOnDate
+        ? new Date().toISOString().split('T')[0]
+        : null;
+
+      props.onSubmitSuccess({
+        ...item,
+        readOnDate
+      });
     } else {
       appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
