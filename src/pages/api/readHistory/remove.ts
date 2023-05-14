@@ -1,36 +1,35 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { isFormData } from '@/api/helpers/common';
-import { createReadHistoryInstance } from '@/api/readHistory';
-import { validateCreateRequest } from '@/api/validators/readHistory';
+import { canRemoveReadHistory, removeReadHistory } from '@/api/readHistory';
+import { validateRemoveRequest } from '@/api/validators/readHistory';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
   const isFormPost = isFormData(request);
-  const data = validateCreateRequest(request);
+  const data = validateRemoveRequest(request);
+  const readHistoryId = data.processedData.Id as number;
   console.log('POST', request.body);
 
-  if (!data.success) {
+  if (!data.success || !canRemoveReadHistory(readHistoryId)) {
     // The redirect here isn't what I want...I want to return data during the redirect.
     if (isFormPost) {
-      return response.redirect(`/`);
+      return response.redirect(request.headers.referer ?? '/');
     } else {
       return response.json(data);
     }
   }
 
-  const readOrderId = data.processedData.ReadOrderId as number;
-  const readHistoryId = createReadHistoryInstance(readOrderId);
+  removeReadHistory(readHistoryId);
 
   if (isFormPost) {
-    return response.redirect(`/readHistory/${readHistoryId}`);
+    return response.redirect(`/`);
   } else {
     return response.json({
       success: true,
-      errorMessages: [],
-      id: readHistoryId
+      errorMessages: []
     });
   }
 }

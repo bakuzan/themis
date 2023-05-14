@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistory';
+import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistoryIssue';
 
 import classNames from '@/utils/classNames';
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
@@ -13,7 +13,7 @@ import styles from './ReadHistoryIssueItem.module.css';
 interface ReadHistoryIssueItemProps {
   includeHeader: boolean;
   data: ReadHistoryIssueInfoViewModel;
-  onUpdate: () => void;
+  onUpdate: (item: ReadHistoryIssueInfoViewModel) => void;
 }
 
 export default function ReadHistoryIssueItem(props: ReadHistoryIssueItemProps) {

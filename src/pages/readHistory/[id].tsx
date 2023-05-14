@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 
-import {
-  ReadHistoryIssueInfoViewModel,
-  ReadHistoryViewModel
-} from '@/types/ReadHistory';
+import { ReadHistoryViewModel } from '@/types/ReadHistory';
+import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistoryIssue';
 import { getReadHistoryById, getReadHistoryIssues } from '@/api/readHistory';
 
 import PageHead from '@/components/PageHead';
@@ -23,23 +21,34 @@ interface ReadHistoryViewProps {
   issues: ReadHistoryIssueInfoViewModel[];
 }
 
+function getReadOnDate(
+  changes: Map<string, string | null>,
+  item: ReadHistoryIssueInfoViewModel
+) {
+  const itemKey = getReadOrderIssueKey(item);
+  return (
+    (changes.has(itemKey) ? changes.get(itemKey) : item.readOnDate) ?? null
+  );
+}
+
 export default function ReadHistoryView(props: ReadHistoryViewProps) {
   const router = useRouter();
-  const refreshData = () =>
-    router.replace(router.asPath, undefined, { scroll: false });
 
   const data = props.item;
   const pageTitle = `Reading ${data.readOrderName}`;
 
+  const [changes, setChanges] = useState(new Map<string, string | null>([]));
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
 
   const allIssues = [...props.issues];
   const issues = allIssues.filter(filterReadHistoryIssues(searchStringLower));
   const totalIssueCount = allIssues.length;
-  const completedCount = allIssues.filter((x) => !!x.readOnDate).length;
+  const completedCount = allIssues.filter(
+    (x) => !!getReadOnDate(changes, x)
+  ).length;
 
-  console.log('<ReadHistoryView>', props);
+  console.log('<ReadHistoryView>', props, changes);
 
   return (
     <section>
@@ -51,6 +60,7 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
             {completedCount}/{totalIssueCount}
           </p>
         </div>
+        <div>COMPLETE BUTTON</div>
       </header>
       <div>
         <SearchBox
@@ -70,18 +80,22 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
               <ReadHistoryIssueItem
                 key={itemKey}
                 includeHeader={collectionStarting}
-                data={item}
-                onUpdate={refreshData}
+                data={{ ...item, readOnDate: getReadOnDate(changes, item) }}
+                onUpdate={(updated) =>
+                  setChanges((p) => new Map(p.set(itemKey, updated.readOnDate)))
+                }
               />
             );
           })}
         </ul>
       </div>
       <footer className={styles.footer}>
-        <RemoveReadHistoryForm
-          readHistoryId={data.id}
-          onSubmitSuccess={() => router.replace('/')}
-        />
+        {!data.completedOnDate && (
+          <RemoveReadHistoryForm
+            readHistoryId={data.id}
+            onSubmitSuccess={() => router.replace('/')}
+          />
+        )}
       </footer>
     </section>
   );

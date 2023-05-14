@@ -3,8 +3,12 @@ import db from './database';
 import {
   ReadHistoryWithCounts,
   ReadHistoryWithReadOrder,
-  ReadHistoryIssue
+  ReadHistory
 } from '@/types/ReadHistory';
+import {
+  ReadHistoryIssue,
+  ToggleReadHistoryIssueRequest
+} from '@/types/ReadHistoryIssue';
 import { ReadOrderIssue } from '@/types/ReadOrderIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
@@ -78,4 +82,49 @@ export function createReadHistoryInstance(readOrderId: number) {
   insertHistoryIssues(readOrderIssues);
 
   return readHistoryId;
+}
+
+export function toggleReadHistoryIssue(request: ToggleReadHistoryIssueRequest) {
+  const query = `
+  SELECT *
+    FROM ReadHistoryIssue
+   WHERE ReadHistoryId = @ReadHistoryId
+     AND (@CollectionId IS NULL OR CollectionId = @CollectionId)
+     AND IssueId = @IssueId`;
+
+  const instance = db.prepare(query).get(request) as ReadHistoryIssue;
+
+  const readOnDate = !instance.ReadOnDate
+    ? new Date().toISOString().split('T')[0]
+    : null;
+
+  db.prepare(
+    `
+    UPDATE ReadHistoryIssue 
+       SET ReadOnDate = @ReadOnDate 
+     WHERE ReadHistoryId = @ReadHistoryId
+       AND (@CollectionId IS NULL OR CollectionId = @CollectionId)
+       AND IssueId = @IssueId`
+  ).run({ ...request, ReadOnDate: readOnDate });
+}
+
+export function canRemoveReadHistory(readHistoryId: number) {
+  const instance = db
+    .prepare(`SELECT * FROM ReadHistory WHERE Id = ?`)
+    .get(readHistoryId) as ReadHistory;
+
+  return !instance || !instance.CompletedOnDate;
+}
+
+export function removeReadHistory(readHistoryId: number) {
+  const q = `DELETE FROM ReadHistoryIssue WHERE ReadHistoryId = ?`;
+  const deleteIssues = db.prepare(q);
+  const deleteInstance = db.prepare(`DELETE FROM ReadHistory WHERE Id = ?`);
+
+  const deleteReadHistoryInstance = db.transaction((id: number) => {
+    deleteIssues.run(id);
+    deleteInstance.run(id);
+  });
+
+  deleteReadHistoryInstance(readHistoryId);
 }

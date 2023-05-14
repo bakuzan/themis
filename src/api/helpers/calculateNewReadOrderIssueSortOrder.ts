@@ -48,10 +48,8 @@ export default function calculateNewReadOrderIssueSortOrder(
       .prepare(lastIssueQuery)
       .get(data.ReadOrderId) as ReadOrderIssue;
 
-    setIssueSortOrders(
-      newItems,
-      lastReadOrderIssue.SortOrder + SORT_ORDER_INCREMENT
-    );
+    const latestSortOrder = lastReadOrderIssue?.SortOrder ?? 0;
+    setIssueSortOrders(newItems, latestSortOrder + SORT_ORDER_INCREMENT);
 
     return [];
   }
