@@ -84,6 +84,45 @@ export function createReadHistoryInstance(readOrderId: number) {
   return readHistoryId;
 }
 
+export function toggleReadHistoryComplete(readHistoryId: number) {
+  const instance = db
+    .prepare(`SELECT * FROM ReadHistory WHERE Id = ?`)
+    .get(readHistoryId) as ReadHistory;
+
+  const completedOnDate = !instance.CompletedOnDate
+    ? new Date().toISOString().split('T')[0]
+    : null;
+
+  db.prepare(
+    `UPDATE ReadHistory 
+        SET CompletedOnDate = @CompletedOnDate 
+      WHERE Id = @ReadHistoryId`
+  ).run({ ReadHistoryId: readHistoryId, CompletedOnDate: completedOnDate });
+}
+
+export function canRemoveReadHistory(readHistoryId: number) {
+  const instance = db
+    .prepare(`SELECT * FROM ReadHistory WHERE Id = ?`)
+    .get(readHistoryId) as ReadHistory;
+
+  return !instance || !instance.CompletedOnDate;
+}
+
+export function removeReadHistory(readHistoryId: number) {
+  const q = `DELETE FROM ReadHistoryIssue WHERE ReadHistoryId = ?`;
+  const deleteIssues = db.prepare(q);
+  const deleteInstance = db.prepare(`DELETE FROM ReadHistory WHERE Id = ?`);
+
+  const deleteReadHistoryInstance = db.transaction((id: number) => {
+    deleteIssues.run(id);
+    deleteInstance.run(id);
+  });
+
+  deleteReadHistoryInstance(readHistoryId);
+}
+
+/* Read History Issue */
+
 export function toggleReadHistoryIssue(request: ToggleReadHistoryIssueRequest) {
   const query = `
   SELECT *
@@ -106,25 +145,4 @@ export function toggleReadHistoryIssue(request: ToggleReadHistoryIssueRequest) {
        AND (@CollectionId IS NULL OR CollectionId = @CollectionId)
        AND IssueId = @IssueId`
   ).run({ ...request, ReadOnDate: readOnDate });
-}
-
-export function canRemoveReadHistory(readHistoryId: number) {
-  const instance = db
-    .prepare(`SELECT * FROM ReadHistory WHERE Id = ?`)
-    .get(readHistoryId) as ReadHistory;
-
-  return !instance || !instance.CompletedOnDate;
-}
-
-export function removeReadHistory(readHistoryId: number) {
-  const q = `DELETE FROM ReadHistoryIssue WHERE ReadHistoryId = ?`;
-  const deleteIssues = db.prepare(q);
-  const deleteInstance = db.prepare(`DELETE FROM ReadHistory WHERE Id = ?`);
-
-  const deleteReadHistoryInstance = db.transaction((id: number) => {
-    deleteIssues.run(id);
-    deleteInstance.run(id);
-  });
-
-  deleteReadHistoryInstance(readHistoryId);
 }

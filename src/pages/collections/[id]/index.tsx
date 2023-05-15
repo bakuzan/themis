@@ -41,8 +41,6 @@ export default function CollectionView(props: CollectionViewProps) {
     (x) => !issueIds.some((y) => y === x.id)
   );
 
-  console.log('<CollectionView>', props);
-
   return (
     <section>
       <PageHead title={pageTitle ?? undefined} />

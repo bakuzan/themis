@@ -31,6 +31,42 @@ export function validateCreateRequest(request: NextApiRequest) {
   };
 }
 
+function validateReadHistoryRequest(request: NextApiRequest) {
+  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+
+  const errorMessages = [];
+  const processedData: Partial<ReadHistory> = {};
+
+  // Set the id if it exists
+  if (data.readHistoryId) {
+    const readHistoryId = Number(data.readHistoryId);
+
+    if (isNaN(readHistoryId)) {
+      errorMessages.push('Read History Id is required');
+    } else {
+      processedData.Id = readHistoryId;
+    }
+  } else {
+    errorMessages.push('Read History Id is required');
+  }
+
+  return {
+    success: errorMessages.length === 0,
+    errorMessages,
+    processedData
+  };
+}
+
+export function validateCompleteRequest(request: NextApiRequest) {
+  return validateReadHistoryRequest(request);
+}
+
+export function validateRemoveRequest(request: NextApiRequest) {
+  return validateReadHistoryRequest(request);
+}
+
+/* Read History Issue */
+
 export function validateToggleIssueRequest(request: NextApiRequest) {
   const data = isFormData(request) ? request.body : JSON.parse(request.body);
   const errorMessages = [];
@@ -77,31 +113,5 @@ export function validateToggleIssueRequest(request: NextApiRequest) {
     success: errorMessages.length === 0,
     errorMessages,
     processedData: processedData as ToggleReadHistoryIssueRequest
-  };
-}
-
-export function validateRemoveRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
-
-  const errorMessages = [];
-  const processedData: Partial<ReadHistory> = {};
-
-  // Set the id if it exists
-  if (data.readHistoryId) {
-    const readHistoryId = Number(data.readHistoryId);
-
-    if (isNaN(readHistoryId)) {
-      errorMessages.push('Read History Id is required');
-    } else {
-      processedData.Id = readHistoryId;
-    }
-  } else {
-    errorMessages.push('Read History Id is required');
-  }
-
-  return {
-    success: errorMessages.length === 0,
-    errorMessages,
-    processedData
   };
 }

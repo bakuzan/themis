@@ -23,7 +23,6 @@ export default function ReadOrders(props: ReadOrdersProps) {
   const readOrders = props.items.filter((x) =>
     x.name.toLowerCase().includes(searchStringLower)
   );
-  console.log('<ReadOrders>', props);
 
   return (
     <section>

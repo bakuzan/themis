@@ -26,7 +26,6 @@ export default function Collections(props: CollectionsProps) {
       getCollectionFullName(x)?.toLowerCase().includes(searchStringLower) ||
       `${x.publicationDate}`.includes(searchStringLower)
   );
-  console.log('<Collections>', props);
 
   return (
     <section>

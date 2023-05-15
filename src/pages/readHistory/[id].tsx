@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next';
 
@@ -9,16 +9,20 @@ import { getReadHistoryById, getReadHistoryIssues } from '@/api/readHistory';
 import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
 import ReadHistoryIssueItem from '@/components/ReadHistoryIssueItem';
+import RemoveReadHistoryForm from '@/components/Forms/RemoveReadHistoryForm';
+import CompleteReadHistoryForm from '@/components/Forms/CompleteReadHistoryForm';
 
 import { filterReadHistoryIssues } from '@/utils/filters/issues';
 import { getReadOrderIssueKey } from '@/utils/getReadOrderIssueKey';
+import getTargetIssueElementId from '@/utils/getTargetIssueElementId';
 
 import styles from './[id].module.css';
-import RemoveReadHistoryForm from '@/components/Forms/RemoveReadHistoryForm';
+import { findLastIndex } from '@/utils/findLastIndex';
 
 interface ReadHistoryViewProps {
   item: ReadHistoryViewModel;
   issues: ReadHistoryIssueInfoViewModel[];
+  nextIssueToRead: ReadHistoryIssueInfoViewModel | null;
 }
 
 function getReadOnDate(
@@ -33,8 +37,10 @@ function getReadOnDate(
 
 export default function ReadHistoryView(props: ReadHistoryViewProps) {
   const router = useRouter();
+  const refreshData = () =>
+    router.replace(router.asPath, undefined, { scroll: false });
 
-  const data = props.item;
+  const { item: data, nextIssueToRead } = props;
   const pageTitle = `Reading ${data.readOrderName}`;
 
   const [changes, setChanges] = useState(new Map<string, string | null>([]));
@@ -42,13 +48,20 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
   const searchStringLower = searchString.toLowerCase();
 
   const allIssues = [...props.issues];
+  const isComplete = data.completedOnDate !== null;
   const issues = allIssues.filter(filterReadHistoryIssues(searchStringLower));
   const totalIssueCount = allIssues.length;
   const completedCount = allIssues.filter(
     (x) => !!getReadOnDate(changes, x)
   ).length;
 
-  console.log('<ReadHistoryView>', props, changes);
+  useEffect(() => {
+    // Scroll to the next issue to read in an ongoing read-through.
+    if (!isComplete && nextIssueToRead) {
+      const elementId = getTargetIssueElementId(nextIssueToRead);
+      document.getElementById(elementId)?.scrollIntoView();
+    }
+  }, [nextIssueToRead, isComplete]);
 
   return (
     <section>
@@ -60,7 +73,14 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
             {completedCount}/{totalIssueCount}
           </p>
         </div>
-        <div>COMPLETE BUTTON</div>
+        <div className={styles.completionBlock}>
+          <div className={styles.historyDates}>
+            <span>{data.startedOnDate}</span>
+            <span>&nbsp;to&nbsp;</span>
+            <span>{data.completedOnDate ?? 'present'}</span>
+          </div>
+          <CompleteReadHistoryForm data={data} onSubmitSuccess={refreshData} />
+        </div>
       </header>
       <div>
         <SearchBox
@@ -113,7 +133,16 @@ export async function getServerSideProps(
   const item = getReadHistoryById(readHistoryId);
   const issues = getReadHistoryIssues(readHistoryId);
 
+  const mostRecentReadIndex = findLastIndex(
+    issues,
+    (x) => x.readOnDate !== null
+  );
+
   return {
-    props: { item, issues }
+    props: {
+      item,
+      issues,
+      nextIssueToRead: issues[mostRecentReadIndex + 1] ?? null
+    }
   };
 }
