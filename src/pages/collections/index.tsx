@@ -45,7 +45,7 @@ export default function Collections(props: CollectionsProps) {
           {collections.map((x) => (
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
-                <Link href={`/collections/${x.id}`}>
+                <Link className={styles.itemName} href={`/collections/${x.id}`}>
                   {getCollectionFullName(x)}
                 </Link>
                 <span className="muted">&nbsp;({x.publicationDate})</span>

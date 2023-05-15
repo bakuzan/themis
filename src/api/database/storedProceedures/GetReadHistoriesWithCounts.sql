@@ -6,3 +6,4 @@ SELECT H.*
   JOIN ReadOrder O			ON H.ReadOrderId = O.Id
   JOIN ReadHistoryIssue I	ON H.Id = I.ReadHistoryId
  GROUP BY H.Id
+ ORDER BY H.StartedOnDate DESC, H.Id DESC

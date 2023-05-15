@@ -53,7 +53,9 @@ export default function Home(props: HomePageProps) {
           {historyList.map((x) => (
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
-                <Link href={`/readHistory/${x.id}`}>{x.readOrderName}</Link>
+                <Link className={styles.itemName} href={`/readHistory/${x.id}`}>
+                  {x.readOrderName}
+                </Link>
                 <span className="muted">&nbsp;{x.readIssueCount}</span>/
                 <span className="muted">{x.totalIssueCount}</span>
               </div>

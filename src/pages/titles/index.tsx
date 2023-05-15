@@ -41,7 +41,9 @@ export default function Titles(props: TitlesProps) {
           {titles.map((x) => (
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
-                <Link href={`/titles/${x.id}`}>{x.name}</Link>
+                <Link className={styles.itemName} href={`/titles/${x.id}`}>
+                  {x.name}
+                </Link>
                 {x.isOneShot && <span className="muted">&nbsp;(One Shot)</span>}
               </div>
               <div className="muted">
