@@ -42,7 +42,9 @@ export default function ReadOrders(props: ReadOrdersProps) {
           {readOrders.map((x) => (
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
-                <Link href={`/readOrders/${x.id}`}>{x.name}</Link>
+                <Link className={styles.itemName} href={`/readOrders/${x.id}`}>
+                  {x.name}
+                </Link>
               </div>
               <div className="muted">
                 {x.issueCount} {x.issueCount === 1 ? 'issue' : 'issues'}

@@ -7,6 +7,11 @@
   margin-bottom: 10px;
 }
 
+.item:hover {
+  border-style: solid;
+  border-color: var(--accent-background);
+}
+
 .coverInfo {
   display: flex;
   align-items: center;
