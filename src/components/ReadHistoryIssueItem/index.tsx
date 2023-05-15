@@ -22,7 +22,11 @@ export default function ReadHistoryIssueItem(props: ReadHistoryIssueItemProps) {
   return (
     <React.Fragment>
       {props.includeHeader && (
-        <li key="HEADER" className={styles.headerItem}>
+        <li
+          key="HEADER"
+          id={`COLLECTION_${item.collectionId}`}
+          className={styles.headerItem}
+        >
           <div>
             <div>
               {getCollectionFullName({
@@ -36,6 +40,7 @@ export default function ReadHistoryIssueItem(props: ReadHistoryIssueItemProps) {
       )}
       <li
         key="ITEM"
+        id={`ISSUE_${item.collectionId}_${item.issueId}`}
         className={classNames(
           styles.item,
           item.collectionId && styles.itemIndented

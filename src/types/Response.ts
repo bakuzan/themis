@@ -32,3 +32,5 @@ export interface ReadHistoryResponse extends BaseResponse {
 }
 
 export interface ToggleReadHistoryIssueResponse extends BaseResponse {}
+
+export interface CompleteReadHistoryResponse extends BaseResponse {}

@@ -32,7 +32,6 @@ export default function TitleView(props: TitleViewProps) {
 
   const pageTitle = `${data.name} (${data.startYear})`;
   const latestIssue = issues[0] ?? { number: 0, coverDate: '' };
-  console.log('<TitleView>', props);
 
   return (
     <section>

@@ -54,8 +54,6 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
   const dropdownCollections = exclude(props.collections, collectionIds);
   const dropdownIssues = exclude(props.issues, issueIds);
 
-  console.log('<ReadOrderView>', props);
-
   return (
     <section>
       <PageHead title={pageTitle} />

@@ -30,8 +30,6 @@ export default function Home(props: HomePageProps) {
     filterReadHistory(searchStringLower)
   );
 
-  console.log('<Home>', props);
-
   return (
     <section>
       <PageHead title={metadata.title} />

@@ -22,7 +22,6 @@ export default function Titles(props: TitlesProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const titles = props.items.filter(filterTitles(searchStringLower));
-  console.log('<Titles>', props);
 
   return (
     <section>
