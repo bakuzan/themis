@@ -44,6 +44,7 @@ export default function Titles(props: TitlesProps) {
                 <Link className={styles.itemName} href={`/titles/${x.id}`}>
                   {x.name}
                 </Link>
+                <span className="muted">&nbsp;({x.startYear})</span>
                 {x.isOneShot && <span className="muted">&nbsp;(One Shot)</span>}
               </div>
               <div className="muted">
