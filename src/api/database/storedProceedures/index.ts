@@ -12,6 +12,7 @@ type StoredProceedures =
   | 'GetReadOrdersWithIssueCount'
   | 'GetIssuesListForReadOrder'
   | 'GetIssuesWithoutACollection'
+  | 'GetReadOrdersAssociatedWithCollection'
   // Read History queries
   | 'GetReadHistoriesWithCounts'
   | 'GetReadHistoryById'

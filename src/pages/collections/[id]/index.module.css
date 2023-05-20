@@ -1,7 +1,19 @@
-.issue_form {
+.sectionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.issue_form,
+.readOrderLinks {
   padding: 10px 5px;
   margin-bottom: 25px;
   box-shadow: 1px 1px 5px 1px var(--primary-background);
+}
+
+.readOrderLink {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
 }
 
 .list {

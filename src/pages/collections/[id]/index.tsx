@@ -5,8 +5,10 @@ import Link from 'next/link';
 
 import { getCollectionWithIssues } from '@/api/collections';
 import { getIssuesWithTitleInfo } from '@/api/issues';
+import { getReadOrdersAssociatedWithCollection } from '@/api/readOrders';
 import { CollectionWithIssuesViewModel } from '@/types/Collection';
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
+import { ReadOrderViewModel } from '@/types/ReadOrder';
 
 import SearchBox from '@/components/SearchBox';
 import PageHead from '@/components/PageHead';
@@ -21,6 +23,7 @@ import styles from './index.module.css';
 interface CollectionViewProps {
   item: CollectionWithIssuesViewModel;
   issues: IssueWithTitleInfoViewModel[];
+  readOrders: ReadOrderViewModel[];
 }
 
 export default function CollectionView(props: CollectionViewProps) {
@@ -54,25 +57,39 @@ export default function CollectionView(props: CollectionViewProps) {
         </div>
       </header>
       <div>
-        <section className={styles.issue_form}>
-          <header className="header">
-            <h2>Add existing issue to {pageTitle}</h2>
-          </header>
-          <CollectionIssueForm
-            key={issueFormKey}
-            method="POST"
-            action={`/api/collectionissues/new`}
-            issues={dropdownIssues}
-            onSuccess={() => {
-              refreshData();
-              setIssueFormKey((p) => p + 1);
-            }}
-            data={{
-              collectionId: data.id,
-              issueId: undefined
-            }}
-          />
-        </section>
+        <div className={styles.sectionGrid}>
+          <section className={styles.issue_form}>
+            <header className="header">
+              <h2>Add existing issue to {pageTitle}</h2>
+            </header>
+            <CollectionIssueForm
+              key={issueFormKey}
+              method="POST"
+              action={`/api/collectionissues/new`}
+              issues={dropdownIssues}
+              onSuccess={() => {
+                refreshData();
+                setIssueFormKey((p) => p + 1);
+              }}
+              data={{
+                collectionId: data.id,
+                issueId: undefined
+              }}
+            />
+          </section>
+          <section className={styles.readOrderLinks}>
+            <header className="header">
+              <h2>Associated with the following read orders</h2>
+            </header>
+            <ul className={styles.list}>
+              {props.readOrders.map((x) => (
+                <li key={x.id} className={styles.readOrderLink}>
+                  <Link href={`/readOrders/${x.id}`}>{x.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
         <SearchBox
           value={searchString}
           onChange={(text) => setSearchString(text)}
@@ -101,10 +118,12 @@ export async function getServerSideProps(
     throw new Error(`collections/[id] was called without an id!`);
   }
 
-  const item = getCollectionWithIssues(Number(id));
+  const collectionId = Number(id);
+  const item = getCollectionWithIssues(collectionId);
   const issues = getIssuesWithTitleInfo();
+  const readOrders = getReadOrdersAssociatedWithCollection(collectionId);
 
   return {
-    props: { item, issues }
+    props: { item, issues, readOrders }
   };
 }

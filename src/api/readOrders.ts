@@ -1,6 +1,10 @@
 import db from './database';
 
-import { ReadOrder, ReadOrderWithIssueCount } from '@/types/ReadOrder';
+import {
+  ReadOrder,
+  ReadOrderViewModel,
+  ReadOrderWithIssueCount
+} from '@/types/ReadOrder';
 import { IssueWithReadOrderInfo } from '@/types/Issue';
 import { CollectionIssue } from '@/types/CollectionIssue';
 import {
@@ -11,12 +15,14 @@ import {
 } from '@/types/ReadOrderIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
-import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
+
 import {
   toReadOrderViewModel,
   toReadOrderWithIssuesViewModel
 } from './mappers/readOrder';
 import { ReOrderDirection } from '@/constants/ReOrderDirection';
+
+import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
 import setIssueSortOrders from './helpers/setIssueSortOrders';
 import { moveToNewArrayPosition } from './helpers/common';
 import reOrderIssuesList from './helpers/reOrderIssueList';
@@ -51,6 +57,13 @@ export function getReadOrderWithIssues(id: number) {
   const issues = db.prepare(query).all(id) as IssueWithReadOrderInfo[];
 
   return toReadOrderWithIssuesViewModel(readOrder, issues);
+}
+
+export function getReadOrdersAssociatedWithCollection(collectionId: number) {
+  const query = getStoredProceedure('GetReadOrdersAssociatedWithCollection');
+  const readOrders = db.prepare(query).all(collectionId) as ReadOrder[];
+
+  return readOrders.map(toReadOrderViewModel);
 }
 
 /* DATABASE WRITES */
