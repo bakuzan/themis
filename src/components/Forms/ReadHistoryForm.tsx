@@ -43,39 +43,37 @@ export default function ReadHistoryForm(props: ReadHistoryFormProps) {
   }
 
   return (
-    <div>
-      <form
-        method={convertMethodToFormValidMethod(props.method)}
-        action={props.action}
-        id="readHistoryForm"
-        name="readHistoryForm"
-        onSubmit={handleSubmit}
-      >
-        <div className={styles.innerContainer}>
-          <InputSelect
-            id="readOrderId"
-            name="readOrderId"
-            label="Read Order"
-            value={readOrderId}
-            required
-            onChange={(e) => {
-              const value = e.target.value;
-              setReadOrderId(value ? Number(value) : undefined);
-            }}
-          >
-            <option value="">Select a Read Order</option>
-            {props.readOrders.map((x) => (
-              <option key={x.id} value={x.id}>
-                {x.name}
-              </option>
-            ))}
-          </InputSelect>
+    <form
+      method={convertMethodToFormValidMethod(props.method)}
+      action={props.action}
+      id="readHistoryForm"
+      name="readHistoryForm"
+      onSubmit={handleSubmit}
+    >
+      <div className={styles.innerContainer}>
+        <InputSelect
+          id="readOrderId"
+          name="readOrderId"
+          label="Read Order"
+          value={readOrderId}
+          required
+          onChange={(e) => {
+            const value = e.target.value;
+            setReadOrderId(value ? Number(value) : undefined);
+          }}
+        >
+          <option value="">Select a Read Order</option>
+          {props.readOrders.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.name}
+            </option>
+          ))}
+        </InputSelect>
 
-          <ButtonGroup>
-            <Button type="submit">Start</Button>
-          </ButtonGroup>
-        </div>
-      </form>
-    </div>
+        <ButtonGroup style={{ paddingTop: 5 }}>
+          <Button type="submit">Start</Button>
+        </ButtonGroup>
+      </div>
+    </form>
   );
 }

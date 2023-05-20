@@ -8,6 +8,14 @@ interface ButtonGroupProps
     HTMLDivElement
   > {}
 
-export default function ButtonGroup({ className, children }: ButtonGroupProps) {
-  return <div className={classNames(styles.group, className)}>{children}</div>;
+export default function ButtonGroup({
+  className,
+  children,
+  ...props
+}: ButtonGroupProps) {
+  return (
+    <div className={classNames(styles.group, className)} {...props}>
+      {children}
+    </div>
+  );
 }

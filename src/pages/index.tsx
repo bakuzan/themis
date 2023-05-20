@@ -36,8 +36,7 @@ export default function Home(props: HomePageProps) {
       <header className="header">
         <h1>{metadata.title}</h1>
       </header>
-
-      <div>
+      <div className={styles.formContainer}>
         <ReadHistoryForm
           method="POST"
           action={`/api/readHistory/new`}
