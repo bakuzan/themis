@@ -64,11 +64,12 @@ export function validateRequest(request: NextApiRequest) {
   };
 }
 
-export function validateCollectionIssueRequest(request: NextApiRequest) {
+export function validateAddCollectionIssuesRequest(request: NextApiRequest) {
   const data = isFormData(request) ? request.body : JSON.parse(request.body);
 
   const errorMessages = [];
-  const processedData: Partial<CollectionIssue> = {};
+  const processedData: Partial<CollectionIssue>[] = [];
+  let CollectionId: number = 0;
 
   if (!data.collectionId) {
     errorMessages.push('Collection Id required');
@@ -78,19 +79,24 @@ export function validateCollectionIssueRequest(request: NextApiRequest) {
     if (isNaN(collectionId)) {
       errorMessages.push('Collection Id should be a number');
     } else {
-      processedData.CollectionId = collectionId;
+      CollectionId = collectionId;
     }
   }
 
-  if (!data.issueId) {
-    errorMessages.push('Issue Id required');
+  if (!data.issueIds) {
+    errorMessages.push('Issue Id(s) required');
   } else {
-    const issueId = Number(data.issueId);
+    for (let rawId of data.issueIds) {
+      const issueId = Number(rawId);
 
-    if (isNaN(issueId)) {
-      errorMessages.push('Issue Id should be a number');
-    } else {
-      processedData.IssueId = issueId;
+      if (isNaN(issueId)) {
+        errorMessages.push(`Issue Id should be a number (Got: ${rawId})`);
+      } else {
+        processedData.push({
+          CollectionId,
+          IssueId: issueId
+        });
+      }
     }
   }
 
@@ -143,5 +149,42 @@ export function validateEditCollectionIssueRequest(request: NextApiRequest) {
     success: errorMessages.length === 0,
     errorMessages,
     processedData: processedData as ReOrderCollectionIssuesRequest
+  };
+}
+
+export function validateRemoveCollectionIssueRequest(request: NextApiRequest) {
+  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+
+  const errorMessages = [];
+  const processedData: Partial<CollectionIssue> = {};
+
+  if (!data.collectionId) {
+    errorMessages.push('Collection Id required');
+  } else {
+    const collectionId = Number(data.collectionId);
+
+    if (isNaN(collectionId)) {
+      errorMessages.push('Collection Id should be a number');
+    } else {
+      processedData.CollectionId = collectionId;
+    }
+  }
+
+  if (!data.issueId) {
+    errorMessages.push('Issue Id required');
+  } else {
+    const issueId = Number(data.issueId);
+
+    if (isNaN(issueId)) {
+      errorMessages.push('Issue Id should be a number');
+    } else {
+      processedData.IssueId = issueId;
+    }
+  }
+
+  return {
+    success: errorMessages.length === 0,
+    errorMessages,
+    processedData
   };
 }

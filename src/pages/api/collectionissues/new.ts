@@ -5,17 +5,17 @@ import { CollectionIssue } from '@/types/CollectionIssue';
 import { isFormData } from '@/api/helpers/common';
 import {
   checkCollectionIssueDoesNotExist,
-  insertCollectionIssue
+  insertCollectionIssues
 } from '@/api/collections';
-import { validateCollectionIssueRequest } from '@/api/validators/collection';
+import { validateAddCollectionIssuesRequest } from '@/api/validators/collection';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
   const isFormPost = isFormData(request);
-  let data = validateCollectionIssueRequest(request);
-  const collectionId = data.processedData.CollectionId;
+  let data = validateAddCollectionIssuesRequest(request);
+  const collectionId = data.processedData[0]?.CollectionId;
   console.log('POST', request.body);
 
   if (!data.success) {
@@ -27,11 +27,14 @@ export default async function handler(
     }
   }
 
-  const newCollectionIssue = data.processedData as CollectionIssue;
+  // This should only insert request(s) if they don't already exist.
+  const newCollectionIssues = data.processedData as CollectionIssue[];
+  const newCIs = newCollectionIssues.filter((ci) =>
+    checkCollectionIssueDoesNotExist(ci)
+  );
 
-  // This should only insert request if it doesn't already exist.
-  if (checkCollectionIssueDoesNotExist(newCollectionIssue)) {
-    insertCollectionIssue(newCollectionIssue);
+  if (newCIs.length > 0) {
+    insertCollectionIssues(newCIs);
   }
 
   if (isFormPost) {

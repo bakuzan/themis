@@ -31,3 +31,17 @@
 .checkbox input {
   cursor: pointer;
 }
+
+/* multiple select highlight */
+.control > select[multiple] {
+  min-height: calc(17px * 5); /* option height x no. of rows I want to see */
+}
+
+.control > select[multiple] option {
+  margin-right: 2px;
+}
+
+.control > select[multiple] option:checked {
+  background-color: var(--accent-background);
+  color: var(--accent-constrast-colour);
+}

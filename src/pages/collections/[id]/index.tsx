@@ -72,8 +72,7 @@ export default function CollectionView(props: CollectionViewProps) {
                 setIssueFormKey((p) => p + 1);
               }}
               data={{
-                collectionId: data.id,
-                issueId: undefined
+                collectionId: data.id
               }}
             />
           </section>

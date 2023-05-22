@@ -19,19 +19,19 @@ interface CollectionIssueFormProps {
   action: string;
   data: Partial<CollectionIssueViewModel>;
   issues: IssueWithTitleInfoViewModel[];
-  onSuccess: (issue: IssueWithTitleInfoViewModel) => void;
+  onSuccess: () => void;
 }
 
 export default function CollectionIssueForm(props: CollectionIssueFormProps) {
   const appProps = useContext(AppContext);
   const { data } = props;
-  const [issueId, setIssueId] = useState(data.issueId);
+  const [issueIds, setIssueIds] = useState(new Set<number>([]));
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const payload = {
       collectionId: data.collectionId,
-      issueId
+      issueIds: Array.from(issueIds.values())
     };
 
     const response = await callApi<CollectionIssueResponse>(props.action, {
@@ -40,12 +40,7 @@ export default function CollectionIssueForm(props: CollectionIssueFormProps) {
     });
 
     if (response.success) {
-      const issue = props.issues.find((x) => x.id === issueId);
-      if (!issue) {
-        throw new Error('This should never happen!');
-      }
-
-      props.onSuccess(issue);
+      props.onSuccess();
     } else {
       appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }
@@ -67,17 +62,34 @@ export default function CollectionIssueForm(props: CollectionIssueFormProps) {
           value={data.collectionId}
         />
         <InputSelect
-          id="issueId"
-          name="issueId"
-          label="Issue"
+          id="issueIds"
+          name="issueIds"
+          label="Issue(s)"
           required
-          value={issueId}
+          multiple
+          value={Array.from(issueIds.values()).map((x) => `${x}`)}
           onChange={(e) => {
-            const value = e.target.value;
-            setIssueId(value ? Number(value) : undefined);
+            const value = Number(e.currentTarget.value);
+            let ids = new Set(issueIds);
+
+            if (!ids.delete(value)) {
+              ids.add(value);
+            }
+
+            setIssueIds(ids);
+
+            /**
+             * If the multiple select is not blurred after selecting an item
+             * the control will fire the onChange event when scrolling (retarded).
+             * To prevent this, we need to blur and refocus the control.
+             */
+            const element = document.activeElement as HTMLSelectElement;
+            if (element) {
+              requestAnimationFrame(() => element.blur());
+              requestAnimationFrame(() => element.focus());
+            }
           }}
         >
-          <option value="">Select an Issue</option>
           {props.issues.map((x) => (
             <option key={x.id} value={x.id}>
               {x.titleName} ({x.startYear}) {getFormattedIssueNumber(x)}{' '}

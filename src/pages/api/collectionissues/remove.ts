@@ -4,14 +4,14 @@ import { CollectionIssue } from '@/types/CollectionIssue';
 
 import { isFormData } from '@/api/helpers/common';
 import { removeCollectionIssue } from '@/api/collections';
-import { validateCollectionIssueRequest } from '@/api/validators/collection';
+import { validateRemoveCollectionIssueRequest } from '@/api/validators/collection';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
   const isFormPost = isFormData(request);
-  const data = validateCollectionIssueRequest(request);
+  const data = validateRemoveCollectionIssueRequest(request);
   const collectionId = data.processedData.CollectionId;
   console.log('DELETE', request.body);
 

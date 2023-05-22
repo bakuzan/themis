@@ -91,15 +91,24 @@ export function checkCollectionIssueDoesNotExist(data: CollectionIssue) {
   return !existingCollectionIssue;
 }
 
-export function insertCollectionIssue(data: CollectionIssue) {
-  const query = `SELECT * FROM CollectionIssue WHERE CollectionId = ? ORDER BY SortOrder DESC LIMIT 1`;
-  const ci = db.prepare(query).get(data.CollectionId) as CollectionIssue;
-  const latestSortOrder = ci?.SortOrder ?? 0;
-
+function insertCollectionIssue(data: CollectionIssue, sortOrder: number) {
   db.prepare(
     `INSERT INTO CollectionIssue (CollectionId, IssueId, SortOrder)
      VALUES (@CollectionId, @IssueId, @SortOrder)`
-  ).run({ ...data, SortOrder: latestSortOrder + SORT_ORDER_INCREMENT });
+  ).run({ ...data, SortOrder: sortOrder });
+}
+
+export function insertCollectionIssues(items: CollectionIssue[]) {
+  const collectionId = items[0].CollectionId;
+  const query = `SELECT * FROM CollectionIssue WHERE CollectionId = ? ORDER BY SortOrder DESC LIMIT 1`;
+  const ci = db.prepare(query).get(collectionId) as CollectionIssue;
+  const latestSortOrder = ci?.SortOrder ?? 0;
+  let sortOrder = latestSortOrder;
+
+  for (let ci of items) {
+    sortOrder += SORT_ORDER_INCREMENT;
+    insertCollectionIssue(ci, sortOrder);
+  }
 }
 
 export function removeCollectionIssue(data: CollectionIssue) {
