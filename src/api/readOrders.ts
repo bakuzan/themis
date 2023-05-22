@@ -93,14 +93,13 @@ export function insertReadOrderIssues(data: AddReadOrderIssuesRequest) {
 
   // process the request ids to create a list of new read order issues
   if (data.CollectionId) {
-    const ci = db
-      .prepare(`SELECT * FROM CollectionIssue WHERE CollectionId = ?`)
-      .all(data.CollectionId) as CollectionIssue[];
+    const ciQuery = `SELECT * FROM CollectionIssue WHERE CollectionId = ? ORDER BY SortOrder`;
+    const ci = db.prepare(ciQuery).all(data.CollectionId) as CollectionIssue[];
 
     const rois = ci.map((x) => ({
+      ...x,
       ReadOrderId: data.ReadOrderId,
-      SortOrder: 0,
-      ...x
+      SortOrder: 0
     }));
 
     items.push(...rois);
@@ -164,41 +163,20 @@ export function removeReadOrderIssues(data: RemoveReadOrderIssuesRequest) {
 
 export function reOrderReadOrderIssues(data: ReOrderReadOrderIssuesRequest) {
   const isMovingUp = data.Direction === ReOrderDirection.UP;
-  let changedIssues: ReadOrderIssue[] = [];
 
-  // Re-order issues within a collection
-  if (data.CollectionId && data.IssueId) {
-    const query = getStoredProceedure('GetCollectionIssuesWithinReadOrder');
-    const issues = db.prepare(query).all(data) as ReadOrderIssue[];
+  // Re-order within read order
+  const query = getStoredProceedure('GetIssuesUsingTargetInReadOrder');
+  const issues = db.prepare(query).all({
+    ReadOrderId: data.ReadOrderId,
+    CollectionId: data.CollectionId,
+    IssueId: data.IssueId,
+    IncludePriors: isMovingUp ? 1 : 0
+  }) as ReadOrderIssue[];
 
-    const initialSortOrder = issues[0].SortOrder;
-    const diff = isMovingUp ? -1 : 1;
-    const targetIndex = issues.findIndex((x) => x.IssueId === data.IssueId);
-    const toIndex = targetIndex + diff;
-    const reOrderedIssues = moveToNewArrayPosition(
-      issues,
-      targetIndex,
-      toIndex
-    );
+  const initialSortOrder = issues[0].SortOrder;
+  const changedIssues = reOrderIssuesList(data, issues);
 
-    setIssueSortOrders(reOrderedIssues, initialSortOrder);
-    changedIssues = reOrderedIssues;
-  } else {
-    // Re-order within read order
-    const query = getStoredProceedure('GetIssuesUsingTargetInReadOrder');
-    const issues = db.prepare(query).all({
-      ReadOrderId: data.ReadOrderId,
-      CollectionId: data.CollectionId,
-      IssueId: data.IssueId,
-      IncludePriors: isMovingUp ? 1 : 0
-    }) as ReadOrderIssue[];
-
-    const initialSortOrder = issues[0].SortOrder;
-    const reOrderedIssues = reOrderIssuesList(data, issues);
-
-    setIssueSortOrders(reOrderedIssues, initialSortOrder);
-    changedIssues = reOrderedIssues;
-  }
+  setIssueSortOrders(changedIssues, initialSortOrder);
 
   // Perform updates on the issues that were re-ordered during processing
   const updateROI = db.prepare<ReadOrderIssue>(

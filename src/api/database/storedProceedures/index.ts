@@ -20,7 +20,6 @@ type StoredProceedures =
   // Helpers
   | 'GetLastIssueInReadOrder'
   | 'GetIssuesAfterTargetInReadOrder'
-  | 'GetCollectionIssuesWithinReadOrder'
   | 'GetIssuesUsingTargetInReadOrder';
 
 const proceedures = {} as Record<StoredProceedures, string>;

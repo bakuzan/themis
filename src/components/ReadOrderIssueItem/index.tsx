@@ -69,19 +69,20 @@ export default function ReadOrderIssueItem(props: ReadOrderIssueItemProps) {
             <div>{item.name}</div>
           </div>
         </div>
-        <div className={styles.actions}>
-          <EditForm
-            canUp={!!props.data.collectionId || !props.isFirst}
-            canDown={!!props.data.collectionId || !props.isLast}
-            readOrderId={props.data.readOrderId}
-            collectionId={props.data.collectionId}
-            issueId={props.data.issueId}
-            onSubmitSuccess={props.onEdit}
-          />
-          {!item.collectionId && (
+        {!item.collectionId && (
+          <div className={styles.actions}>
+            <EditForm
+              canUp={!props.isFirst}
+              canDown={!props.isLast}
+              readOrderId={props.data.readOrderId}
+              collectionId={props.data.collectionId}
+              issueId={props.data.issueId}
+              onSubmitSuccess={props.onEdit}
+            />
+
             <RemoveForm data={props.data} onSubmitSuccess={props.onRemove} />
-          )}
-        </div>
+          </div>
+        )}
       </li>
     </React.Fragment>
   );

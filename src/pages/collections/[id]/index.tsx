@@ -100,6 +100,7 @@ export default function CollectionView(props: CollectionViewProps) {
               key={x.id}
               data={x}
               collectionId={data.id}
+              onEdit={refreshData}
               onRemove={refreshData}
             />
           ))}

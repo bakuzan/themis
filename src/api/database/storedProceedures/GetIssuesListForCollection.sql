@@ -6,3 +6,4 @@ SELECT I.*
   JOIN Title T 				ON I.TitleId = T.Id
   JOIN CollectionIssue CI 	ON I.Id = CI.IssueId
  WHERE CI.CollectionId = ?
+ ORDER BY CI.SortOrder

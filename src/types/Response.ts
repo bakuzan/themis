@@ -26,7 +26,9 @@ export interface ReadOrderResponse extends BaseResponse {
 export interface ReadOrderIssueResponse extends BaseResponse {}
 
 export interface ReadOrderIssueReOrderResponse extends BaseResponse {}
+export interface CollectionIssueReOrderResponse extends BaseResponse {}
 
+/*  Read History Responses */
 export interface ReadHistoryResponse extends BaseResponse {
   id?: number;
 }

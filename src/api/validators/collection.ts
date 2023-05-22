@@ -1,8 +1,12 @@
 import { NextApiRequest } from 'next';
 
 import { Collection } from '@/types/Collection';
-import { CollectionIssue } from '@/types/CollectionIssue';
+import {
+  CollectionIssue,
+  ReOrderCollectionIssuesRequest
+} from '@/types/CollectionIssue';
 import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
+import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
 export function validateRequest(request: NextApiRequest) {
   const data = isFormData(request) ? request.body : JSON.parse(request.body);
@@ -94,5 +98,50 @@ export function validateCollectionIssueRequest(request: NextApiRequest) {
     success: errorMessages.length === 0,
     errorMessages,
     processedData
+  };
+}
+
+export function validateEditCollectionIssueRequest(request: NextApiRequest) {
+  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+  const errorMessages = [];
+  const processedData: Partial<ReOrderCollectionIssuesRequest> = {};
+
+  if (!data.collectionId) {
+    errorMessages.push('Collection Id required');
+  } else {
+    const collectionId = Number(data.collectionId);
+
+    if (isNaN(collectionId)) {
+      errorMessages.push('Collection Id should be a number');
+    } else {
+      processedData.CollectionId = collectionId;
+    }
+  }
+
+  if (!data.issueId) {
+    errorMessages.push('Issue Id required');
+  } else {
+    const issueId = Number(data.issueId);
+
+    if (isNaN(issueId)) {
+      errorMessages.push('Issue Id should be a number');
+    } else {
+      processedData.IssueId = issueId;
+    }
+  }
+
+  if (!data.direction) {
+    errorMessages.push(`Direction should be either 'UP' or 'DOWN'`);
+  } else {
+    processedData.Direction =
+      data.direction === ReOrderDirection.UP
+        ? ReOrderDirection.UP
+        : ReOrderDirection.DOWN;
+  }
+
+  return {
+    success: errorMessages.length === 0,
+    errorMessages,
+    processedData: processedData as ReOrderCollectionIssuesRequest
   };
 }

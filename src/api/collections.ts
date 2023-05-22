@@ -2,7 +2,10 @@ import db from './database';
 
 import { IssueWithTitleInfo } from '@/types/Issue';
 import { Collection, CollectionWithIssueCount } from '@/types/Collection';
-import { CollectionIssue } from '@/types/CollectionIssue';
+import {
+  CollectionIssue,
+  ReOrderCollectionIssuesRequest
+} from '@/types/CollectionIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
 
@@ -10,6 +13,11 @@ import {
   toCollectionViewModel,
   toCollectionWithIssuesViewModel
 } from './mappers/collection';
+import { SORT_ORDER_INCREMENT } from '@/constants';
+import { ReOrderDirection } from '@/constants/ReOrderDirection';
+
+import { moveToNewArrayPosition } from './helpers/common';
+import setIssueSortOrders from './helpers/setIssueSortOrders';
 
 /* DATEBASE READS */
 export function getCollections() {
@@ -84,10 +92,14 @@ export function checkCollectionIssueDoesNotExist(data: CollectionIssue) {
 }
 
 export function insertCollectionIssue(data: CollectionIssue) {
+  const query = `SELECT * FROM CollectionIssue WHERE CollectionId = ? ORDER BY SortOrder DESC LIMIT 1`;
+  const ci = db.prepare(query).get(data.CollectionId) as CollectionIssue;
+  const latestSortOrder = ci?.SortOrder ?? 0;
+
   db.prepare(
-    `INSERT INTO CollectionIssue (CollectionId, IssueId)
-     VALUES (@CollectionId, @IssueId)`
-  ).run(data);
+    `INSERT INTO CollectionIssue (CollectionId, IssueId, SortOrder)
+     VALUES (@CollectionId, @IssueId, @SortOrder)`
+  ).run({ ...data, SortOrder: latestSortOrder + SORT_ORDER_INCREMENT });
 }
 
 export function removeCollectionIssue(data: CollectionIssue) {
@@ -96,4 +108,36 @@ export function removeCollectionIssue(data: CollectionIssue) {
      WHERE CollectionId = @CollectionId
        AND IssueId = @IssueId`
   ).run(data);
+}
+
+export function reOrderCollectionIssues(data: ReOrderCollectionIssuesRequest) {
+  const isMovingUp = data.Direction === ReOrderDirection.UP;
+
+  // Re-order issues within a collection
+  const query = `SELECT * FROM CollectionIssue WHERE CollectionId = @CollectionId ORDER BY SortOrder`;
+  const issues = db.prepare(query).all(data) as CollectionIssue[];
+
+  const initialSortOrder = issues[0].SortOrder;
+  const diff = isMovingUp ? -1 : 1;
+  const targetIndex = issues.findIndex((x) => x.IssueId === data.IssueId);
+  const toIndex = targetIndex + diff;
+  const changedIssues = moveToNewArrayPosition(issues, targetIndex, toIndex);
+
+  setIssueSortOrders(changedIssues, initialSortOrder);
+
+  // Perform updates on the issues that were re-ordered during processing
+  const updateROI = db.prepare<CollectionIssue>(
+    `UPDATE CollectionIssue
+        SET SortOrder = @SortOrder
+      WHERE CollectionId = @CollectionId
+        AND IssueId = @IssueId`
+  );
+
+  const updateROIs = db.transaction((rows: CollectionIssue[]) => {
+    for (let row of rows) {
+      updateROI.run(row);
+    }
+  });
+
+  updateROIs(changedIssues);
 }

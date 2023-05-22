@@ -6,21 +6,24 @@ import { AppContext } from '@/context';
 import callApi from '@/utils/callApi';
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 
+import CollectionIssueEditForm from './Forms/CollectionIssueEditForm';
 import Button from './Button';
 
-import styles from './IssueItem.module.css';
+import styles from './CollectionIssueItem.module.css';
 
 interface CollectionIssueItemProps {
   collectionId: number;
   data: IssueWithTitleInfoViewModel;
+  onEdit: () => void;
   onRemove: () => void;
 }
+
+const deleteActionUrl = `/api/collectionissues/remove`;
 
 export default function CollectionIssueItem(props: CollectionIssueItemProps) {
   const appProps = useContext(AppContext);
   const { collectionId, data: item } = props;
   const issueNumber = getFormattedIssueNumber(item);
-  const deleteActionUrl = `/api/collectionissues/remove`;
 
   async function onDelete(event: FormEvent) {
     event.preventDefault();
@@ -39,26 +42,32 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
 
   return (
     <li className={styles.item}>
-      <div className={styles.coverInfo}>
-        <div>
-          {item.titleName} {issueNumber} {item.isAnnual && 'Annual'}
+      <div style={{ flex: 1 }}>
+        <div className={styles.coverInfo}>
+          <div>
+            {item.titleName} {issueNumber} {item.isAnnual && 'Annual'}
+          </div>
+          &nbsp;
+          <div>{item.coverDate}</div>
         </div>
-        &nbsp;
-        <div>{item.coverDate}</div>
-      </div>
-      <div className={styles.main}>
         <div>{item.name}</div>
-        <div>
-          <form
-            method="POST"
-            action={deleteActionUrl}
-            id="removeCollectionIssue"
-            name="removeCollectionIssue"
-            onSubmit={onDelete}
-          >
-            <Button type="submit">Remove</Button>
-          </form>
-        </div>
+      </div>
+
+      <div>
+        <CollectionIssueEditForm
+          collectionId={collectionId}
+          issueId={item.id}
+          onSubmitSuccess={props.onEdit}
+        />
+        <form
+          method="POST"
+          action={deleteActionUrl}
+          id="removeCollectionIssue"
+          name="removeCollectionIssue"
+          onSubmit={onDelete}
+        >
+          <Button type="submit">Remove</Button>
+        </form>
       </div>
     </li>
   );

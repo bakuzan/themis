@@ -1,6 +1,6 @@
-import { ReadOrderIssue } from '@/types/ReadOrderIssue';
-
 import { SORT_ORDER_INCREMENT } from '@/constants';
+
+type SortableRecord = { SortOrder: number };
 
 /**
  * Will loop through the items giving them equally spaced sort order values.
@@ -10,7 +10,7 @@ import { SORT_ORDER_INCREMENT } from '@/constants';
  * @returns nextSortOrder
  */
 export default function setIssueSortOrders(
-  items: ReadOrderIssue[],
+  items: SortableRecord[],
   initialSortOrder: number
 ) {
   let offset = 0;

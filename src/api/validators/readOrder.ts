@@ -115,13 +115,27 @@ export function validateEditReadOrderIssueRequest(request: NextApiRequest) {
   // Set the id if it exists (must be an update)
   processedData.ReadOrderId = Number(data.readOrderId);
 
-  if (!data.collectionId && !data.issueId) {
-    errorMessages.push('Either Collection Id or Issue Id are required');
+  if (
+    (!data.collectionId && !data.issueId) ||
+    (data.collectionId && data.issueId)
+  ) {
+    errorMessages.push(
+      'Either Collection Id or Issue Id are required, but not both'
+    );
   } else {
     const collectionId = Number(data.collectionId);
     const issueId = Number(data.issueId);
     processedData.CollectionId = returnNumberOrNull(collectionId);
     processedData.IssueId = returnNumberOrNull(issueId);
+
+    if (
+      (!processedData.CollectionId && !processedData.IssueId) ||
+      (processedData.CollectionId && processedData.IssueId)
+    ) {
+      errorMessages.push(
+        'Either Collection Id or Issue Id are required, but not both'
+      );
+    }
   }
 
   if (!data.direction) {
