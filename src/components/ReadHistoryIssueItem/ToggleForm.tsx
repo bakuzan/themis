@@ -1,6 +1,6 @@
 import React, { FormEvent, useContext } from 'react';
 
-import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistory';
+import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistoryIssue';
 import { ToggleReadHistoryIssueResponse } from '@/types/Response';
 import { AppContext } from '@/context';
 

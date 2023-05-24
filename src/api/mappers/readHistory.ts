@@ -2,10 +2,12 @@ import {
   ReadHistoryWithReadOrder,
   ReadHistoryViewModel,
   ReadHistoryWithCounts,
-  ReadHistoryWithCountsViewModel,
+  ReadHistoryWithCountsViewModel
+} from '@/types/ReadHistory';
+import {
   ReadHistoryIssue,
   ReadHistoryIssueInfoViewModel
-} from '@/types/ReadHistory';
+} from '@/types/ReadHistoryIssue';
 
 export function toReadHistoryViewModel(
   history: ReadHistoryWithReadOrder

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 import styles from './NavBar.module.css';
 
@@ -7,7 +8,7 @@ export default function NavBar() {
     <nav className={styles.navbar}>
       <Link className={styles.navbar__link} href={'/'} title="Go to home page">
         <div className={styles.imageContainer}>
-          <img src="/favicon.ico" alt="Themis" />
+          <Image src="/favicon.ico" alt="Themis" />
         </div>
       </Link>
       <Link className={styles.navbar__link} href={'/titles'}>

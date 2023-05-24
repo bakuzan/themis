@@ -3,7 +3,7 @@ import {
   IssueWithReadOrderInfoViewModel,
   IssueWithTitleInfoViewModel
 } from '@/types/Issue';
-import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistory';
+import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistoryIssue';
 
 import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
 import getCollectionFullName from '@/utils/getCollectionFullName';

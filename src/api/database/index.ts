@@ -18,7 +18,15 @@ for (const item of scripts) {
   //    Scripts:  N.<file_name>.sql
   // Migration: m_N.<file_name>.sql
   if (!item.migration || item.number >= user_version) {
-    db.exec(item.script);
+    try {
+      db.exec(item.script);
+    } catch (e) {
+      console.error(
+        `%c Database script error :: `,
+        'color:red;font-size:20px;',
+        e
+      );
+    }
   }
 }
 
