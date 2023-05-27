@@ -8,7 +8,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import:dry": "ts-node -P ./tools/tsconfig.json ./tools/import.ts --dry",
+    "import:live": "ts-node -P ./tools/tsconfig.json ./tools/import.ts"
   },
   "dependencies": {
     "@types/node": "18.15.11",
@@ -24,9 +26,11 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
+    "dotenv": "^16.0.3",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.7",
+    "ts-node": "^10.9.1"
   },
   "lint-staged": {
     "{,src}/**/*.{js,ts,tsx}": [
