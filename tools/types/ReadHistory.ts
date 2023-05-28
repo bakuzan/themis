@@ -5,9 +5,12 @@ export interface ReadHistory {
 }
 
 export interface ReadHistoryIssue {
-  ReadHistoryId: number | null;
   CollectionId: number | null;
   IssueId: number;
   SortOrder: number;
   ReadOnDate: string | null;
+}
+
+export interface ReadHistoryIssueWithId extends ReadHistoryIssue {
+  ReadHistoryId: number;
 }

@@ -49,22 +49,23 @@ const monthNameToNumber = new Map([
 export function convertDateToYYYYMMDD(dd_MMMM_YYYY: string) {
   const parts = dd_MMMM_YYYY.split(' ').reverse();
   const month = monthNameToNumber.get(parts[1]);
-  return `${parts[0]}-${month}-${parts[2]}`;
+  return `${parts[0]}-${month}-${parts[2].padStart(2, '0')}`;
 }
 
 function getAllDatesFromStartToEnd(d1: string, d2: string) {
   const start = new Date(d1);
   const end = new Date(d2);
-  let curr = new Date(start);
+  const endTime = end.getTime();
 
+  let curr = new Date(start);
   const dates = [];
 
-  while (curr !== end) {
+  while (curr.getTime() < endTime) {
     dates.push(curr.toISOString().split('T')[0]);
     curr.setDate(curr.getDate() + 1);
   }
 
-  return [...dates, d2];
+  return [...dates, curr.toISOString().split('T')[0]];
 }
 
 export function calculateDateForEachIssue(
@@ -74,7 +75,7 @@ export function calculateDateForEachIssue(
 ) {
   const dateList = [];
   const dates = getAllDatesFromStartToEnd(d1, d2);
-  const diff = dates.length - 1;
+  const diff = dates.length;
   let issuesPerDay = Math.ceil(issueCount / diff);
   let issues = 0;
 

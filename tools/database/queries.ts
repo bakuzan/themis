@@ -1,3 +1,5 @@
+// Reads
+
 export const GetReadOrder = `
     SELECT *
       FROM ReadOrder
@@ -14,4 +16,15 @@ export const GetReadOrderIssues = `
       JOIN Issue I				ON ROI.IssueId = I.Id
      WHERE ReadOrderId = ?
      ORDER BY ROI.SortOrder, ROI.IssueId
+`;
+
+// Writes
+export const InsertReadHistory = `
+     INSERT INTO ReadHistory(ReadOrderId, StartedOnDate, CompletedOnDate)
+     VALUES (@ReadOrderId, @StartedOnDate, @CompletedOnDate)
+`;
+
+export const InsertReadHistoryIssue = `
+     INSERT INTO ReadHistoryIssue(ReadHistoryId, IssueId, CollectionId, SortOrder, ReadOnDate)
+     VALUES (@ReadHistoryId, @IssueId, @CollectionId, @SortOrder, @ReadOnDate)
 `;

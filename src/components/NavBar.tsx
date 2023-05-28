@@ -8,7 +8,7 @@ export default function NavBar() {
     <nav className={styles.navbar}>
       <Link className={styles.navbar__link} href={'/'} title="Go to home page">
         <div className={styles.imageContainer}>
-          <Image src="/favicon.ico" alt="Themis" />
+          <Image src="/favicon.ico" alt="Themis" width={32} height={32} />
         </div>
       </Link>
       <Link className={styles.navbar__link} href={'/titles'}>
