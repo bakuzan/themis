@@ -39,6 +39,9 @@ export interface ReadHistoryIssueInfoViewModel {
   name: string;
   isAnnual: boolean;
   coverDate: string; // YYYY-DD
+  // Derived
+  isRepeatedIssue: boolean;
+  issueInstanceIndex: number;
 }
 
 export interface ToggleReadHistoryIssueRequest {

@@ -59,7 +59,7 @@ for (const file of files) {
 
     const roi = readOrderIssues.find(
       (roi) =>
-        (roi.CollectionName?.toLowerCase() === collectionName &&
+        (roi.CollectionName?.trim().toLowerCase() === collectionName &&
           ((!roi.CollectionNumber && !collectionNumber) ||
             roi.CollectionNumber === collectionNumber)) ||
         (isSingleIssue && roi.IssueName.toLowerCase() === collectionName)

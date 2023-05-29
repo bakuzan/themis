@@ -33,8 +33,13 @@ export function toReadHistoryWithCountsViewModel(
 
 /* Read History Issue */
 export function toIssueWithReadHistoryInfoViewModel(
-  issue: ReadHistoryIssue
+  issue: ReadHistoryIssue,
+  _: number,
+  arr: ReadHistoryIssue[]
 ): ReadHistoryIssueInfoViewModel {
+  const issueList = arr.filter((x) => x.IssueId === issue.IssueId);
+  const isRepeatedIssue = issueList.length > 1;
+
   return {
     readHistoryId: issue.ReadHistoryId,
     readOnDate: issue.ReadOnDate,
@@ -56,6 +61,14 @@ export function toIssueWithReadHistoryInfoViewModel(
     number: issue.Number,
     name: issue.Name,
     isAnnual: issue.IsAnnual === 1,
-    coverDate: issue.CoverDate
+    coverDate: issue.CoverDate,
+    // Derived
+    isRepeatedIssue,
+    issueInstanceIndex: isRepeatedIssue
+      ? issueList.findIndex(
+          (x) =>
+            x.CollectionId === issue.CollectionId && x.IssueId === issue.IssueId
+        )
+      : 0
   };
 }

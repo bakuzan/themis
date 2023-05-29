@@ -54,6 +54,18 @@ export default function ReadHistoryIssueItem(props: ReadHistoryIssueItemProps) {
             </div>
             &nbsp;
             <div>{item.coverDate}</div>
+            {item.isRepeatedIssue && (
+              <div
+                className={styles.repeatIcon}
+                title={`This issue has appeared (${
+                  item.issueInstanceIndex
+                } time${
+                  item.issueInstanceIndex === 1 ? '' : 's'
+                }) earlier in the read order.`}
+              >
+                <span aria-hidden={true}>&#x26a0;</span>
+              </div>
+            )}
           </div>
           <div className={styles.main}>
             <div>{item.name}</div>

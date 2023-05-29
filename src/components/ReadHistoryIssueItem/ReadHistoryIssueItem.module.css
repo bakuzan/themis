@@ -31,6 +31,15 @@
   margin-bottom: 10px;
 }
 
+.repeatIcon {
+  display: flex;
+  align-items: center;
+  color: var(--warning-colour);
+  margin-top: -5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 .main {
   display: flex;
   justify-content: space-between;
