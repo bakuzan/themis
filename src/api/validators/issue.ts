@@ -52,7 +52,7 @@ export function validateRequest(request: NextApiRequest) {
     }
   }
 
-  processedData.IsAnnual = data.IsAnnual && data.IsAnnual !== 'off' ? 1 : 0;
+  processedData.IsAnnual = data.isAnnual && data.isAnnual !== 'off' ? 1 : 0;
 
   return {
     success: errorMessages.length === 0,
