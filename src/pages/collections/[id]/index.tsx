@@ -28,7 +28,8 @@ interface CollectionViewProps {
 
 export default function CollectionView(props: CollectionViewProps) {
   const router = useRouter();
-  const refreshData = () => router.replace(router.asPath);
+  const refreshData = () =>
+    router.replace(router.asPath, undefined, { scroll: false });
   const data = props.item;
 
   const [issueFormKey, setIssueFormKey] = useState(1);

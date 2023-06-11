@@ -21,7 +21,7 @@ export function validateRequest(request: NextApiRequest) {
     errorMessages.push('Issue Title is required');
   }
 
-  if (!data.number) {
+  if (isNullOrEmpty(data.number)) {
     errorMessages.push('Issue Number is required');
   } else {
     const issueNumber = Number(data.number);
