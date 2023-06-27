@@ -15,7 +15,7 @@ export default function InputSelect({
   ...props
 }: InputProps) {
   return (
-    <div className={styles.control}>
+    <div className={classNames(styles.control, styles.select)}>
       <label htmlFor={props.id}>{labelText}</label>
       <select
         {...props}

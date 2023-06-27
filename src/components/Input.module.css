@@ -6,6 +6,10 @@
   margin-bottom: 10px;
 }
 
+.select {
+  width: 100%;
+}
+
 .input {
   border: 1px solid transparent;
   border-bottom: 1px solid var(--primary-background);
@@ -34,7 +38,9 @@
 
 /* multiple select highlight */
 .control > select[multiple] {
-  min-height: calc(17px * 5); /* option height x no. of rows I want to see */
+  min-height: calc(
+    (18px * 6) - 1px
+  ); /* option height x no. of rows I want to see */
 }
 
 .control > select[multiple] option {

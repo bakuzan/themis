@@ -66,7 +66,9 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
           name="removeCollectionIssue"
           onSubmit={onDelete}
         >
-          <Button type="submit">Remove</Button>
+          <Button type="submit" isDanger>
+            Remove
+          </Button>
         </form>
       </div>
     </li>
