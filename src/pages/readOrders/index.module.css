@@ -13,7 +13,16 @@
   align-items: center;
 }
 
+@media (max-width: 598px) {
+  .nameWrapper {
+    flex-wrap: wrap;
+  }
+}
+
 .itemName {
   font-size: 1.25rem;
-  margin-bottom: 5px;
+}
+
+.issueCount {
+  margin-top: 5px;
 }

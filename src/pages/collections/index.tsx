@@ -9,6 +9,7 @@ import SearchBox from '@/components/SearchBox';
 import getCollectionFullName from '@/utils/getCollectionFullName';
 
 import styles from './index.module.css';
+import classNames from '@/utils/classNames';
 
 interface CollectionsProps {
   items: CollectionViewModel[];
@@ -46,11 +47,11 @@ export default function Collections(props: CollectionsProps) {
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
                 <Link className={styles.itemName} href={`/collections/${x.id}`}>
-                  {getCollectionFullName(x)}
+                  {getCollectionFullName(x)}&nbsp;
                 </Link>
-                <span className="muted">&nbsp;({x.publicationDate})</span>
+                <span className="muted">({x.publicationDate})</span>
               </div>
-              <div className="muted">
+              <div className={classNames('muted', styles.issueCount)}>
                 {x.issueCount} {x.issueCount === 1 ? 'issue' : 'issues'}
               </div>
             </li>

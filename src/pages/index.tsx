@@ -14,6 +14,7 @@ import { filterReadHistory } from '@/utils/filters/readHistory';
 import getDifferenceBetweenDates from '@/utils/getDifferenceBetweenDates';
 
 import styles from './index.module.css';
+import classNames from '@/utils/classNames';
 
 interface HomePageProps {
   readHistoryList: ReadHistoryWithCountsViewModel[];
@@ -66,13 +67,13 @@ export default function Home(props: HomePageProps) {
                     className={styles.itemName}
                     href={`/readHistory/${x.id}`}
                   >
-                    {x.readOrderName}
+                    {x.readOrderName}&nbsp;
                   </Link>
                   <span className="muted" title={percentageRead}>
-                    &nbsp;{x.readIssueCount}/{x.totalIssueCount}
+                    {x.readIssueCount}/{x.totalIssueCount}
                   </span>
                 </div>
-                <div className="muted">
+                <div className={classNames('muted', styles.dates)}>
                   <span>{x.startedOnDate}</span>
                   <span>&nbsp;to&nbsp;</span>
                   <span>

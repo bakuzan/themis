@@ -8,6 +8,7 @@ import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
 
 import styles from './index.module.css';
+import classNames from '@/utils/classNames';
 
 interface ReadOrdersProps {
   items: ReadOrderViewModel[];
@@ -46,7 +47,7 @@ export default function ReadOrders(props: ReadOrdersProps) {
                   {x.name}
                 </Link>
               </div>
-              <div className="muted">
+              <div className={classNames('muted', styles.issueCount)}>
                 {x.issueCount} {x.issueCount === 1 ? 'issue' : 'issues'}
               </div>
             </li>

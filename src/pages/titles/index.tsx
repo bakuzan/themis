@@ -9,6 +9,7 @@ import SearchBox from '@/components/SearchBox';
 import { filterTitles } from '@/utils/filters/titles';
 
 import styles from './index.module.css';
+import classNames from '@/utils/classNames';
 
 interface TitlesProps {
   items: TitleViewModel[];
@@ -42,12 +43,12 @@ export default function Titles(props: TitlesProps) {
             <li key={x.id} className={styles.list__item}>
               <div className={styles.nameWrapper}>
                 <Link className={styles.itemName} href={`/titles/${x.id}`}>
-                  {x.name}
+                  {x.name}&nbsp;
                 </Link>
-                <span className="muted">&nbsp;({x.startYear})</span>
+                <span className="muted">({x.startYear})</span>
                 {x.isOneShot && <span className="muted">&nbsp;(One Shot)</span>}
               </div>
-              <div className="muted">
+              <div className={classNames('muted', styles.issueCount)}>
                 {x.issueCount} {x.issueCount === 1 ? 'issue' : 'issues'}
               </div>
             </li>

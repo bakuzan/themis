@@ -1,10 +1,22 @@
 .wrapper {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 
 .wrapper > div {
   margin: 0;
+}
+
+@media (max-width: 598px) {
+  .wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wrapper > div {
+    margin-bottom: 20px;
+  }
 }
 
 .actions.actions {
