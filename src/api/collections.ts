@@ -6,6 +6,7 @@ import {
   CollectionIssue,
   ReOrderCollectionIssuesRequest
 } from '@/types/CollectionIssue';
+import { ReadOrderIssue } from '@/types/ReadOrderIssue';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
 
@@ -18,6 +19,7 @@ import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
 import { moveToNewArrayPosition } from './helpers/common';
 import setIssueSortOrders from './helpers/setIssueSortOrders';
+import setReadOrderIssueSortOrders from './helpers/setReadOrderIssueSortOrders';
 
 /* DATEBASE READS */
 export function getCollections() {
@@ -134,19 +136,37 @@ export function reOrderCollectionIssues(data: ReOrderCollectionIssuesRequest) {
 
   setIssueSortOrders(changedIssues, initialSortOrder);
 
+  // Re-order issues within the collection that are assigned to read orders
+  const roQuery = `SELECT * FROM ReadOrderIssue WHERE CollectionId = @CollectionId ORDER BY ReadOrderId, SortOrder`;
+  const roIssues = db.prepare(roQuery).all(data) as ReadOrderIssue[];
+  setReadOrderIssueSortOrders(changedIssues, roIssues);
+
   // Perform updates on the issues that were re-ordered during processing
-  const updateROI = db.prepare<CollectionIssue>(
+  const updateCI = db.prepare<CollectionIssue>(
     `UPDATE CollectionIssue
         SET SortOrder = @SortOrder
       WHERE CollectionId = @CollectionId
         AND IssueId = @IssueId`
   );
+  const updateROI = db.prepare<ReadOrderIssue>(
+    `UPDATE ReadOrderIssue
+        SET SortOrder = @SortOrder
+      WHERE ReadOrderId = @ReadOrderId
+        AND CollectionId = @CollectionId
+        AND IssueId = @IssueId`
+  );
 
-  const updateROIs = db.transaction((rows: CollectionIssue[]) => {
-    for (let row of rows) {
-      updateROI.run(row);
+  const updateItems = db.transaction(
+    (ciRows: CollectionIssue[], roRows: ReadOrderIssue[]) => {
+      for (let row of ciRows) {
+        updateCI.run(row);
+      }
+
+      for (let row of roRows) {
+        updateROI.run(row);
+      }
     }
-  });
+  );
 
-  updateROIs(changedIssues);
+  updateItems(changedIssues, roIssues);
 }
