@@ -7,6 +7,11 @@ export const returnNumberOrNull = (n: number) => (isNaN(n) ? null : n);
 
 export const getCurrentTimestamp = () => new Date().toISOString();
 
+export const splitDelimitedToNumbers = (
+  data: string,
+  separator: string = ','
+) => data?.split(separator).map((x) => Number(x)) ?? [];
+
 export function isFormData(request: NextApiRequest) {
   const headersList = request.headers;
   const accept = headersList['accept'];

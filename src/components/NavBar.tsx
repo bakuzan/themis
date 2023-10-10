@@ -20,6 +20,10 @@ export default function NavBar() {
       <Link className={styles.navbar__link} href={'/readOrders'}>
         Read Orders
       </Link>
+      <div className="flex-spacer"></div>
+      <Link className={styles.navbar__link} href={'/statistics'}>
+        Statistics
+      </Link>
     </nav>
   );
 }

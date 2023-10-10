@@ -20,7 +20,10 @@ type StoredProceedures =
   // Helpers
   | 'GetLastIssueInReadOrder'
   | 'GetIssuesAfterTargetInReadOrder'
-  | 'GetIssuesUsingTargetInReadOrder';
+  | 'GetIssuesUsingTargetInReadOrder'
+  // Stats
+  | 'Stats_GetIssueCountPerMonth'
+  | 'Stats_GetIssueRepeatsCounts';
 
 const proceedures = {} as Record<StoredProceedures, string>;
 const targetFolder = path.join(
