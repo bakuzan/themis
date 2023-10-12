@@ -19,9 +19,19 @@ export function getIssueCountsPerMonth() {
   );
 }
 
+/**
+ * Gets a list of Issues including the number of times read
+ * and the last date each was read.
+ * Currently limited to 'top 10'; Consider paging.
+ *
+ * @returns IssueRepeatViewModel[]
+ */
 export function getIssueRepeatsCounts() {
+  // TODO implement paging?
   const query = getStoredProceedure('Stats_GetIssueRepeatsCounts');
-  const issueRepeats = db.prepare(query).all() as IssueRepeat[];
+  const issueRepeats = db
+    .prepare(query)
+    .all({ limit: 10, offset: 0 }) as IssueRepeat[];
 
-  return issueRepeats.map(toIssueRepeatViewModel); // TODO change number[]'s to Item[]'s
+  return issueRepeats.map(toIssueRepeatViewModel);
 }

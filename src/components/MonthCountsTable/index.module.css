@@ -1,0 +1,12 @@
+.table {
+}
+
+.tableHeader {
+}
+
+.tableCell {
+  width: calc(100 / 12);
+  border: 1px solid #000;
+  text-align: center;
+  /* TODO set background colour using theme or someting */
+}

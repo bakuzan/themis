@@ -25,6 +25,7 @@ SELECT ReadHistoryIds
   FROM RepeatsCounts_CTE R
   JOIN Issue I				ON R.IssueId = I.Id
   JOIN Title T				ON I.TitleId = T.Id
- ORDER BY InstanceCount DESC, LastReadDate;
+ ORDER BY InstanceCount DESC, LastReadDate
+ LIMIT :limit OFFSET :offset;
   
  

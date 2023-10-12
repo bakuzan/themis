@@ -2,8 +2,7 @@ import { getIssueCountsPerMonth, getIssueRepeatsCounts } from '@/api/stats';
 import { IssueRepeatViewModel, MonthIssueCountViewModel } from '@/types/Stats';
 
 import PageHead from '@/components/PageHead';
-
-import getFormattedIssueNumber from '@/utils/getFormattedIssueNumber';
+import MonthCountsTable from '@/components/MonthCountsTable';
 
 import styles from './index.module.css';
 
@@ -27,6 +26,7 @@ export default function Stats(props: StatsPageProps) {
         <h1>{metadata.title}</h1>
       </header>
       <div>
+        <MonthCountsTable data={props.monthHistoryCounts} />
         <br />
       </div>
     </section>
