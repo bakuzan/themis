@@ -1,5 +1,7 @@
 @import './minireset.css';
 @import './generic.css';
+@import './tooltip.css';
+@import './table.css';
 
 :root {
   --font-size: 16px;
@@ -21,6 +23,8 @@
   --muted-colour: #757575;
 
   --navbar-height: 50px;
+
+  --statistics-table-cell-colour: var(--accent-background);
 
   font-size: var(--font-size);
   font-family: var(--font-family);

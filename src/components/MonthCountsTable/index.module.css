@@ -1,12 +1,41 @@
 .table {
+  width: 100%;
 }
 
 .tableHeader {
+  font-size: 1.25rem;
+}
+
+.tableHeader,
+.tableCell {
+  height: 24px;
+  width: calc(100% / 13); /* 12 Months + 1 LHS Header */
 }
 
 .tableCell {
-  width: calc(100 / 12);
   border: 1px solid #000;
+}
+
+.tableCellInner,
+.tableCellContents {
+  height: 100%;
+  width: 100%;
+}
+
+.tableCellContents {
+  background-color: var(--statistics-table-cell-colour);
   text-align: center;
-  /* TODO set background colour using theme or someting */
+}
+
+/* Unset the width to allow the responsive table styles to handle it */
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .tableHeader,
+  .tableCell {
+    width: unset;
+  }
+
+  .tableCellInner {
+    border-left: 1px solid #000;
+  }
 }
