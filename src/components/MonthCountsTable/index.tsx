@@ -27,86 +27,88 @@ export default function MonthCountsTable(props: MonthCountsTableProps) {
   );
 
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th className={styles.tableHeader}></th>
-          {monthNames.map((names) => (
-            <th key={names.short} className={styles.tableHeader}>
-              {names.short}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {props.data.map(([year, months]) => {
-          const yearLabelId = `info_${year}`;
-          const yearCount = months.reduce((p, c) => p + c.count, 0);
-
-          const isFuture = currentYear < year;
-          const isCurrent = currentYear === year;
-          const tense = isCurrent ? 'have been' : 'were';
-          const yearLabel = !isFuture
-            ? `In ${year}, ${yearCount} comics ${tense} read.`
-            : `${year} is in the future, therefore no comics have been read yet.`;
-
-          return (
-            <tr key={year}>
-              <th
-                data-tooltip={yearLabel}
-                aria-labelledby={yearLabelId}
-                className={classNames(styles.tableHeader, 'tooltip-right')}
-              >
-                <p id={yearLabelId} className="sr-only">
-                  {yearLabel}
-                </p>
-                {year}
+    <section className={styles.monthCounts}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th className={styles.tableHeader}></th>
+            {monthNames.map((names) => (
+              <th key={names.short} className={styles.tableHeader}>
+                {names.short}
               </th>
-              {months.map((m, i) => {
-                const isLast = i === 11; // Last month index
-                const monthLabelId = `info_${m.monthKey}`;
-                const monthNames = monthNumberToNames.get(m.monthNumber);
-                const monthIndex = m.monthNumber - 1;
-                const isFuture =
-                  currentYear < year ||
-                  (currentYear === year && currentMonth < monthIndex);
-                const isCurrent =
-                  currentYear === year && currentMonth === monthIndex;
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {props.data.map(([year, months]) => {
+            const yearLabelId = `info_${year}`;
+            const yearCount = months.reduce((p, c) => p + c.count, 0);
 
-                const tense = isCurrent ? 'have been' : 'were';
-                const label = !isFuture
-                  ? `In ${monthNames?.long} ${year}, ${m.count} comics ${tense} read.`
-                  : `${monthNames?.long} ${year} is in the future, therefore no comics have been read yet.`;
+            const isFuture = currentYear < year;
+            const isCurrent = currentYear === year;
+            const tense = isCurrent ? 'have been' : 'were';
+            const yearLabel = !isFuture
+              ? `In ${year}, ${yearCount} comics ${tense} read.`
+              : `${year} is in the future, therefore no comics have been read yet.`;
 
-                return (
-                  <td
-                    key={m.monthKey}
-                    data-column-title={monthNames?.short}
-                    aria-labelledby={monthLabelId}
-                    className={classNames(styles.tableCell)}
-                  >
-                    <p id={monthLabelId} className="sr-only">
-                      {label}
-                    </p>
-                    <div
-                      className={classNames(
-                        styles.tableCellInner,
-                        isLast && 'tooltip-left'
-                      )}
-                      data-tooltip={label}
+            return (
+              <tr key={year}>
+                <th
+                  data-tooltip={yearLabel}
+                  aria-labelledby={yearLabelId}
+                  className={classNames(styles.tableHeader, 'tooltip-right')}
+                >
+                  <p id={yearLabelId} className="sr-only">
+                    {yearLabel}
+                  </p>
+                  {year}
+                </th>
+                {months.map((m, i) => {
+                  const isLast = i === 11; // Last month index
+                  const monthLabelId = `info_${m.monthKey}`;
+                  const monthNames = monthNumberToNames.get(m.monthNumber);
+                  const monthIndex = m.monthNumber - 1;
+                  const isFuture =
+                    currentYear < year ||
+                    (currentYear === year && currentMonth < monthIndex);
+                  const isCurrent =
+                    currentYear === year && currentMonth === monthIndex;
+
+                  const tense = isCurrent ? 'have been' : 'were';
+                  const label = !isFuture
+                    ? `In ${monthNames?.long} ${year}, ${m.count} comics ${tense} read.`
+                    : `${monthNames?.long} ${year} is in the future, therefore no comics have been read yet.`;
+
+                  return (
+                    <td
+                      key={m.monthKey}
+                      data-column-title={monthNames?.short}
+                      aria-labelledby={monthLabelId}
+                      className={classNames(styles.tableCell)}
                     >
+                      <p id={monthLabelId} className="sr-only">
+                        {label}
+                      </p>
                       <div
-                        className={styles.tableCellContents}
-                        style={{ opacity: m.count / maxMonthCount }}
-                      ></div>
-                    </div>
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                        className={classNames(
+                          styles.tableCellInner,
+                          isLast && 'tooltip-left'
+                        )}
+                        data-tooltip={label}
+                      >
+                        <div
+                          className={styles.tableCellContents}
+                          style={{ opacity: m.count / maxMonthCount }}
+                        ></div>
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </section>
   );
 }

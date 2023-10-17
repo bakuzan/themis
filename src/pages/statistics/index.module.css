@@ -1,1 +1,12 @@
+.sections {
+  --sections-margin: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    'history history history history'
+    'c c repeats repeats';
+}
 
+.sections > section {
+  margin: var(--sections-margin);
+}

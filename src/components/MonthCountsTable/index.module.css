@@ -1,3 +1,7 @@
+.monthCounts {
+  grid-area: history;
+}
+
 .table {
   width: 100%;
 }
@@ -13,7 +17,7 @@
 }
 
 .tableCell {
-  border: 1px solid #000;
+  border: 1px solid var(--accent-background);
 }
 
 .tableCellInner,

@@ -1,0 +1,58 @@
+.topIssueRepeats {
+  grid-area: repeats;
+}
+
+.tableHeader {
+  font-size: 1.25rem;
+}
+
+.tableHeader,
+.tableCell {
+  padding: 5px;
+  height: 24px;
+  text-align: right;
+}
+
+.tableCell {
+  border: 1px solid var(--accent-background);
+  border-left: none;
+  border-right: none;
+}
+.tableCell > div:first-child {
+  padding-bottom: 5px;
+}
+
+.lhs {
+  text-align: left;
+}
+
+.date {
+  margin-right: 5px;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+}
+
+/* Unset the width to allow the responsive table styles to handle it */
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  tr > .tableCell:first-child {
+    background-color: var(--accent-background);
+    color: var(--accent-constrast-colour);
+  }
+
+  .tableHeader,
+  .tableCell {
+    width: unset;
+    height: unset;
+    text-align: right;
+  }
+
+  .text {
+    justify-content: flex-end;
+    text-align: right;
+    margin-left: 45%; /* Force text wrapping away from label */
+  }
+}

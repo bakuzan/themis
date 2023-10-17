@@ -3,6 +3,7 @@ import { IssueRepeatViewModel, MonthIssueCountViewModel } from '@/types/Stats';
 
 import PageHead from '@/components/PageHead';
 import MonthCountsTable from '@/components/MonthCountsTable';
+import TopIssueRepeats from '@/components/TopIssueRepeats';
 
 import styles from './index.module.css';
 
@@ -16,8 +17,6 @@ const metadata = {
 };
 
 export default function Stats(props: StatsPageProps) {
-  // TODO create two tables
-  // One for each set of information
   console.log('<Stats> :: ', { ...props });
   return (
     <section>
@@ -25,9 +24,9 @@ export default function Stats(props: StatsPageProps) {
       <header className="header">
         <h1>{metadata.title}</h1>
       </header>
-      <div>
+      <div className={styles.sections}>
         <MonthCountsTable data={props.monthHistoryCounts} />
-        <br />
+        <TopIssueRepeats data={props.issueRepeats} />
       </div>
     </section>
   );
