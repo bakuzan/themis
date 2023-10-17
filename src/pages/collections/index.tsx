@@ -10,6 +10,7 @@ import getCollectionFullName from '@/utils/getCollectionFullName';
 
 import styles from './index.module.css';
 import classNames from '@/utils/classNames';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 interface CollectionsProps {
   items: CollectionViewModel[];
@@ -19,7 +20,9 @@ const metadata = {
   title: 'Collections'
 };
 
-export default function Collections(props: CollectionsProps) {
+export default function Collections(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const collections = props.items.filter(
@@ -62,10 +65,10 @@ export default function Collections(props: CollectionsProps) {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = (async () => {
   const items = getCollections();
 
   return {
     props: { items }
   };
-}
+}) satisfies GetServerSideProps<CollectionsProps>;

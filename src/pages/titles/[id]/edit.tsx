@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { getTitleById } from '@/api/titles';
@@ -15,7 +15,9 @@ const metadata = {
   title: 'Edit Title'
 };
 
-export default function TitlesEdit(props: TitleEditProps) {
+export default function TitlesEdit(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const data = props.item;
 
   return (
@@ -32,9 +34,7 @@ export default function TitlesEdit(props: TitleEditProps) {
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ id: string }>
-) {
+export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
   if (!id) {
     throw new Error(`titles/[id]/edit was called without an id!`);
@@ -45,4 +45,4 @@ export async function getServerSideProps(
   return {
     props: { item }
   };
-}
+}) satisfies GetServerSideProps<TitleEditProps>;

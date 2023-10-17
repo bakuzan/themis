@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 import { ReadHistoryViewModel } from '@/types/ReadHistory';
 import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistoryIssue';
@@ -35,7 +35,9 @@ function getReadOnDate(
   );
 }
 
-export default function ReadHistoryView(props: ReadHistoryViewProps) {
+export default function ReadHistoryView(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const router = useRouter();
   const refreshData = () =>
     router.replace(router.asPath, undefined, { scroll: false });
@@ -121,9 +123,7 @@ export default function ReadHistoryView(props: ReadHistoryViewProps) {
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ id: string }>
-) {
+export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
   if (!id) {
     throw new Error(`readHistory/[id] was called without an id!`);
@@ -145,4 +145,4 @@ export async function getServerSideProps(
       nextIssueToRead: issues[mostRecentReadIndex + 1] ?? null
     }
   };
-}
+}) satisfies GetServerSideProps<ReadHistoryViewProps>;

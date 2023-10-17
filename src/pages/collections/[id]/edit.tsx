@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { CollectionViewModel } from '@/types/Collection';
@@ -15,7 +15,9 @@ const metadata = {
   title: 'Edit Collection'
 };
 
-export default function CollectionEdit(props: CollectionEditProps) {
+export default function CollectionEdit(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const data = props.item;
 
   return (
@@ -36,9 +38,7 @@ export default function CollectionEdit(props: CollectionEditProps) {
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ id: string }>
-) {
+export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
   if (!id) {
     throw new Error(`collections/[id]/edit was called without an id!`);
@@ -49,4 +49,4 @@ export async function getServerSideProps(
   return {
     props: { item }
   };
-}
+}) satisfies GetServerSideProps<CollectionEditProps>;

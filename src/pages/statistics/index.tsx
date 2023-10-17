@@ -1,3 +1,4 @@
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getIssueCountsPerMonth, getIssueRepeatsCounts } from '@/api/stats';
 import { IssueRepeatViewModel, MonthIssueCountViewModel } from '@/types/Stats';
 
@@ -16,7 +17,9 @@ const metadata = {
   title: 'Statistics'
 };
 
-export default function Stats(props: StatsPageProps) {
+export default function Stats(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   console.log('<Stats> :: ', { ...props });
   return (
     <section>
@@ -32,11 +35,11 @@ export default function Stats(props: StatsPageProps) {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = (async () => {
   const monthHistoryCounts = getIssueCountsPerMonth();
   const issueRepeats = getIssueRepeatsCounts();
 
   return {
     props: { monthHistoryCounts, issueRepeats }
   };
-}
+}) satisfies GetServerSideProps<StatsPageProps>;

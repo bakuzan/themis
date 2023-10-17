@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { getTitleWithIssues } from '@/api/titles';
@@ -18,7 +18,9 @@ interface TitleViewProps {
   item: TitleWithIssuesViewModel;
 }
 
-export default function TitleView(props: TitleViewProps) {
+export default function TitleView(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const router = useRouter();
   const refreshData = () => router.replace(router.asPath);
   const data = props.item;
@@ -84,9 +86,7 @@ export default function TitleView(props: TitleViewProps) {
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ id: string }>
-) {
+export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
   if (!id) {
     throw new Error(`titles/[id] was called without an id!`);
@@ -97,4 +97,4 @@ export async function getServerSideProps(
   return {
     props: { item }
   };
-}
+}) satisfies GetServerSideProps<TitleViewProps>;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { ReadOrderWithIssuesViewModel } from '@/types/ReadOrder';
@@ -34,7 +34,9 @@ interface ReadOrderViewProps {
   lastROIKey: string | null;
 }
 
-export default function ReadOrderView(props: ReadOrderViewProps) {
+export default function ReadOrderView(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const router = useRouter();
   const refreshData = () =>
     router.replace(router.asPath, undefined, { scroll: false });
@@ -121,9 +123,7 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ id: string }>
-) {
+export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
   if (!id) {
     throw new Error(`readOrders/[id] was called without an id!`);
@@ -140,4 +140,4 @@ export async function getServerSideProps(
   return {
     props: { item, collections, issues, firstROIKey, lastROIKey }
   };
-}
+}) satisfies GetServerSideProps<ReadOrderViewProps>;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { getTitles } from '@/api/titles';
@@ -19,7 +20,9 @@ const metadata = {
   title: 'Titles'
 };
 
-export default function Titles(props: TitlesProps) {
+export default function Titles(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const titles = props.items.filter(filterTitles(searchStringLower));
@@ -59,10 +62,10 @@ export default function Titles(props: TitlesProps) {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = (async () => {
   const items = getTitles();
 
   return {
     props: { items }
   };
-}
+}) satisfies GetServerSideProps<TitlesProps>;

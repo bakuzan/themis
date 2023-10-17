@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { ReadOrderViewModel } from '@/types/ReadOrder';
@@ -25,7 +26,9 @@ const metadata = {
   title: 'Home'
 };
 
-export default function Home(props: HomePageProps) {
+export default function Home(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const historyList = props.readHistoryList.filter(
@@ -90,11 +93,11 @@ export default function Home(props: HomePageProps) {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = (async () => {
   const readHistoryList = getReadHistories();
   const readOrders = getReadOrders();
 
   return {
     props: { readHistoryList, readOrders }
   };
-}
+}) satisfies GetServerSideProps<HomePageProps>;

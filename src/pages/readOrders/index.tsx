@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { getReadOrders } from '@/api/readOrders';
@@ -18,7 +19,9 @@ const metadata = {
   title: 'Read Orders'
 };
 
-export default function ReadOrders(props: ReadOrdersProps) {
+export default function ReadOrders(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const readOrders = props.items.filter((x) =>
@@ -58,10 +61,10 @@ export default function ReadOrders(props: ReadOrdersProps) {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = (async () => {
   const items = getReadOrders();
 
   return {
     props: { items }
   };
-}
+}) satisfies GetServerSideProps<ReadOrdersProps>;
