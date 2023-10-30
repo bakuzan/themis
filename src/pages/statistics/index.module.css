@@ -4,7 +4,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
     'history history history history'
-    'c c repeats repeats';
+    'detail detail repeats repeats';
 }
 
 .sections > section {

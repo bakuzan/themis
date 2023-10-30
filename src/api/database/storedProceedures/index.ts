@@ -23,7 +23,8 @@ type StoredProceedures =
   | 'GetIssuesUsingTargetInReadOrder'
   // Stats
   | 'Stats_GetIssueCountPerMonth'
-  | 'Stats_GetIssueRepeatsCounts';
+  | 'Stats_GetIssueRepeatsCounts'
+  | 'Stats_GetIssuesForYearMonthKey';
 
 const proceedures = {} as Record<StoredProceedures, string>;
 const targetFolder = path.join(

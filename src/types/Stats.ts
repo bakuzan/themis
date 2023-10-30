@@ -22,6 +22,21 @@ export interface IssueRepeat {
   IsOneShot: number;
 }
 
+export interface IssueReadDetailInfo {
+  Id: number;
+  Number: number;
+  TitleId: number;
+  IsAnnual: number; // boolean, 1 or 0
+  Name: string;
+  CoverDate: string; // YYYY-DD
+  // Title Info
+  TitleName: string;
+  StartYear: string;
+  IsOneShot: number; // boolean, 1 or 0
+  // Read Info
+  ReadOnDate: string;
+}
+
 // View Models
 export interface MonthIssueCountViewModel {
   year: number;
@@ -36,6 +51,19 @@ export interface IssueRepeatViewModel {
   issueId: number;
   instanceCount: number;
   lastReadDate: string;
+  issueNumber: number;
+  isAnnual: boolean;
+  issueName: string;
+  issueCoverDate: string;
+  titleId: number;
+  titleName: string;
+  titleStartYear: number;
+  isOneShot: boolean;
+}
+
+export interface IssueReadDetailViewModel {
+  issueId: number;
+  readOnDate: string;
   issueNumber: number;
   isAnnual: boolean;
   issueName: string;

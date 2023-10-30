@@ -10,6 +10,13 @@
   font-size: 1.25rem;
 }
 
+.tableHeader .tableCellButton {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
 .tableHeader,
 .tableCell {
   height: 24px;
@@ -18,6 +25,17 @@
 
 .tableCell {
   border: 1px solid var(--accent-background);
+}
+
+.tableCellButton,
+.tableCellButton[disabled] {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 4px;
 }
 
 .tableCellInner,
@@ -37,6 +55,11 @@
   .tableHeader,
   .tableCell {
     width: unset;
+  }
+
+  .tableCellButton,
+  .tableCellButton[disabled] {
+    margin-top: 0;
   }
 
   .tableCellInner {

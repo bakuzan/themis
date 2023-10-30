@@ -3,20 +3,17 @@ import { useState } from 'react';
 import { MonthIssueCountViewModel } from '@/types/Stats';
 
 import { monthNumberToNames } from '@/constants/date';
+import classNames from '@/utils/classNames';
 
 import styles from './index.module.css';
-import classNames from '@/utils/classNames';
 
 const monthNames = Array.from(monthNumberToNames.values());
 
 interface MonthCountsTableProps {
   data: [number, MonthIssueCountViewModel[]][];
+  onSelect: (key: string) => void;
 }
 
-/* TODO
- * 1) Add a button to the cells, like in Erza, to display a list of the comics that were completed in that month
- * 2) Expand (1) to include the year cell too
- */
 export default function MonthCountsTable(props: MonthCountsTableProps) {
   const [today] = useState(new Date());
   const currentYear = today.getFullYear();
@@ -28,7 +25,7 @@ export default function MonthCountsTable(props: MonthCountsTableProps) {
 
   return (
     <section className={styles.monthCounts}>
-      <table className={styles.table}>
+      <table className={styles.table} cellPadding="0" cellSpacing="0">
         <thead>
           <tr>
             <th className={styles.tableHeader}></th>
@@ -61,7 +58,13 @@ export default function MonthCountsTable(props: MonthCountsTableProps) {
                   <p id={yearLabelId} className="sr-only">
                     {yearLabel}
                   </p>
-                  {year}
+                  <button
+                    className={styles.tableCellButton}
+                    disabled={yearCount === 0}
+                    onClick={() => props.onSelect(`${year}`)}
+                  >
+                    {year}
+                  </button>
                 </th>
                 {months.map((m, i) => {
                   const isLast = i === 11; // Last month index
@@ -79,6 +82,8 @@ export default function MonthCountsTable(props: MonthCountsTableProps) {
                     ? `In ${monthNames?.long} ${year}, ${m.count} comics ${tense} read.`
                     : `${monthNames?.long} ${year} is in the future, therefore no comics have been read yet.`;
 
+                  const isDisabled = m.count === 0;
+
                   return (
                     <td
                       key={m.monthKey}
@@ -89,18 +94,24 @@ export default function MonthCountsTable(props: MonthCountsTableProps) {
                       <p id={monthLabelId} className="sr-only">
                         {label}
                       </p>
-                      <div
-                        className={classNames(
-                          styles.tableCellInner,
-                          isLast && 'tooltip-left'
-                        )}
-                        data-tooltip={label}
+                      <button
+                        className={styles.tableCellButton}
+                        disabled={isDisabled}
+                        onClick={() => props.onSelect(m.monthKey)}
                       >
                         <div
-                          className={styles.tableCellContents}
-                          style={{ opacity: m.count / maxMonthCount }}
-                        ></div>
-                      </div>
+                          className={classNames(
+                            styles.tableCellInner,
+                            isLast && 'tooltip-left'
+                          )}
+                          data-tooltip={label}
+                        >
+                          <div
+                            className={styles.tableCellContents}
+                            style={{ opacity: m.count / maxMonthCount }}
+                          ></div>
+                        </div>
+                      </button>
                     </td>
                   );
                 })}

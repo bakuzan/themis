@@ -1,4 +1,6 @@
 import {
+  IssueReadDetailViewModel,
+  IssueReadDetailInfo,
   IssueRepeat,
   IssueRepeatViewModel,
   MonthIssueCount,
@@ -37,5 +39,22 @@ export function toIssueRepeatViewModel(
     titleName: issueRepeat.TitleName,
     titleStartYear: Number(issueRepeat.TitleStartYear),
     isOneShot: issueRepeat.IsOneShot === 1
+  };
+}
+
+export function toIssueReadDetailViewModel(
+  issue: IssueReadDetailInfo
+): IssueReadDetailViewModel {
+  return {
+    issueId: issue.Id,
+    issueNumber: issue.Number,
+    issueName: issue.Name,
+    issueCoverDate: issue.CoverDate,
+    readOnDate: issue.ReadOnDate,
+    titleId: issue.TitleId,
+    titleName: issue.TitleName,
+    titleStartYear: Number(issue.StartYear),
+    isOneShot: issue.IsOneShot === 1,
+    isAnnual: issue.IsAnnual === 1
   };
 }

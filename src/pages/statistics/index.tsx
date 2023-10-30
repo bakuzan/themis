@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getIssueCountsPerMonth, getIssueRepeatsCounts } from '@/api/stats';
 import { IssueRepeatViewModel, MonthIssueCountViewModel } from '@/types/Stats';
 
 import PageHead from '@/components/PageHead';
 import MonthCountsTable from '@/components/MonthCountsTable';
+import MonthCountsDetail from '@/components/MonthCountsTable/MonthCountsDetail';
 import TopIssueRepeats from '@/components/TopIssueRepeats';
 
 import styles from './index.module.css';
@@ -20,7 +22,11 @@ const metadata = {
 export default function Stats(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
-  console.log('<Stats> :: ', { ...props });
+  const [monthDetailKey, setMonthCountDetailKey] = useState<string | null>(
+    null
+  );
+
+  console.log('<Stats> :: ', { ...props, monthDetailKey });
   return (
     <section>
       <PageHead title={metadata.title} />
@@ -28,7 +34,11 @@ export default function Stats(
         <h1>{metadata.title}</h1>
       </header>
       <div className={styles.sections}>
-        <MonthCountsTable data={props.monthHistoryCounts} />
+        <MonthCountsTable
+          data={props.monthHistoryCounts}
+          onSelect={(key) => setMonthCountDetailKey(key)}
+        />
+        <MonthCountsDetail filterKey={monthDetailKey} />
         <TopIssueRepeats data={props.issueRepeats} />
       </div>
     </section>
