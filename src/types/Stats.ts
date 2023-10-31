@@ -37,6 +37,20 @@ export interface IssueReadDetailInfo {
   ReadOnDate: string;
 }
 
+export interface IssueRepeatDetailItem {
+  // Read Info
+  ReadHistoryId: number;
+  ReadOrderName: string;
+  ReadOnDate: string;
+  // Collection Info
+  CollectionId: number;
+  CollectionName: string;
+  CollectionNumber: number;
+  PublicationDate: string;
+  // Issue Info
+  IssueId: number;
+}
+
 // View Models
 export interface MonthIssueCountViewModel {
   year: number;
@@ -72,4 +86,15 @@ export interface IssueReadDetailViewModel {
   titleName: string;
   titleStartYear: number;
   isOneShot: boolean;
+}
+
+export interface IssueRepeatDetailViewModel {
+  readHistoryId: number;
+  readOrderName: string;
+  readOnDate: string;
+  collectionId: number;
+  collectionName: string;
+  collectionNumber: number;
+  publicationDate: number;
+  issueId: number;
 }

@@ -3,14 +3,16 @@ import db from './database';
 import {
   IssueReadDetailInfo,
   IssueRepeat,
-  MonthIssueCount
+  MonthIssueCount,
+  IssueRepeatDetailItem
 } from '@/types/Stats';
 
 import getStoredProceedure from '@/api/database/storedProceedures';
 import {
   toMonthIssueCountViewModel,
   toIssueRepeatViewModel,
-  toIssueReadDetailViewModel
+  toIssueReadDetailViewModel,
+  toIssueRepeatDetailViewModel
 } from '@/api/mappers/stats';
 import fillMissingMonths from './helpers/fillMissingMonths';
 
@@ -43,9 +45,18 @@ export function getIssueRepeatsCounts() {
 
 export function getMonthCountDetailItems(monthOrYearKey: string) {
   const query = getStoredProceedure('Stats_GetIssuesForYearMonthKey');
-  const issueRepeats = db
+  const issueReadDetails = db
     .prepare(query)
     .all({ monthKey: monthOrYearKey }) as IssueReadDetailInfo[];
 
-  return issueRepeats.map(toIssueReadDetailViewModel);
+  return issueReadDetails.map(toIssueReadDetailViewModel);
+}
+
+export function getIssueRepeatDetailItems(issueId: number) {
+  const query = getStoredProceedure('Stats_GetIssueRepeatDetailItems');
+  const issueRepeatDetails = db
+    .prepare(query)
+    .all({ issueId }) as IssueRepeatDetailItem[];
+
+  return issueRepeatDetails.map(toIssueRepeatDetailViewModel);
 }

@@ -4,7 +4,9 @@ import {
   IssueRepeat,
   IssueRepeatViewModel,
   MonthIssueCount,
-  MonthIssueCountViewModel
+  MonthIssueCountViewModel,
+  IssueRepeatDetailViewModel,
+  IssueRepeatDetailItem
 } from '@/types/Stats';
 import { splitDelimitedToNumbers } from '@/api/helpers/common';
 
@@ -56,5 +58,22 @@ export function toIssueReadDetailViewModel(
     titleStartYear: Number(issue.StartYear),
     isOneShot: issue.IsOneShot === 1,
     isAnnual: issue.IsAnnual === 1
+  };
+}
+
+export function toIssueRepeatDetailViewModel(
+  issue: IssueRepeatDetailItem
+): IssueRepeatDetailViewModel {
+  return {
+    readHistoryId: issue.ReadHistoryId,
+    readOrderName: issue.ReadOrderName,
+    readOnDate: issue.ReadOnDate,
+
+    collectionId: issue.CollectionId,
+    collectionName: issue.CollectionName,
+    collectionNumber: issue.CollectionNumber,
+    publicationDate: Number(issue.PublicationDate),
+
+    issueId: issue.IssueId
   };
 }

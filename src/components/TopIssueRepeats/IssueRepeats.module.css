@@ -1,0 +1,34 @@
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .onResponsive {
+    min-height: 20px;
+  }
+
+  .preventResponsiveness {
+    padding: 0;
+    margin-top: 10px;
+  }
+}
+
+.nestedRow:not(:last-child) {
+  border-bottom: 1px solid var(--accent-background);
+}
+
+.nestedRowCell {
+  padding: 5px 0;
+}
+
+.rowInner {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.rowInnerText > div:first-child {
+  margin-bottom: 5px;
+}
+
+.rowInnerDate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

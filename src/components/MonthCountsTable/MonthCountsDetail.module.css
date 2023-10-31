@@ -2,6 +2,10 @@
   grid-area: detail;
 }
 
+.table {
+  width: 100%;
+}
+
 .tableHeader {
   font-size: 1.25rem;
 }

@@ -25,7 +25,7 @@ export default function MonthCountsTable(props: MonthCountsTableProps) {
 
   return (
     <section className={styles.monthCounts}>
-      <table className={styles.table} cellPadding="0" cellSpacing="0">
+      <table className={styles.table}>
         <thead>
           <tr>
             <th className={styles.tableHeader}></th>

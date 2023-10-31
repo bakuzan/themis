@@ -1,10 +1,10 @@
-import { CollectionViewModel } from '@/types/Collection';
-import { IssueWithReadOrderInfoViewModel } from '@/types/Issue';
-
-type CollectionLike = Partial<
-  Pick<CollectionViewModel, 'name' | 'number' | 'publicationDate'> &
-    Pick<IssueWithReadOrderInfoViewModel, 'collectionName' | 'collectionNumber'>
->;
+type CollectionLike = {
+  number?: number | null | undefined;
+  name?: string | undefined;
+  publicationDate?: number | undefined;
+  collectionName?: string | undefined;
+  collectionNumber?: number | null | undefined;
+};
 
 export default function getCollectionFullName(
   col: CollectionLike,

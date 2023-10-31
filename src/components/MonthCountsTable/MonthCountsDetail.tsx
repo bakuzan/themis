@@ -46,7 +46,7 @@ export default function MonthCountsDetail({
         <h2>Issues Completed {keyAsText}</h2>
         <p className="muted">{data.length} issues</p>
       </header>
-      <table className={styles.table} cellPadding="0" cellSpacing="0">
+      <table className={styles.table}>
         <thead>
           <tr>
             <th className={styles.tableHeader} aria-labelledby={headerLabelId}>
