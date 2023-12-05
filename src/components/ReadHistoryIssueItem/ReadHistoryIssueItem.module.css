@@ -1,7 +1,6 @@
 .headerItem,
 .item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 
   padding: 5px;
@@ -10,6 +9,7 @@
 }
 
 .item {
+  justify-content: space-between;
   border-style: dashed;
   margin-bottom: 10px;
 }
@@ -20,9 +20,22 @@
   border-color: var(--accent-background);
 }
 
+.headerItemInner {
+  margin-left: 5px;
+}
+
 .itemIndented {
   margin-left: 25px;
   margin-bottom: 5px;
+}
+
+.item:not(.itemIndented) {
+  justify-content: unset;
+
+  .itemInner {
+    flex: 1;
+    margin-left: 5px;
+  }
 }
 
 .coverInfo {

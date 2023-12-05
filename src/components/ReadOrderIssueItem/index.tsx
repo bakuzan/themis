@@ -8,6 +8,7 @@ import getCollectionFullName from '@/utils/getCollectionFullName';
 
 import EditForm from './EditForm';
 import RemoveForm from './RemoveForm';
+import ItemAnchorLink from '../ItemAnchorLink';
 
 import styles from './ReadOrderIssueItem.module.css';
 
@@ -22,12 +23,18 @@ interface ReadOrderIssueItemProps {
 
 export default function ReadOrderIssueItem(props: ReadOrderIssueItemProps) {
   const { data: item } = props;
+  const hasCollectionId = !!item.collectionId;
+
+  const headerId = `COLLECTION_${item.collectionId}`;
+  const itemId = `ISSUE_${item.collectionId ?? ''}_${item.issueId}`;
+  const itemHashId = hasCollectionId ? headerId : itemId;
 
   return (
     <React.Fragment>
       {props.includeHeader && (
-        <li key="HEADER" className={styles.headerItem}>
-          <div>
+        <li key="HEADER" id={headerId} className={styles.headerItem}>
+          <ItemAnchorLink hashId={itemHashId} />
+          <div className={styles.headerItemInner}>
             <div>
               {getCollectionFullName({
                 collectionName: item.collectionName,
@@ -51,12 +58,14 @@ export default function ReadOrderIssueItem(props: ReadOrderIssueItemProps) {
       )}
       <li
         key="ITEM"
+        id={itemId}
         className={classNames(
           styles.item,
-          item.collectionId && styles.itemIndented
+          hasCollectionId && styles.itemIndented
         )}
       >
-        <div>
+        {!hasCollectionId && <ItemAnchorLink hashId={itemHashId} />}
+        <div className={styles.itemInner}>
           <div className={styles.coverInfo}>
             <div>
               {item.titleName} {getFormattedIssueNumber(item)}{' '}

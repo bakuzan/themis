@@ -59,9 +59,14 @@ export default function ReadHistoryView(
 
   useEffect(() => {
     // Scroll to the next issue to read in an ongoing read-through.
-    if (!isComplete && nextIssueToRead) {
+    if (router.isReady && !isComplete && nextIssueToRead) {
       const elementId = getTargetIssueElementId(nextIssueToRead);
-      document.getElementById(elementId)?.scrollIntoView();
+
+      // To avoid "Cancel rendering route" error
+      // https://github.com/vercel/next.js/issues/37362#issuecomment-1272211420
+      const pathNoHash = router.asPath.split('#')[0];
+      const newPath = `${pathNoHash}#${elementId}`;
+      window.location.replace(newPath);
     }
   }, [nextIssueToRead, isComplete]);
 
