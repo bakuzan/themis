@@ -39,8 +39,11 @@ export default function ReadHistoryView(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
   const router = useRouter();
+  const routerIsReady = router.isReady;
+  const currentPath = router.asPath;
+  const pathNoHash = currentPath.split('#')[0];
   const refreshData = () =>
-    router.replace(router.asPath, undefined, { scroll: false });
+    router.replace(currentPath, undefined, { scroll: false });
 
   const { item: data, nextIssueToRead } = props;
   const pageTitle = `Reading ${data.readOrderName}`;
@@ -59,16 +62,15 @@ export default function ReadHistoryView(
 
   useEffect(() => {
     // Scroll to the next issue to read in an ongoing read-through.
-    if (router.isReady && !isComplete && nextIssueToRead) {
+    if (routerIsReady && !isComplete && nextIssueToRead) {
       const elementId = getTargetIssueElementId(nextIssueToRead);
 
       // To avoid "Cancel rendering route" error
       // https://github.com/vercel/next.js/issues/37362#issuecomment-1272211420
-      const pathNoHash = router.asPath.split('#')[0];
       const newPath = `${pathNoHash}#${elementId}`;
       window.location.replace(newPath);
     }
-  }, [nextIssueToRead, isComplete]);
+  }, [nextIssueToRead, isComplete, pathNoHash, routerIsReady]);
 
   return (
     <section>
