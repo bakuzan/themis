@@ -5,5 +5,5 @@ export default function getTargetIssueElementId(
 ) {
   const prefix = item.collectionId ? 'COLLECTION' : 'ISSUE';
   const ending = item.collectionId ? '' : `_${item.issueId}`;
-  return `${prefix}_${item.collectionId}${ending}`;
+  return `${prefix}_${item.collectionId ?? ''}${ending}`;
 }
