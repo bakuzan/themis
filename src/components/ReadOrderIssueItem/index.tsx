@@ -15,6 +15,7 @@ import styles from './ReadOrderIssueItem.module.css';
 interface ReadOrderIssueItemProps {
   includeHeader: boolean;
   data: IssueWithReadOrderInfoViewModel;
+  countMap: Map<number | null, number>;
   isFirst: boolean;
   isLast: boolean;
   onEdit: () => void;
@@ -42,6 +43,9 @@ export default function ReadOrderIssueItem(props: ReadOrderIssueItemProps) {
               })}
             </div>
             <span className="muted">({item.publicationDate})</span>
+            <span className="muted">
+              ({props.countMap.get(item.collectionId)} issues)
+            </span>
           </div>
 
           <div className={styles.actions}>

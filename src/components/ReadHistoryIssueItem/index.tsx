@@ -14,6 +14,7 @@ import styles from './ReadHistoryIssueItem.module.css';
 interface ReadHistoryIssueItemProps {
   includeHeader: boolean;
   data: ReadHistoryIssueInfoViewModel;
+  countMap: Map<number | null, number>;
   onUpdate: (item: ReadHistoryIssueInfoViewModel) => void;
 }
 
@@ -38,6 +39,9 @@ export default function ReadHistoryIssueItem(props: ReadHistoryIssueItemProps) {
               })}
             </div>
             <span className="muted">({item.publicationDate})</span>
+            <span className="muted">
+              ({props.countMap.get(item.collectionId)} issues)
+            </span>
           </div>
         </li>
       )}

@@ -14,15 +14,17 @@ import CompleteReadHistoryForm from '@/components/Forms/CompleteReadHistoryForm'
 
 import { filterReadHistoryIssues } from '@/utils/filters/issues';
 import { getReadOrderIssueKey } from '@/utils/getReadOrderIssueKey';
+import createCollectionCountMap from '@/utils/createCollectionCountMap';
 import getTargetIssueElementId from '@/utils/getTargetIssueElementId';
+import { findLastIndex } from '@/utils/findLastIndex';
 
 import styles from './[id].module.css';
-import { findLastIndex } from '@/utils/findLastIndex';
 
 interface ReadHistoryViewProps {
   item: ReadHistoryViewModel;
   issues: ReadHistoryIssueInfoViewModel[];
   nextIssueToRead: ReadHistoryIssueInfoViewModel | null;
+  collectionIssueCounts: [number | null, number][];
 }
 
 function getReadOnDate(
@@ -46,6 +48,7 @@ export default function ReadHistoryView(
     router.replace(currentPath, undefined, { scroll: false });
 
   const { item: data, nextIssueToRead } = props;
+  const countMap = new Map(props.collectionIssueCounts);
   const pageTitle = `Reading ${data.readOrderName}`;
 
   const [changes, setChanges] = useState(new Map<string, string | null>([]));
@@ -110,6 +113,7 @@ export default function ReadHistoryView(
                 key={itemKey}
                 includeHeader={collectionStarting}
                 data={{ ...item, readOnDate: getReadOnDate(changes, item) }}
+                countMap={countMap}
                 onUpdate={(updated) =>
                   setChanges((p) => new Map(p.set(itemKey, updated.readOnDate)))
                 }
@@ -139,6 +143,7 @@ export const getServerSideProps = (async (context) => {
   const readHistoryId = Number(id);
   const item = getReadHistoryById(readHistoryId);
   const issues = getReadHistoryIssues(readHistoryId);
+  const countMap = createCollectionCountMap(issues);
 
   const mostRecentReadIndex = findLastIndex(
     issues,
@@ -149,6 +154,7 @@ export const getServerSideProps = (async (context) => {
     props: {
       item,
       issues,
+      collectionIssueCounts: Array.from(countMap.entries()),
       nextIssueToRead: issues[mostRecentReadIndex + 1] ?? null
     }
   };

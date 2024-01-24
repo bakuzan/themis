@@ -23,6 +23,7 @@ import {
   getFirstReadOrderIssueKey,
   getLastReadOrderIssueKey
 } from '@/utils/getReadOrderIssueKey';
+import createCollectionCountMap from '@/utils/createCollectionCountMap';
 
 import styles from './index.module.css';
 
@@ -32,6 +33,7 @@ interface ReadOrderViewProps {
   issues: IssueWithTitleInfoViewModel[];
   firstROIKey: string | null;
   lastROIKey: string | null;
+  collectionIssueCounts: [number | null, number][];
 }
 
 export default function ReadOrderView(
@@ -42,6 +44,7 @@ export default function ReadOrderView(
     router.replace(router.asPath, undefined, { scroll: false });
 
   const data = props.item;
+  const countMap = new Map(props.collectionIssueCounts);
   const [formKey, setFormKey] = useState(1);
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
@@ -111,6 +114,7 @@ export default function ReadOrderView(
                 isLast={itemKey === props.lastROIKey}
                 includeHeader={collectionStarting}
                 data={item}
+                countMap={countMap}
                 onEdit={refreshData}
                 onRemove={refreshData}
               />
@@ -136,8 +140,16 @@ export const getServerSideProps = (async (context) => {
   const readOrderIssues = item.issues;
   const firstROIKey = getFirstReadOrderIssueKey(readOrderIssues);
   const lastROIKey = getLastReadOrderIssueKey(readOrderIssues);
+  const countMap = createCollectionCountMap(readOrderIssues);
 
   return {
-    props: { item, collections, issues, firstROIKey, lastROIKey }
+    props: {
+      item,
+      collections,
+      issues,
+      firstROIKey,
+      lastROIKey,
+      collectionIssueCounts: Array.from(countMap.entries())
+    }
   };
 }) satisfies GetServerSideProps<ReadOrderViewProps>;
