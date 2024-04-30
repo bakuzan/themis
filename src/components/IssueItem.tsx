@@ -50,7 +50,7 @@ export default function IssueItem(props: IssueItemProps) {
           </div>
           <div className={styles.main}>
             <div>{item.name}</div>
-            <div>
+            <div className={styles.noSelect}>
               <Link href={`/issues/${item.id}/edit`} onClick={onEdit}>
                 Edit
               </Link>

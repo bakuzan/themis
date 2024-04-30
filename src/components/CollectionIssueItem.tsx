@@ -53,7 +53,7 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
         <div>{item.name}</div>
       </div>
 
-      <div>
+      <div className={styles.noSelect}>
         <CollectionIssueEditForm
           collectionId={collectionId}
           issueId={item.id}

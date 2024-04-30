@@ -44,6 +44,10 @@
   margin-bottom: 10px;
 }
 
+.noSelect {
+  user-select: none;
+}
+
 @media (max-width: 598px) {
   .headerItem > div:first-child,
   .coverInfo {
@@ -60,6 +64,7 @@
   margin-top: -5px;
   margin-left: 10px;
   cursor: pointer;
+  user-select: none;
 }
 
 .main {
@@ -75,4 +80,5 @@
   align-items: flex-end;
   justify-content: flex-end;
   height: 37px; /* Height of text + button */
+  user-select: none;
 }

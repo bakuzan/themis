@@ -61,7 +61,7 @@ export default function ReadHistoryIssueItem(props: ReadHistoryIssueItemProps) {
               {item.isOneShot && '(One Shot)'}
             </div>
             &nbsp;
-            <div>{item.coverDate}</div>
+            <div className={styles.noSelect}>{item.coverDate}</div>
             {item.isRepeatedIssue && (
               <div
                 className={styles.repeatIcon}
