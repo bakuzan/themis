@@ -41,7 +41,11 @@ export default function CollectionForm(props: CollectionFromProps) {
       })
     });
     if (response.success) {
-      router.push(`/collections/${response.id}`);
+      const query = new URLSearchParams(
+        router.query as Record<string, string>
+      ).toString();
+      const suffix = query ? `?${query}` : '';
+      router.push(`/collections/${response.id}${suffix}`);
     } else {
       appProps.dispatch({ type: 'ON_ERROR', messages: response.errorMessages });
     }

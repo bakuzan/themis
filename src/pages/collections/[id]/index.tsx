@@ -74,9 +74,7 @@ export default function CollectionView(
                 refreshData();
                 setIssueFormKey((p) => p + 1);
               }}
-              data={{
-                collectionId: data.id
-              }}
+              data={{ collectionId: data.id }}
             />
           </section>
           <section className={styles.readOrderLinks}>
@@ -115,16 +113,18 @@ export default function CollectionView(
 
 export const getServerSideProps = (async (context) => {
   const { id } = context.params ?? {};
+  const { titleId } = context.query ?? {};
+
   if (!id) {
     throw new Error(`collections/[id] was called without an id!`);
   }
 
   const collectionId = Number(id);
+  const maybeTitleId = titleId ? Number(titleId) : null;
+
   const item = getCollectionWithIssues(collectionId);
-  const issues = getIssuesWithTitleInfo();
+  const issues = getIssuesWithTitleInfo(maybeTitleId);
   const readOrders = getReadOrdersAssociatedWithCollection(collectionId);
 
-  return {
-    props: { item, issues, readOrders }
-  };
+  return { props: { item, issues, readOrders } };
 }) satisfies GetServerSideProps<CollectionViewProps>;

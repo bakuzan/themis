@@ -1,5 +1,6 @@
 import db from './database';
 
+import { Title } from '@/types/Title';
 import { IssueWithTitleInfo } from '@/types/Issue';
 import { Collection, CollectionWithIssueCount } from '@/types/Collection';
 import {
@@ -53,6 +54,25 @@ export function getCollectionsForDropdown() {
   const collections = db.prepare(query).all() as CollectionWithIssueCount[];
 
   return collections.map(toCollectionViewModel);
+}
+
+export function getCollectionDefaultProps(titleId: number) {
+  const title = db
+    .prepare(`SELECT * FROM Title WHERE Id = ?`)
+    .get(titleId) as Title;
+
+  const collections = db
+    .prepare(`SELECT * FROM Collection WHERE Name = ?`)
+    .all(title.Name) as Collection[];
+
+  const numbers = collections
+    .map((x) => x.Number)
+    .filter((x): x is number => typeof x === 'number');
+
+  return {
+    defaultName: title.Name,
+    ...(numbers.length > 0 && { defaultNumber: numbers.sort().pop()! + 1 })
+  };
 }
 
 /* DATABASE WRITES */

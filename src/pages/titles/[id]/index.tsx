@@ -45,8 +45,11 @@ export default function TitleView(
             {data.isOneShot ? `(One Shot)` : `${data.issueCount} Issues`}
           </p>
         </div>
-        <div>
+        <div className={styles.links}>
           <Link href={`/titles/${data.id}/edit`}>Edit</Link>
+          <Link href={`/collections/new?titleId=${data.id}`}>
+            Create New Collection
+          </Link>
         </div>
       </header>
       <div>

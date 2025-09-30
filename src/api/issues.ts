@@ -6,10 +6,10 @@ import getStoredProceedure from './database/storedProceedures';
 import { toIssueWithTitleInfoViewModel } from './mappers/issue';
 
 /* DATABASE READS */
-export function getIssuesWithTitleInfo() {
+export function getIssuesWithTitleInfo(titleId: number | null) {
   const issues = db
     .prepare(getStoredProceedure('GetIssuesListWithTitleInfo'))
-    .all() as IssueWithTitleInfo[];
+    .all({ titleId }) as IssueWithTitleInfo[];
 
   return issues.map(toIssueWithTitleInfoViewModel);
 }
