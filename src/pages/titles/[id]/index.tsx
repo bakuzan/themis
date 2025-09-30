@@ -11,6 +11,7 @@ import IssueForm from '@/components/Forms/IssueForm';
 import PageHead from '@/components/PageHead';
 import IssueItem from '@/components/IssueItem';
 import { filterTitleIssues } from '@/utils/filters/issues';
+import getNextYYYYMM from '@/utils/getNextYYYYMM';
 
 import styles from './index.module.css';
 
@@ -25,7 +26,6 @@ export default function TitleView(
   const refreshData = () => router.replace(router.asPath);
   const data = props.item;
 
-  const [issueFormKey, setIssueFormKey] = useState(1);
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
 
@@ -55,18 +55,15 @@ export default function TitleView(
             <h2>Add a new issue to {pageTitle}</h2>
           </header>
           <IssueForm
-            key={issueFormKey}
+            key={latestIssue.id ?? 0}
             method="POST"
             action="/api/issues/new"
-            onSuccess={() => {
-              refreshData();
-              setIssueFormKey((p) => p + 1);
-            }}
+            onSuccess={() => refreshData()}
             data={{
               titleId: data.id,
               number: latestIssue.number + 1,
               name: '',
-              coverDate: latestIssue.coverDate,
+              coverDate: getNextYYYYMM(latestIssue.coverDate),
               isAnnual: false
             }}
           />
@@ -94,7 +91,5 @@ export const getServerSideProps = (async (context) => {
 
   const item = getTitleWithIssues(Number(id));
 
-  return {
-    props: { item }
-  };
+  return { props: { item } };
 }) satisfies GetServerSideProps<TitleViewProps>;

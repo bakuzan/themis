@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import useKeyPress from '@/hooks/useKeyPress';
+import isTypingContext from '@/utils/isTypingContext';
 
 import styles from './SearchBox.module.css';
 
@@ -13,7 +14,8 @@ export default function SearchBox(props: SearchBoxProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useKeyPress(['s', 'S'], (event) => {
-    if (!document.activeElement || document.activeElement.id !== 'search') {
+    console.log(document.activeElement);
+    if (!isTypingContext(document.activeElement)) {
       event.preventDefault();
       inputRef.current?.focus();
     }
