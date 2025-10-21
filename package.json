@@ -13,22 +13,22 @@
     "import:live": "ts-node -P ./tools/tsconfig.json ./tools/import.ts"
   },
   "dependencies": {
-    "@types/node": "22.18.7",
-    "@types/react": "19.0.14",
-    "@types/react-dom": "19.0.6",
-    "better-sqlite3": "^11.10.0",
-    "eslint": "9.36.0",
-    "eslint-config-next": "15.1.8",
-    "next": "15.1.8",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "typescript": "5.7.3"
+    "@types/node": "24.9.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "better-sqlite3": "^12.4.1",
+    "eslint": "9.38.0",
+    "eslint-config-next": "15.5.6",
+    "next": "15.5.6",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "typescript": "5.9.3"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.2.3",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.2.5",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2"
   },
