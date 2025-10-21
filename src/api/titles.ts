@@ -17,13 +17,13 @@ export function getTitles() {
   return titles.map(toTitleViewModel);
 }
 
-export function getTitleById(id: number) {
+export async function getTitleById(id: number) {
   const title = db.prepare(`SELECT * FROM Title WHERE Id = ?`).get(id) as Title;
 
   return toTitleViewModel(title);
 }
 
-export function getTitleWithIssues(id: number) {
+export async function getTitleWithIssues(id: number) {
   const title = db.prepare(`SELECT * FROM Title WHERE Id = ?`).get(id) as Title;
 
   const query = getStoredProceedure('GetIssuesListForTitle');

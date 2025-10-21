@@ -1,29 +1,25 @@
+'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { getTitleWithIssues } from '@/api/titles';
 import { TitleWithIssuesViewModel } from '@/types/Title';
 
 import SearchBox from '@/components/SearchBox';
 import IssueForm from '@/components/Forms/IssueForm';
-import PageHead from '@/components/PageHead';
 import IssueItem from '@/components/IssueItem';
 import { filterTitleIssues } from '@/utils/filters/issues';
 import getNextYYYYMM from '@/utils/getNextYYYYMM';
 
-import styles from './index.module.css';
+import styles from './TitleView.module.css';
 
 interface TitleViewProps {
   item: TitleWithIssuesViewModel;
 }
 
-export default function TitleView(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function TitleView(props: TitleViewProps) {
   const router = useRouter();
-  const refreshData = () => router.replace(router.asPath);
+  const refreshData = () => router.refresh();
   const data = props.item;
 
   const [searchString, setSearchString] = useState('');
@@ -37,7 +33,6 @@ export default function TitleView(
 
   return (
     <section>
-      <PageHead title={pageTitle} />
       <header className="header">
         <div>
           <h1>{pageTitle}</h1>
@@ -85,14 +80,3 @@ export default function TitleView(
     </section>
   );
 }
-
-export const getServerSideProps = (async (context) => {
-  const { id } = context.params ?? {};
-  if (!id) {
-    throw new Error(`titles/[id] was called without an id!`);
-  }
-
-  const item = getTitleWithIssues(Number(id));
-
-  return { props: { item } };
-}) satisfies GetServerSideProps<TitleViewProps>;

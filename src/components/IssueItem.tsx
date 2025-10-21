@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import { IssueViewModel } from '@/types/Issue';
@@ -16,7 +16,7 @@ interface IssueItemProps {
 export default function IssueItem(props: IssueItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
-  const refreshData = () => router.replace(router.asPath);
+  const refreshData = () => router.refresh();
 
   const item = props.data;
   const issueNumber = getFormattedIssueNumber(item);

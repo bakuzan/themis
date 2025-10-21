@@ -2,18 +2,17 @@ import Link from 'next/link';
 
 import TitleForm from '@/components/Forms/TitleForm';
 
-import PageHead from '@/components/PageHead';
+import getPageTitle from '@/utils/getPageTitle';
 
 export const metadata = {
-  title: 'Create Title'
+  title: getPageTitle('Create Title')
 };
 
 export default function TitlesNew() {
   return (
     <section>
-      <PageHead title={metadata.title} />
       <header className="header">
-        <h1>{metadata.title}</h1>
+        <h1>Create Title</h1>
         <div>
           <Link href="/titles">Back</Link>
         </div>

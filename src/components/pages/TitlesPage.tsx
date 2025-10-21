@@ -1,37 +1,28 @@
+'use client';
 import { useState } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import { getTitles } from '@/api/titles';
 import { TitleViewModel } from '@/types/Title';
 
-import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
 import { filterTitles } from '@/utils/filters/titles';
-
-import styles from './index.module.css';
 import classNames from '@/utils/classNames';
+
+import styles from './TitlesPage.module.css';
 
 interface TitlesProps {
   items: TitleViewModel[];
 }
 
-const metadata = {
-  title: 'Titles'
-};
-
-export default function Titles(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function Titles(props: TitlesProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const titles = props.items.filter(filterTitles(searchStringLower));
 
   return (
     <section>
-      <PageHead title={metadata.title} />
       <header className="header">
-        <h1>{metadata.title}</h1>
+        <h1>Titles</h1>
         <div>
           <Link href="/titles/new">Create New Title</Link>
         </div>
@@ -61,11 +52,3 @@ export default function Titles(
     </section>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const items = getTitles();
-
-  return {
-    props: { items }
-  };
-}) satisfies GetServerSideProps<TitlesProps>;
