@@ -31,14 +31,14 @@ export async function getReadHistories() {
   return readOrders.map(toReadHistoryWithCountsViewModel);
 }
 
-export function getReadHistoryById(id: number) {
+export async function getReadHistoryById(id: number) {
   const query = getStoredProceedure('GetReadHistoryById');
   const history = db.prepare(query).get(id) as ReadHistoryWithReadOrder;
 
   return toReadHistoryViewModel(history);
 }
 
-export function getReadHistoryIssues(readHistoryId: number) {
+export async function getReadHistoryIssues(readHistoryId: number) {
   const query = getStoredProceedure('GetIssuesListForReadHistory');
   const issues = db.prepare(query).all(readHistoryId) as ReadHistoryIssue[];
 

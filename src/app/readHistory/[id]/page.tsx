@@ -8,10 +8,10 @@ type PageProps = {
   params: { id: string };
 };
 
-export default function Page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const readHistoryId = Number(params.id);
-  const item = getReadHistoryById(readHistoryId);
-  const issues = getReadHistoryIssues(readHistoryId);
+  const item = await getReadHistoryById(readHistoryId);
+  const issues = await getReadHistoryIssues(readHistoryId);
   const countMap = createCollectionCountMap(issues);
 
   const mostRecentReadIndex = findLastIndex(
