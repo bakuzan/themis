@@ -9,7 +9,8 @@ type PageProps = {
 };
 
 export default async function Page({ params }: PageProps) {
-  const readHistoryId = Number(params.id);
+  const { id } = await params;
+  const readHistoryId = Number(id);
   const item = await getReadHistoryById(readHistoryId);
   const issues = await getReadHistoryIssues(readHistoryId);
   const countMap = createCollectionCountMap(issues);
