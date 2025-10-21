@@ -1,7 +1,7 @@
 import { getReadHistories } from '@/api/readHistory';
 import { getReadOrders } from '@/api/readOrders';
 
-import HomePage from '@/components/pages/homePage';
+import HomePage from '@/components/pages/HomePage';
 import getPageTitle from '@/utils/getPageTitle';
 
 export const dynamic = 'force-dynamic';

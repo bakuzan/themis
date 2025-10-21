@@ -1,6 +1,6 @@
 import { getIssueCountsPerMonth, getIssueRepeatsCounts } from '@/api/stats';
 
-import Statistics from '@/components/pages/statistics';
+import Statistics from '@/components/pages/Statistics';
 import getPageTitle from '@/utils/getPageTitle';
 
 export const dynamic = 'force-dynamic';

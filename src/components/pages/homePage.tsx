@@ -11,7 +11,7 @@ import { filterReadHistory } from '@/utils/filters/readHistory';
 import getDifferenceBetweenDates from '@/utils/getDifferenceBetweenDates';
 import classNames from '@/utils/classNames';
 
-import styles from './homePage.module.css';
+import styles from './HomePage.module.css';
 
 interface HomePageProps {
   readHistoryList: ReadHistoryWithCountsViewModel[];

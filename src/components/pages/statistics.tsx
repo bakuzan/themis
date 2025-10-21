@@ -6,7 +6,7 @@ import MonthCountsTable from '@/components/MonthCountsTable';
 import MonthCountsDetail from '@/components/MonthCountsTable/MonthCountsDetail';
 import TopIssueRepeats from '@/components/TopIssueRepeats';
 
-import styles from './statistics.module.css';
+import styles from './Statistics.module.css';
 
 interface StatsPageProps {
   monthHistoryCounts: [number, MonthIssueCountViewModel[]][];

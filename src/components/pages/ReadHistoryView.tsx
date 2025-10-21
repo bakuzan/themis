@@ -1,10 +1,9 @@
+'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter, usePathname } from 'next/navigation';
 
 import { ReadHistoryViewModel } from '@/types/ReadHistory';
 import { ReadHistoryIssueInfoViewModel } from '@/types/ReadHistoryIssue';
-import { getReadHistoryById, getReadHistoryIssues } from '@/api/readHistory';
 
 import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
@@ -14,11 +13,9 @@ import CompleteReadHistoryForm from '@/components/Forms/CompleteReadHistoryForm'
 
 import { filterReadHistoryIssues } from '@/utils/filters/issues';
 import { getReadOrderIssueKey } from '@/utils/getReadOrderIssueKey';
-import createCollectionCountMap from '@/utils/createCollectionCountMap';
 import getTargetIssueElementId from '@/utils/getTargetIssueElementId';
-import { findLastIndex } from '@/utils/findLastIndex';
 
-import styles from './[id].module.css';
+import styles from './ReadHistoryView.module.css';
 
 interface ReadHistoryViewProps {
   item: ReadHistoryViewModel;
@@ -37,15 +34,10 @@ function getReadOnDate(
   );
 }
 
-export default function ReadHistoryView(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function ReadHistoryView(props: ReadHistoryViewProps) {
   const router = useRouter();
-  const routerIsReady = router.isReady;
-  const currentPath = router.asPath;
-  const pathNoHash = currentPath.split('#')[0];
-  const refreshData = () =>
-    router.replace(currentPath, undefined, { scroll: false });
+  const pathNoHash = usePathname();
+  const refreshData = () => router.refresh();
 
   const { item: data, nextIssueToRead } = props;
   const countMap = new Map(props.collectionIssueCounts);
@@ -65,7 +57,7 @@ export default function ReadHistoryView(
 
   useEffect(() => {
     // Scroll to the next issue to read in an ongoing read-through.
-    if (routerIsReady && !isComplete && nextIssueToRead) {
+    if (!isComplete && nextIssueToRead) {
       const elementId = getTargetIssueElementId(nextIssueToRead);
 
       // To avoid "Cancel rendering route" error
@@ -73,7 +65,7 @@ export default function ReadHistoryView(
       const newPath = `${pathNoHash}#${elementId}`;
       window.location.replace(newPath);
     }
-  }, [nextIssueToRead, isComplete, pathNoHash, routerIsReady]);
+  }, [nextIssueToRead, isComplete, pathNoHash]);
 
   return (
     <section>
@@ -133,29 +125,3 @@ export default function ReadHistoryView(
     </section>
   );
 }
-
-export const getServerSideProps = (async (context) => {
-  const { id } = context.params ?? {};
-  if (!id) {
-    throw new Error(`readHistory/[id] was called without an id!`);
-  }
-
-  const readHistoryId = Number(id);
-  const item = getReadHistoryById(readHistoryId);
-  const issues = getReadHistoryIssues(readHistoryId);
-  const countMap = createCollectionCountMap(issues);
-
-  const mostRecentReadIndex = findLastIndex(
-    issues,
-    (x) => x.readOnDate !== null
-  );
-
-  return {
-    props: {
-      item,
-      issues,
-      collectionIssueCounts: Array.from(countMap.entries()),
-      nextIssueToRead: issues[mostRecentReadIndex + 1] ?? null
-    }
-  };
-}) satisfies GetServerSideProps<ReadHistoryViewProps>;
