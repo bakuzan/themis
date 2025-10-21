@@ -1,0 +1,13 @@
+.notFound {
+  display: flex;
+  min-width: 100vw;
+  min-height: calc(100vh - var(--navbar-height));
+}
+
+.centering {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}

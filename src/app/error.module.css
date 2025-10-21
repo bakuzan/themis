@@ -1,0 +1,15 @@
+.error {
+  display: flex;
+  min-width: 100vw;
+  min-height: calc(100vh);
+  padding: 1rem;
+  padding-top: calc(1rem + var(--navbar-height));
+}
+
+.centering {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}

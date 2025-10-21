@@ -1,5 +1,6 @@
+'use client';
 import { FormEvent, useContext, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { ReadOrderViewModel } from '@/types/ReadOrder';
 import { ReadHistoryResponse } from '@/types/Response';

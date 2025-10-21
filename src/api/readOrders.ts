@@ -24,7 +24,6 @@ import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
 import calculateNewReadOrderIssueSortOrder from './helpers/calculateNewReadOrderIssueSortOrder';
 import setIssueSortOrders from './helpers/setIssueSortOrders';
-import { moveToNewArrayPosition } from './helpers/common';
 import reOrderIssuesList from './helpers/reOrderIssueList';
 
 interface ReadOrderIssueChanges {
@@ -33,7 +32,7 @@ interface ReadOrderIssueChanges {
 }
 
 /* DATEBASE READS */
-export function getReadOrders() {
+export async function getReadOrders() {
   const query = getStoredProceedure('GetReadOrdersWithIssueCount');
   const readOrders = db.prepare(query).all() as ReadOrderWithIssueCount[];
 

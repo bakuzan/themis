@@ -1,0 +1,18 @@
+import { getReadHistories } from '@/api/readHistory';
+import { getReadOrders } from '@/api/readOrders';
+
+import HomePage from '@/components/pages/homePage';
+import getPageTitle from '@/utils/getPageTitle';
+
+export const dynamic = 'force-dynamic';
+
+export const metadata = {
+  title: getPageTitle('Home')
+};
+
+export default async function Home() {
+  const readHistoryList = await getReadHistories();
+  const readOrders = await getReadOrders();
+
+  return <HomePage readOrders={readOrders} readHistoryList={readHistoryList} />;
+}

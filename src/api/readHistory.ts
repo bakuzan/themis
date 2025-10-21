@@ -24,7 +24,7 @@ interface ReadHistoryIssueInsertProps
 }
 
 /* DATEBASE READS */
-export function getReadHistories() {
+export async function getReadHistories() {
   const query = getStoredProceedure('GetReadHistoriesWithCounts');
   const readOrders = db.prepare(query).all() as ReadHistoryWithCounts[];
 

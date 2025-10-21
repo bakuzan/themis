@@ -1,51 +1,43 @@
+'use client';
 import { useState } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import { ReadOrderViewModel } from '@/types/ReadOrder';
 import { ReadHistoryWithCountsViewModel } from '@/types/ReadHistory';
 
-import { getReadHistories } from '@/api/readHistory';
-import { getReadOrders } from '@/api/readOrders';
-
 import ReadHistoryForm from '@/components/Forms/ReadHistoryForm';
-import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
 import { filterReadHistory } from '@/utils/filters/readHistory';
 import getDifferenceBetweenDates from '@/utils/getDifferenceBetweenDates';
-
-import styles from './index.module.css';
 import classNames from '@/utils/classNames';
+
+import styles from './homePage.module.css';
 
 interface HomePageProps {
   readHistoryList: ReadHistoryWithCountsViewModel[];
   readOrders: ReadOrderViewModel[];
 }
 
-const metadata = {
-  title: 'Home'
-};
-
-export default function Home(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function HomePage({
+  readOrders,
+  readHistoryList
+}: HomePageProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
-  const historyList = props.readHistoryList.filter(
+  const historyList = readHistoryList.filter(
     filterReadHistory(searchStringLower)
   );
 
   return (
     <section>
-      <PageHead title={metadata.title} />
       <header className="header">
-        <h1>{metadata.title}</h1>
+        <h1>Home</h1>
       </header>
       <div className={styles.formContainer}>
         <ReadHistoryForm
           method="POST"
           action={`/api/readHistory/new`}
-          readOrders={props.readOrders}
+          readOrders={readOrders}
         />
       </div>
       <div>
@@ -92,12 +84,3 @@ export default function Home(
     </section>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const readHistoryList = getReadHistories();
-  const readOrders = getReadOrders();
-
-  return {
-    props: { readHistoryList, readOrders }
-  };
-}) satisfies GetServerSideProps<HomePageProps>;

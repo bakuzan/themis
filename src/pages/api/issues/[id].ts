@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { isFormData } from '@/api/helpers/common';
-import { insertIssue, updateIssue } from '@/api/issues';
+import { updateIssue } from '@/api/issues';
 import { validateRequest } from '@/api/validators/issue';
 
 export default async function handler(
