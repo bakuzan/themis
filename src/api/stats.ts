@@ -17,7 +17,7 @@ import {
 import fillMissingMonths from './helpers/fillMissingMonths';
 
 /* DATEBASE READS */
-export function getIssueCountsPerMonth() {
+export async function getIssueCountsPerMonth() {
   const query = getStoredProceedure('Stats_GetIssueCountPerMonth');
   const monthCounts = db.prepare(query).all() as MonthIssueCount[];
 
@@ -33,7 +33,7 @@ export function getIssueCountsPerMonth() {
  *
  * @returns IssueRepeatViewModel[]
  */
-export function getIssueRepeatsCounts() {
+export async function getIssueRepeatsCounts() {
   // TODO implement paging?
   const query = getStoredProceedure('Stats_GetIssueRepeatsCounts');
   const issueRepeats = db
