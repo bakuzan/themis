@@ -14,7 +14,7 @@ export async function getIssuesWithTitleInfo(titleId: number | null) {
   return issues.map(toIssueWithTitleInfoViewModel);
 }
 
-export function getIssuesWithoutACollection() {
+export async function getIssuesWithoutACollection() {
   const issues = db
     .prepare(getStoredProceedure('GetIssuesWithoutACollection'))
     .all() as IssueWithTitleInfo[];

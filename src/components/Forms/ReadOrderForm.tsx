@@ -1,4 +1,5 @@
-import { useRouter } from 'next/router';
+'use client';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useContext, useState } from 'react';
 
 import { ReadOrderViewModel } from '@/types/ReadOrder';

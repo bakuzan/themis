@@ -49,7 +49,7 @@ export async function getCollectionWithIssues(id: number) {
   return toCollectionWithIssuesViewModel(collection, issues);
 }
 
-export function getCollectionsForDropdown() {
+export async function getCollectionsForDropdown() {
   const query = getStoredProceedure('GetCollectionsForDropdown');
   const collections = db.prepare(query).all() as CollectionWithIssueCount[];
 

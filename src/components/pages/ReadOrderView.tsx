@@ -1,31 +1,21 @@
+'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import { ReadOrderWithIssuesViewModel } from '@/types/ReadOrder';
 import { CollectionViewModel } from '@/types/Collection';
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
 
-import { getReadOrderWithIssues } from '@/api/readOrders';
-import { getCollectionsForDropdown } from '@/api/collections';
-import { getIssuesWithoutACollection } from '@/api/issues';
-
 import SearchBox from '@/components/SearchBox';
-import PageHead from '@/components/PageHead';
 import ReadOrderIssueItem from '@/components/ReadOrderIssueItem';
 import ReadOrderIssueForm from '@/components/Forms/ReadOrderIssueForm';
 
 import { filterReadOrderIssues } from '@/utils/filters/issues';
 import { exclude } from '@/utils/filters/includeExclude';
-import {
-  getReadOrderIssueKey,
-  getFirstReadOrderIssueKey,
-  getLastReadOrderIssueKey
-} from '@/utils/getReadOrderIssueKey';
-import createCollectionCountMap from '@/utils/createCollectionCountMap';
+import { getReadOrderIssueKey } from '@/utils/getReadOrderIssueKey';
 
-import styles from './index.module.css';
+import styles from './ReadOrderView.module.css';
 
 interface ReadOrderViewProps {
   item: ReadOrderWithIssuesViewModel;
@@ -36,12 +26,9 @@ interface ReadOrderViewProps {
   collectionIssueCounts: [number | null, number][];
 }
 
-export default function ReadOrderView(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function ReadOrderView(props: ReadOrderViewProps) {
   const router = useRouter();
-  const refreshData = () =>
-    router.replace(router.asPath, undefined, { scroll: false });
+  const refreshData = () => router.refresh();
 
   const data = props.item;
   const countMap = new Map(props.collectionIssueCounts);
@@ -61,7 +48,6 @@ export default function ReadOrderView(
 
   return (
     <section>
-      <PageHead title={pageTitle} />
       <header className="header">
         <div>
           <h1>{pageTitle}</h1>
@@ -126,30 +112,3 @@ export default function ReadOrderView(
     </section>
   );
 }
-
-export const getServerSideProps = (async (context) => {
-  const { id } = context.params ?? {};
-  if (!id) {
-    throw new Error(`readOrders/[id] was called without an id!`);
-  }
-
-  const item = getReadOrderWithIssues(Number(id));
-  const collections = getCollectionsForDropdown();
-  const issues = getIssuesWithoutACollection();
-
-  const readOrderIssues = item.issues;
-  const firstROIKey = getFirstReadOrderIssueKey(readOrderIssues);
-  const lastROIKey = getLastReadOrderIssueKey(readOrderIssues);
-  const countMap = createCollectionCountMap(readOrderIssues);
-
-  return {
-    props: {
-      item,
-      collections,
-      issues,
-      firstROIKey,
-      lastROIKey,
-      collectionIssueCounts: Array.from(countMap.entries())
-    }
-  };
-}) satisfies GetServerSideProps<ReadOrderViewProps>;

@@ -39,7 +39,7 @@ export async function getReadOrders() {
   return readOrders.map(toReadOrderViewModel);
 }
 
-export function getReadOrderById(id: number) {
+export async function getReadOrderById(id: number) {
   const readOrder = db
     .prepare(`SELECT * FROM ReadOrder WHERE Id = ?`)
     .get(id) as ReadOrder;
@@ -47,7 +47,7 @@ export function getReadOrderById(id: number) {
   return toReadOrderViewModel(readOrder);
 }
 
-export function getReadOrderWithIssues(id: number) {
+export async function getReadOrderWithIssues(id: number) {
   const readOrder = db
     .prepare(`SELECT * FROM ReadOrder WHERE Id = ?`)
     .get(id) as ReadOrder;

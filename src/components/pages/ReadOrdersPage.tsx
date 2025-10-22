@@ -1,27 +1,20 @@
+'use client';
 import { useState } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import { getReadOrders } from '@/api/readOrders';
 import { ReadOrderViewModel } from '@/types/ReadOrder';
 
-import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
 
-import styles from './index.module.css';
 import classNames from '@/utils/classNames';
+
+import styles from './ReadOrdersPage.module.css';
 
 interface ReadOrdersProps {
   items: ReadOrderViewModel[];
 }
 
-const metadata = {
-  title: 'Read Orders'
-};
-
-export default function ReadOrders(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function ReadOrdersPage(props: ReadOrdersProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const readOrders = props.items.filter((x) =>
@@ -30,9 +23,8 @@ export default function ReadOrders(
 
   return (
     <section>
-      <PageHead title={metadata.title} />
       <header className="header">
-        <h1>{metadata.title}</h1>
+        <h1>Read Orders</h1>
         <div>
           <Link href="/readOrders/new">Create New Read Order</Link>
         </div>
@@ -60,11 +52,3 @@ export default function ReadOrders(
     </section>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const items = getReadOrders();
-
-  return {
-    props: { items }
-  };
-}) satisfies GetServerSideProps<ReadOrdersProps>;
