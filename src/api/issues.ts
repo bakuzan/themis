@@ -6,7 +6,7 @@ import getStoredProceedure from './database/storedProceedures';
 import { toIssueWithTitleInfoViewModel } from './mappers/issue';
 
 /* DATABASE READS */
-export function getIssuesWithTitleInfo(titleId: number | null) {
+export async function getIssuesWithTitleInfo(titleId: number | null) {
   const issues = db
     .prepare(getStoredProceedure('GetIssuesListWithTitleInfo'))
     .all({ titleId }) as IssueWithTitleInfo[];

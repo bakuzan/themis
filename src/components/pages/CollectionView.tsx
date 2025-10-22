@@ -1,24 +1,20 @@
+'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { getCollectionWithIssues } from '@/api/collections';
-import { getIssuesWithTitleInfo } from '@/api/issues';
-import { getReadOrdersAssociatedWithCollection } from '@/api/readOrders';
 import { CollectionWithIssuesViewModel } from '@/types/Collection';
 import { IssueWithTitleInfoViewModel } from '@/types/Issue';
 import { ReadOrderViewModel } from '@/types/ReadOrder';
 
 import SearchBox from '@/components/SearchBox';
-import PageHead from '@/components/PageHead';
 import CollectionIssueItem from '@/components/CollectionIssueItem';
 import CollectionIssueForm from '@/components/Forms/CollectionIssueForm';
 
 import getCollectionFullName from '@/utils/getCollectionFullName';
 import { filterCollectionIssues } from '@/utils/filters/issues';
 
-import styles from './index.module.css';
+import styles from './CollectionView.module.css';
 
 interface CollectionViewProps {
   item: CollectionWithIssuesViewModel;
@@ -26,14 +22,11 @@ interface CollectionViewProps {
   readOrders: ReadOrderViewModel[];
 }
 
-export default function CollectionView(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function CollectionView(props: CollectionViewProps) {
   const router = useRouter();
-  const refreshData = () =>
-    router.replace(router.asPath, undefined, { scroll: false });
-  const data = props.item;
+  const refreshData = () => router.refresh();
 
+  const data = props.item;
   const [issueFormKey, setIssueFormKey] = useState(1);
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
@@ -49,7 +42,6 @@ export default function CollectionView(
 
   return (
     <section>
-      <PageHead title={pageTitle ?? undefined} />
       <header className="header">
         <div>
           <h1>{pageTitle}</h1>
@@ -110,21 +102,3 @@ export default function CollectionView(
     </section>
   );
 }
-
-export const getServerSideProps = (async (context) => {
-  const { id } = context.params ?? {};
-  const { titleId } = context.query ?? {};
-
-  if (!id) {
-    throw new Error(`collections/[id] was called without an id!`);
-  }
-
-  const collectionId = Number(id);
-  const maybeTitleId = titleId ? Number(titleId) : null;
-
-  const item = getCollectionWithIssues(collectionId);
-  const issues = getIssuesWithTitleInfo(maybeTitleId);
-  const readOrders = getReadOrdersAssociatedWithCollection(collectionId);
-
-  return { props: { item, issues, readOrders } };
-}) satisfies GetServerSideProps<CollectionViewProps>;

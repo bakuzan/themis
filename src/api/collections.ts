@@ -23,7 +23,7 @@ import setIssueSortOrders from './helpers/setIssueSortOrders';
 import setReadOrderIssueSortOrders from './helpers/setReadOrderIssueSortOrders';
 
 /* DATEBASE READS */
-export function getCollections() {
+export async function getCollections() {
   const query = getStoredProceedure('GetCollectionsWithIssueCount');
   const collections = db.prepare(query).all() as CollectionWithIssueCount[];
 
@@ -38,7 +38,7 @@ export function getCollectionById(id: number) {
   return toCollectionViewModel(collection);
 }
 
-export function getCollectionWithIssues(id: number) {
+export async function getCollectionWithIssues(id: number) {
   const collection = db
     .prepare(`SELECT * FROM Collection WHERE Id = ?`)
     .get(id) as Collection;
@@ -56,7 +56,7 @@ export function getCollectionsForDropdown() {
   return collections.map(toCollectionViewModel);
 }
 
-export function getCollectionDefaultProps(titleId: number) {
+export async function getCollectionDefaultProps(titleId: number) {
   const title = db
     .prepare(`SELECT * FROM Title WHERE Id = ?`)
     .get(titleId) as Title;

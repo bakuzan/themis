@@ -1,4 +1,5 @@
-import { useRouter } from 'next/router';
+'use client';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FormEvent, useContext, useState } from 'react';
 
 import { CollectionViewModel } from '@/types/Collection';
@@ -22,6 +23,7 @@ interface CollectionFromProps {
 export default function CollectionForm(props: CollectionFromProps) {
   const appProps = useContext(AppContext);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const data = props.data;
   const [name, setName] = useState(data.name);
@@ -40,10 +42,9 @@ export default function CollectionForm(props: CollectionFromProps) {
         number: collectionNumber ?? null
       })
     });
+
     if (response.success) {
-      const query = new URLSearchParams(
-        router.query as Record<string, string>
-      ).toString();
+      const query = searchParams?.toString();
       const suffix = query ? `?${query}` : '';
       router.push(`/collections/${response.id}${suffix}`);
     } else {

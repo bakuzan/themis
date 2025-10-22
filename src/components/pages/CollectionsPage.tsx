@@ -1,28 +1,20 @@
+'use client';
 import { useState } from 'react';
 import Link from 'next/link';
 
 import { CollectionViewModel } from '@/types/Collection';
-import { getCollections } from '@/api/collections';
 
-import PageHead from '@/components/PageHead';
 import SearchBox from '@/components/SearchBox';
 import getCollectionFullName from '@/utils/getCollectionFullName';
-
-import styles from './index.module.css';
 import classNames from '@/utils/classNames';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+
+import styles from './CollectionsPage.module.css';
 
 interface CollectionsProps {
   items: CollectionViewModel[];
 }
 
-const metadata = {
-  title: 'Collections'
-};
-
-export default function Collections(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) {
+export default function CollectionsPage(props: CollectionsProps) {
   const [searchString, setSearchString] = useState('');
   const searchStringLower = searchString.toLowerCase();
   const collections = props.items.filter(
@@ -33,9 +25,8 @@ export default function Collections(
 
   return (
     <section>
-      <PageHead title={metadata.title} />
       <header className="header">
-        <h1>{metadata.title}</h1>
+        <h1>Collections</h1>
         <div>
           <Link href="/collections/new">Create New Collection</Link>
         </div>
@@ -64,11 +55,3 @@ export default function Collections(
     </section>
   );
 }
-
-export const getServerSideProps = (async () => {
-  const items = getCollections();
-
-  return {
-    props: { items }
-  };
-}) satisfies GetServerSideProps<CollectionsProps>;

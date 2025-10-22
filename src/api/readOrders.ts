@@ -58,7 +58,9 @@ export function getReadOrderWithIssues(id: number) {
   return toReadOrderWithIssuesViewModel(readOrder, issues);
 }
 
-export function getReadOrdersAssociatedWithCollection(collectionId: number) {
+export async function getReadOrdersAssociatedWithCollection(
+  collectionId: number
+) {
   const query = getStoredProceedure('GetReadOrdersAssociatedWithCollection');
   const readOrders = db.prepare(query).all(collectionId) as ReadOrder[];
 
