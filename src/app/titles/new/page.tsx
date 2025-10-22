@@ -19,7 +19,7 @@ export default function TitlesNew() {
       </header>
       <TitleForm
         method="POST"
-        action="/api/titles/new"
+        action="/api/titles"
         data={{ name: '', startYear: 1977, isOneShot: false }}
       />
     </section>

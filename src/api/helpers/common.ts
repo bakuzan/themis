@@ -1,5 +1,3 @@
-import { NextApiRequest } from 'next';
-
 export const isNullOrEmpty = (s: string) =>
   s === undefined || s === null || (typeof s === 'string' && !s.trim());
 
@@ -12,9 +10,8 @@ export const splitDelimitedToNumbers = (
   separator: string = ','
 ) => data?.split(separator).map((x) => Number(x)) ?? [];
 
-export function isFormData(request: NextApiRequest) {
-  const headersList = request.headers;
-  const accept = headersList['accept'];
+export function isFormData(request: Request) {
+  const accept = request.headers.get('accept');
   return accept !== 'application/json';
 }
 

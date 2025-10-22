@@ -1,34 +1,31 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 import { isFormData } from '@/api/helpers/common';
 import { toggleReadHistoryIssue } from '@/api/readHistory';
 import { validateToggleIssueRequest } from '@/api/validators/readHistory';
 
-export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse
-) {
+export async function POST(request: Request) {
   const isFormPost = isFormData(request);
-  const data = validateToggleIssueRequest(request);
+  const data = await validateToggleIssueRequest(request);
   const readHistoryId = data.processedData.ReadHistoryId;
   console.log('POST', request.body);
 
   if (!data.success) {
     // The redirect here isn't what I want...I want to return data during the redirect.
     if (isFormPost) {
-      return response.redirect(
-        request.headers.referer ?? `/readHistory/${readHistoryId}`
+      return NextResponse.redirect(
+        request.headers.get('referer') ?? `/readHistory/${readHistoryId}`
       );
     } else {
-      return response.json(data);
+      return NextResponse.json(data);
     }
   }
 
   toggleReadHistoryIssue(data.processedData);
 
   if (isFormPost) {
-    return response.redirect(`/readHistory/${readHistoryId}`);
+    return NextResponse.redirect(`/readHistory/${readHistoryId}`);
   } else {
-    return response.json({ success: true, errorMessages: [] });
+    return NextResponse.json({ success: true, errorMessages: [] });
   }
 }

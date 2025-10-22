@@ -67,8 +67,11 @@ export function validateRemoveRequest(request: NextApiRequest) {
 
 /* Read History Issue */
 
-export function validateToggleIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateToggleIssueRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
+
   const errorMessages = [];
   const processedData: Partial<ToggleReadHistoryIssueRequest> = {};
 
