@@ -1,3 +1,4 @@
+'use client';
 import { FormEvent, useContext, useState } from 'react';
 
 import { CollectionViewModel } from '@/types/Collection';

@@ -1,3 +1,4 @@
+'use client';
 import React, { FormEvent, useContext } from 'react';
 
 import { CompleteReadHistoryResponse } from '@/types/Response';
