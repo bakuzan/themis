@@ -55,7 +55,7 @@ export default function TitleView(props: TitleViewProps) {
           <IssueForm
             key={latestIssue.id ?? 0}
             method="POST"
-            action="/api/issues/new"
+            action="/api/issues"
             onSuccess={() => refreshData()}
             data={{
               titleId: data.id,

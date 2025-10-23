@@ -13,7 +13,7 @@ interface RemoveReadHistoryFormProps {
   onSubmitSuccess: () => void;
 }
 
-const deleteActionUrl = `/api/readHistory/remove`;
+const deleteActionUrl = `/api/readHistory`;
 
 export default function RemoveReadHistoryForm(
   props: RemoveReadHistoryFormProps
@@ -25,7 +25,7 @@ export default function RemoveReadHistoryForm(
     event.preventDefault();
 
     const response = await callApi<DeleteResponse>(deleteActionUrl, {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify({
         readHistoryId
       })

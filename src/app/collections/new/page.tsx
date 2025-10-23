@@ -35,7 +35,7 @@ export default async function CollectionsNew(props: PageProps) {
       </header>
       <CollectionForm
         method="POST"
-        action="/api/collections/new"
+        action="/api/collections"
         data={{
           name: defaultProps.defaultName,
           publicationDate: 1977,

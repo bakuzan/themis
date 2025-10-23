@@ -19,7 +19,7 @@ export default function ReadOrdersNew() {
       </header>
       <ReadOrderForm
         method="POST"
-        action="/api/readOrders/new"
+        action="/api/readOrders"
         data={{ name: '' }}
       />
     </section>

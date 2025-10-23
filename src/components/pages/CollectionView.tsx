@@ -60,7 +60,7 @@ export default function CollectionView(props: CollectionViewProps) {
             <CollectionIssueForm
               key={issueFormKey}
               method="POST"
-              action={`/api/collectionissues/new`}
+              action="/api/collectionissues"
               issues={dropdownIssues}
               onSuccess={() => {
                 refreshData();

@@ -14,7 +14,7 @@ interface CompleteReadHistoryFormProps {
   onSubmitSuccess: () => void;
 }
 
-const actionUrl = `/api/readHistory/complete`;
+const actionUrl = `/api/readHistory`;
 
 export default function CompleteReadHistoryForm(
   props: CompleteReadHistoryFormProps
@@ -26,7 +26,7 @@ export default function CompleteReadHistoryForm(
     event.preventDefault();
 
     const response = await callApi<CompleteReadHistoryResponse>(actionUrl, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({
         readHistoryId
       })

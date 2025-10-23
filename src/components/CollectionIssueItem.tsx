@@ -18,7 +18,7 @@ interface CollectionIssueItemProps {
   onRemove: () => void;
 }
 
-const deleteActionUrl = `/api/collectionissues/remove`;
+const deleteActionUrl = `/api/collectionissues`;
 
 export default function CollectionIssueItem(props: CollectionIssueItemProps) {
   const appProps = useContext(AppContext);
@@ -29,7 +29,7 @@ export default function CollectionIssueItem(props: CollectionIssueItemProps) {
     event.preventDefault();
 
     const response = await callApi<DeleteResponse>(deleteActionUrl, {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify({ collectionId, issueId: item.id })
     });
 

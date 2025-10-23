@@ -19,7 +19,7 @@ interface EditFormProps {
   onSubmitSuccess: () => void;
 }
 
-const actionUrl = `/api/readOrderIssues/edit`;
+const actionUrl = `/api/readOrderIssues`;
 
 export default function EditForm(props: EditFormProps) {
   const appProps = useContext(AppContext);
@@ -34,7 +34,7 @@ export default function EditForm(props: EditFormProps) {
       : null;
 
     const response = await callApi<ReadOrderIssueReOrderResponse>(actionUrl, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({
         readOrderId,
         collectionId,

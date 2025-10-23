@@ -13,7 +13,7 @@ interface RemoveFormProps {
   onSubmitSuccess: () => void;
 }
 
-const deleteActionUrl = `/api/readOrderIssues/remove`;
+const deleteActionUrl = `/api/readOrderIssues`;
 
 export default function RemoveForm(props: RemoveFormProps) {
   const appProps = useContext(AppContext);
@@ -23,7 +23,7 @@ export default function RemoveForm(props: RemoveFormProps) {
     event.preventDefault();
 
     const response = await callApi<DeleteResponse>(deleteActionUrl, {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify({
         readOrderId: item.readOrderId,
         collectionId: item.collectionId,

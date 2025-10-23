@@ -65,7 +65,7 @@ export default function ReadOrderView(props: ReadOrderViewProps) {
           <ReadOrderIssueForm
             key={formKey}
             method="POST"
-            action={`/api/readOrderIssues/new`}
+            action="/api/readOrderIssues"
             readOrderIssues={data.issues}
             collections={dropdownCollections}
             issues={dropdownIssues}

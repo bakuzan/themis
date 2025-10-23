@@ -36,7 +36,7 @@ export default function HomePage({
       <div className={styles.formContainer}>
         <ReadHistoryForm
           method="POST"
-          action={`/api/readHistory/new`}
+          action="/api/readHistory"
           readOrders={readOrders}
         />
       </div>

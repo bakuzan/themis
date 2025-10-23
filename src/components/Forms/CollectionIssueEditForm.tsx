@@ -17,7 +17,7 @@ interface CollectionIssueEditFormProps {
   onSubmitSuccess: () => void;
 }
 
-const actionUrl = `/api/collectionissues/edit`;
+const actionUrl = `/api/collectionissues`;
 
 export default function CollectionIssueEditForm(
   props: CollectionIssueEditFormProps
@@ -34,7 +34,7 @@ export default function CollectionIssueEditForm(
       : null;
 
     const response = await callApi<CollectionIssueReOrderResponse>(actionUrl, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({
         collectionId,
         issueId,
