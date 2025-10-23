@@ -1,32 +1,29 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 import { isFormData } from '@/api/helpers/common';
 import { insertCollection } from '@/api/collections';
 import { validateRequest } from '@/api/validators/collection';
 
-export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse
-) {
+export async function POST(request: Request) {
   const isFormPost = isFormData(request);
-  const data = validateRequest(request);
+  const data = await validateRequest(request);
   console.log('POST', request.body);
 
   if (!data.success) {
     // The redirect here isn't what I want...I want to return data during the redirect.
     if (isFormPost) {
-      return response.redirect(`/collections/new`);
+      return NextResponse.redirect(`/collections/new`);
     } else {
-      return response.json(data);
+      return NextResponse.json(data);
     }
   }
 
   const collectionId = insertCollection(data.processedData);
 
   if (isFormPost) {
-    return response.redirect(`/collections/${collectionId}`);
+    return NextResponse.redirect(`/collections/${collectionId}`);
   } else {
-    return response.json({
+    return NextResponse.json({
       success: true,
       errorMessages: [],
       id: collectionId

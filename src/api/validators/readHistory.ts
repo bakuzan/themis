@@ -1,12 +1,12 @@
-import { NextApiRequest } from 'next';
-
 import { ReadHistory } from '@/types/ReadHistory';
 
 import { isFormData } from '@/api/helpers/common';
 import { ToggleReadHistoryIssueRequest } from '@/types/ReadHistoryIssue';
 
-export function validateCreateRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateCreateRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<ReadHistory> = {};
@@ -31,8 +31,10 @@ export function validateCreateRequest(request: NextApiRequest) {
   };
 }
 
-function validateReadHistoryRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+async function validateReadHistoryRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<ReadHistory> = {};
@@ -57,12 +59,12 @@ function validateReadHistoryRequest(request: NextApiRequest) {
   };
 }
 
-export function validateCompleteRequest(request: NextApiRequest) {
-  return validateReadHistoryRequest(request);
+export async function validateCompleteRequest(request: Request) {
+  return await validateReadHistoryRequest(request);
 }
 
-export function validateRemoveRequest(request: NextApiRequest) {
-  return validateReadHistoryRequest(request);
+export async function validateRemoveRequest(request: Request) {
+  return await validateReadHistoryRequest(request);
 }
 
 /* Read History Issue */

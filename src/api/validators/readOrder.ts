@@ -1,5 +1,3 @@
-import { NextApiRequest } from 'next';
-
 import { ReadOrder } from '@/types/ReadOrder';
 import {
   ReOrderReadOrderIssuesRequest,
@@ -15,8 +13,10 @@ import {
 } from '@/api/helpers/common';
 import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
-export function validateRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<ReadOrder> = {};
@@ -78,8 +78,11 @@ function validateReadOrderIssueRequest<T extends ReadOrderIssuesRequest>(
   };
 }
 
-export function validateAddReadOrderIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateAddReadOrderIssueRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
+
   const response =
     validateReadOrderIssueRequest<AddReadOrderIssuesRequest>(data);
 
@@ -107,8 +110,11 @@ export function validateAddReadOrderIssueRequest(request: NextApiRequest) {
   return response;
 }
 
-export function validateEditReadOrderIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateEditReadOrderIssueRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
+
   const errorMessages = [];
   const processedData: Partial<ReOrderReadOrderIssuesRequest> = {};
 
@@ -154,7 +160,10 @@ export function validateEditReadOrderIssueRequest(request: NextApiRequest) {
   };
 }
 
-export function validateRemoveReadOrderIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateRemoveReadOrderIssueRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
+
   return validateReadOrderIssueRequest<RemoveReadOrderIssuesRequest>(data);
 }

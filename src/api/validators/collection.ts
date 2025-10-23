@@ -1,5 +1,3 @@
-import { NextApiRequest } from 'next';
-
 import { Collection } from '@/types/Collection';
 import {
   CollectionIssue,
@@ -8,8 +6,10 @@ import {
 import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
 import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
-export function validateRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<Collection> = {};
@@ -64,8 +64,10 @@ export function validateRequest(request: NextApiRequest) {
   };
 }
 
-export function validateAddCollectionIssuesRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateAddCollectionIssuesRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<CollectionIssue>[] = [];
@@ -107,8 +109,11 @@ export function validateAddCollectionIssuesRequest(request: NextApiRequest) {
   };
 }
 
-export function validateEditCollectionIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateEditCollectionIssueRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
+
   const errorMessages = [];
   const processedData: Partial<ReOrderCollectionIssuesRequest> = {};
 
@@ -152,8 +157,10 @@ export function validateEditCollectionIssueRequest(request: NextApiRequest) {
   };
 }
 
-export function validateRemoveCollectionIssueRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateRemoveCollectionIssueRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<CollectionIssue> = {};

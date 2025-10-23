@@ -1,11 +1,11 @@
-import { NextApiRequest } from 'next';
-
 import { Issue } from '@/types/Issue';
 
 import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
 
-export function validateRequest(request: NextApiRequest) {
-  const data = isFormData(request) ? request.body : JSON.parse(request.body);
+export async function validateRequest(request: Request) {
+  const data = await (isFormData(request)
+    ? request.formData()
+    : request.json());
 
   const errorMessages = [];
   const processedData: Partial<Issue> = {};
