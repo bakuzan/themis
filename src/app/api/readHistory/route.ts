@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
 
-import { isFormData } from '@/api/helpers/common';
+import { isFormData } from '@/database/helpers/common';
 import {
   createReadHistoryInstance,
   toggleReadHistoryComplete,
   canRemoveReadHistory,
   removeReadHistory
-} from '@/api/readHistory';
+} from '@/database/readHistory';
 import {
   validateCreateRequest,
   validateCompleteRequest,
   validateRemoveRequest
-} from '@/api/validators/readHistory';
+} from '@/database/validators/readHistory';
 
 export async function POST(request: Request) {
   const isFormPost = isFormData(request);

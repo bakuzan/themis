@@ -1,8 +1,8 @@
 import { PageProps } from '@/types/PageProps';
 
-import { getReadOrderWithIssues } from '@/api/readOrders';
-import { getCollectionsForDropdown } from '@/api/collections';
-import { getIssuesWithoutACollection } from '@/api/issues';
+import { getReadOrderWithIssues } from '@/database/readOrders';
+import { getCollectionsForDropdown } from '@/database/collections';
+import { getIssuesWithoutACollection } from '@/database/issues';
 
 import ReadOrderView from '@/components/pages/ReadOrderView';
 

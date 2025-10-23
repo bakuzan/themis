@@ -3,7 +3,7 @@ import {
   CollectionIssue,
   ReOrderCollectionIssuesRequest
 } from '@/types/CollectionIssue';
-import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
+import { isFormData, isNullOrEmpty } from '@/database/helpers/common';
 import { ReOrderDirection } from '@/constants/ReOrderDirection';
 
 export async function validateRequest(request: Request) {

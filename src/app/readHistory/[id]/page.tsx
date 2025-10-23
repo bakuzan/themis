@@ -1,4 +1,7 @@
-import { getReadHistoryById, getReadHistoryIssues } from '@/api/readHistory';
+import {
+  getReadHistoryById,
+  getReadHistoryIssues
+} from '@/database/readHistory';
 
 import ReadHistoryView from '@/components/pages/ReadHistoryView';
 import createCollectionCountMap from '@/utils/createCollectionCountMap';

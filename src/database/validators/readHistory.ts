@@ -1,6 +1,6 @@
 import { ReadHistory } from '@/types/ReadHistory';
 
-import { isFormData } from '@/api/helpers/common';
+import { isFormData } from '@/database/helpers/common';
 import { ToggleReadHistoryIssueRequest } from '@/types/ReadHistoryIssue';
 
 export async function validateCreateRequest(request: Request) {

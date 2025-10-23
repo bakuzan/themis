@@ -1,4 +1,7 @@
-import { getIssueCountsPerMonth, getIssueRepeatsCounts } from '@/api/stats';
+import {
+  getIssueCountsPerMonth,
+  getIssueRepeatsCounts
+} from '@/database/stats';
 
 import Statistics from '@/components/pages/Statistics';
 import getPageTitle from '@/utils/getPageTitle';

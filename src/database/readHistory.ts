@@ -1,4 +1,4 @@
-import db from './database';
+import db from './db';
 
 import {
   ReadHistoryWithCounts,
@@ -11,7 +11,7 @@ import {
 } from '@/types/ReadHistoryIssue';
 import { ReadOrderIssue } from '@/types/ReadOrderIssue';
 
-import getStoredProceedure from '@/api/database/storedProceedures';
+import getStoredProceedure from '@/database/storedProceedures';
 import {
   toIssueWithReadHistoryInfoViewModel,
   toReadHistoryViewModel,

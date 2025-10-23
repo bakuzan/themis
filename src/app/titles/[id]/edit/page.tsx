@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { getTitleById } from '@/api/titles';
+import { getTitleById } from '@/database/titles';
 
 import TitleForm from '@/components/Forms/TitleForm';
 import getPageTitle from '@/utils/getPageTitle';

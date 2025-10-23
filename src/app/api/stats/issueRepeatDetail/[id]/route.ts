@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getIssueRepeatDetailItems } from '@/api/stats';
+import { getIssueRepeatDetailItems } from '@/database/stats';
 
 export async function GET(
   _request: Request,

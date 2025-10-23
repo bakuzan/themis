@@ -1,4 +1,4 @@
-import { getTitleWithIssues } from '@/api/titles';
+import { getTitleWithIssues } from '@/database/titles';
 import { PageProps } from '@/types/PageProps';
 
 import TitleView from '@/components/pages/TitleView';

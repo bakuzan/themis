@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { isFormData } from '@/api/helpers/common';
-import { toggleReadHistoryIssue } from '@/api/readHistory';
-import { validateToggleIssueRequest } from '@/api/validators/readHistory';
+import { isFormData } from '@/database/helpers/common';
+import { toggleReadHistoryIssue } from '@/database/readHistory';
+import { validateToggleIssueRequest } from '@/database/validators/readHistory';
 
 export async function POST(request: Request) {
   const isFormPost = isFormData(request);

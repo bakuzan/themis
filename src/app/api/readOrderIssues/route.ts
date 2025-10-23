@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server';
 
-import { isFormData } from '@/api/helpers/common';
+import { isFormData } from '@/database/helpers/common';
 import {
   insertReadOrderIssues,
   reOrderReadOrderIssues,
   removeReadOrderIssues
-} from '@/api/readOrders';
+} from '@/database/readOrders';
 import {
   validateAddReadOrderIssueRequest,
   validateEditReadOrderIssueRequest,
   validateRemoveReadOrderIssueRequest
-} from '@/api/validators/readOrder';
+} from '@/database/validators/readOrder';
 
 export async function POST(request: Request) {
   const isFormPost = isFormData(request);

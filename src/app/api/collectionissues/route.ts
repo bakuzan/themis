@@ -2,18 +2,18 @@ import { NextResponse } from 'next/server';
 
 import { CollectionIssue } from '@/types/CollectionIssue';
 
-import { isFormData } from '@/api/helpers/common';
+import { isFormData } from '@/database/helpers/common';
 import {
   checkCollectionIssueDoesNotExist,
   insertCollectionIssues,
   reOrderCollectionIssues,
   removeCollectionIssue
-} from '@/api/collections';
+} from '@/database/collections';
 import {
   validateAddCollectionIssuesRequest,
   validateEditCollectionIssueRequest,
   validateRemoveCollectionIssueRequest
-} from '@/api/validators/collection';
+} from '@/database/validators/collection';
 
 export async function POST(request: Request) {
   const isFormPost = isFormData(request);

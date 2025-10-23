@@ -1,4 +1,4 @@
-import db from './database';
+import db from './db';
 
 import {
   IssueReadDetailInfo,
@@ -7,13 +7,13 @@ import {
   IssueRepeatDetailItem
 } from '@/types/Stats';
 
-import getStoredProceedure from '@/api/database/storedProceedures';
+import getStoredProceedure from '@/database/storedProceedures';
 import {
   toMonthIssueCountViewModel,
   toIssueRepeatViewModel,
   toIssueReadDetailViewModel,
   toIssueRepeatDetailViewModel
-} from '@/api/mappers/stats';
+} from '@/database/mappers/stats';
 import fillMissingMonths from './helpers/fillMissingMonths';
 
 /* DATEBASE READS */

@@ -28,10 +28,7 @@ type StoredProceedures =
   | 'Stats_GetIssueRepeatDetailItems';
 
 const proceedures = {} as Record<StoredProceedures, string>;
-const targetFolder = path.join(
-  process.cwd(),
-  'src/api/database/storedProceedures'
-);
+const targetFolder = path.join(process.cwd(), 'src/database/storedProceedures');
 
 function readSQLFiles() {
   try {

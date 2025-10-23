@@ -1,13 +1,13 @@
-import db from './database';
+import db from './db';
 
 import { Title, TitleWithIssueCount } from '@/types/Title';
 import { Issue } from '@/types/Issue';
 
-import getStoredProceedure from '@/api/database/storedProceedures';
+import getStoredProceedure from '@/database/storedProceedures';
 import {
   toTitleViewModel,
   toTitleWithIssuesViewModel
-} from '@/api/mappers/title';
+} from '@/database/mappers/title';
 
 /* DATEBASE READS */
 export function getTitles() {

@@ -1,4 +1,4 @@
-import db from './database';
+import db from './db';
 
 import { Title } from '@/types/Title';
 import { IssueWithTitleInfo } from '@/types/Issue';
@@ -9,7 +9,7 @@ import {
 } from '@/types/CollectionIssue';
 import { ReadOrderIssue } from '@/types/ReadOrderIssue';
 
-import getStoredProceedure from '@/api/database/storedProceedures';
+import getStoredProceedure from '@/database/storedProceedures';
 
 import {
   toCollectionViewModel,

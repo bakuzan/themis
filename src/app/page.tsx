@@ -1,5 +1,5 @@
-import { getReadHistories } from '@/api/readHistory';
-import { getReadOrders } from '@/api/readOrders';
+import { getReadHistories } from '@/database/readHistory';
+import { getReadOrders } from '@/database/readOrders';
 
 import HomePage from '@/components/pages/HomePage';
 import getPageTitle from '@/utils/getPageTitle';

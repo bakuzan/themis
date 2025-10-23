@@ -8,7 +8,7 @@ import {
   IssueRepeatDetailViewModel,
   IssueRepeatDetailItem
 } from '@/types/Stats';
-import { splitDelimitedToNumbers } from '@/api/helpers/common';
+import { splitDelimitedToNumbers } from '@/database/helpers/common';
 
 export function toMonthIssueCountViewModel(
   monthCount: MonthIssueCount

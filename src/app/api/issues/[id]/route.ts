@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { isFormData } from '@/api/helpers/common';
-import { updateIssue } from '@/api/issues';
-import { validateRequest } from '@/api/validators/issue';
+import { isFormData } from '@/database/helpers/common';
+import { updateIssue } from '@/database/issues';
+import { validateRequest } from '@/database/validators/issue';
 
 export async function PUT(request: Request) {
   const isFormPost = isFormData(request);

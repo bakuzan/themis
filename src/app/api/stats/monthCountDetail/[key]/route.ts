@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getMonthCountDetailItems } from '@/api/stats';
+import { getMonthCountDetailItems } from '@/database/stats';
 
 export async function GET(
   _request: Request,

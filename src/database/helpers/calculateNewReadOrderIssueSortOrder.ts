@@ -1,5 +1,5 @@
-import db from '@/api/database';
-import getStoredProceedure from '@/api/database/storedProceedures';
+import db from '@/database/db';
+import getStoredProceedure from '@/database/storedProceedures';
 
 import {
   AddReadOrderIssuesRequest,

@@ -1,4 +1,4 @@
-import { getTitles } from '@/api/titles';
+import { getTitles } from '@/database/titles';
 
 import Titles from '@/components/pages/TitlesPage';
 import getPageTitle from '@/utils/getPageTitle';

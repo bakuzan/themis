@@ -1,8 +1,8 @@
 import { PageProps } from '@/types/PageProps';
 
-import { getCollectionWithIssues } from '@/api/collections';
-import { getIssuesWithTitleInfo } from '@/api/issues';
-import { getReadOrdersAssociatedWithCollection } from '@/api/readOrders';
+import { getCollectionWithIssues } from '@/database/collections';
+import { getIssuesWithTitleInfo } from '@/database/issues';
+import { getReadOrdersAssociatedWithCollection } from '@/database/readOrders';
 
 import CollectionView from '@/components/pages/CollectionView';
 

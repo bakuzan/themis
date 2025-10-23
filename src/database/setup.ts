@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 
-const targetFolder = path.join(process.cwd(), 'src/api/database/scripts');
+const targetFolder = path.join(process.cwd(), 'src/database/scripts');
 
 export function readSQLFiles() {
   try {

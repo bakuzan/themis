@@ -1,4 +1,4 @@
-import { getCollections } from '@/api/collections';
+import { getCollections } from '@/database/collections';
 
 import CollectionsPage from '@/components/pages/CollectionsPage';
 import getPageTitle from '@/utils/getPageTitle';

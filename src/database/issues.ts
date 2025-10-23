@@ -1,8 +1,8 @@
-import db from './database';
+import db from './db';
 
 import { Issue, IssueWithTitleInfo } from '@/types/Issue';
 
-import getStoredProceedure from './database/storedProceedures';
+import getStoredProceedure from './storedProceedures';
 import { toIssueWithTitleInfoViewModel } from './mappers/issue';
 
 /* DATABASE READS */

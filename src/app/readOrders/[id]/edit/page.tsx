@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { PageProps } from '@/types/PageProps';
 
-import { getReadOrderById } from '@/api/readOrders';
+import { getReadOrderById } from '@/database/readOrders';
 
 import ReadOrderForm from '@/components/Forms/ReadOrderForm';
 import getPageTitle from '@/utils/getPageTitle';

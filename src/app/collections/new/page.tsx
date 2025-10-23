@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { PageProps } from '@/types/PageProps';
 
-import { getCollectionDefaultProps } from '@/api/collections';
+import { getCollectionDefaultProps } from '@/database/collections';
 
 import CollectionForm from '@/components/Forms/CollectionForm';
 import getPageTitle from '@/utils/getPageTitle';

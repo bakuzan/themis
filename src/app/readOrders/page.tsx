@@ -1,4 +1,4 @@
-import { getReadOrders } from '@/api/readOrders';
+import { getReadOrders } from '@/database/readOrders';
 
 import ReadOrdersPage from '@/components/pages/ReadOrdersPage';
 import getPageTitle from '@/utils/getPageTitle';

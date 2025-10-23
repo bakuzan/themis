@@ -1,6 +1,6 @@
 import { Issue } from '@/types/Issue';
 
-import { isFormData, isNullOrEmpty } from '@/api/helpers/common';
+import { isFormData, isNullOrEmpty } from '@/database/helpers/common';
 
 export async function validateRequest(request: Request) {
   const data = await (isFormData(request)

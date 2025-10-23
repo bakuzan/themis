@@ -1,10 +1,6 @@
-import db from './database';
+import db from './db';
 
-import {
-  ReadOrder,
-  ReadOrderViewModel,
-  ReadOrderWithIssueCount
-} from '@/types/ReadOrder';
+import { ReadOrder, ReadOrderWithIssueCount } from '@/types/ReadOrder';
 import { IssueWithReadOrderInfo } from '@/types/Issue';
 import { CollectionIssue } from '@/types/CollectionIssue';
 import {
@@ -14,7 +10,7 @@ import {
   RemoveReadOrderIssuesRequest
 } from '@/types/ReadOrderIssue';
 
-import getStoredProceedure from '@/api/database/storedProceedures';
+import getStoredProceedure from '@/database/storedProceedures';
 
 import {
   toReadOrderViewModel,
