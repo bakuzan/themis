@@ -4,7 +4,7 @@ import { getIssueRepeatDetailItems } from '@/database/stats';
 
 export async function GET(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const id = Number((await params).id);
   const detailItems = getIssueRepeatDetailItems(id);
